@@ -7,6 +7,8 @@ Use the entries below as an example.
 
 Everyone: create application skeleton - meeting 14:00 17 Aug
 
+Everyone: create application skeleton - meeting 20:00 20 Aug 2020
+
 ## Week 5
 
 Zhang San: Task 3 isPiecePlacementWellFormed - 21 Aug
