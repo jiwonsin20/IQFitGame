@@ -1,6 +1,10 @@
 package comp1110.ass2;
 
-public enum Colour {
+public enum PieceType {
+    // Changed name from Colour to PieceType because its not the colour that matters
+    // what matters is whether it has multiple protrusion or single
+    // colour can just be used in constructor
+    // Jiwon 22/08/20
     Y("yellow", 2), y("yellow", 1),
     B("blue", 2), b("blue", 1),
     G("green", 2), g("green", 1),
@@ -22,7 +26,7 @@ public enum Colour {
 
 
 
-    Colour (String colour, int protrusion) {
+    PieceType(String colour, int protrusion) {
         this.colour = colour;
         this.protrusion = protrusion;
     }

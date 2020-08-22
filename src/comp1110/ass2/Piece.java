@@ -4,11 +4,11 @@ public class Piece {
 
 //    private final Colour pieceColour;
 //    private final Direction dir;
-    private final Colour c;
+    private final PieceType c;
     private final Direction dir;
 
     // Constructor
-    Piece (Colour c, Direction dir) {
+    Piece (PieceType c, Direction dir) {
         this.c = c;
         this.dir = dir;
     }
