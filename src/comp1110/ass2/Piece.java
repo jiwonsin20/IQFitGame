@@ -2,20 +2,16 @@ package comp1110.ass2;
 
 public class Piece {
 
-//    private final Colour pieceColour;
-//    private final Direction dir;
     private final PieceType type;
     private final PieceDirection dir;
-    public int xCoords; // Jiwon 22/08
-    public int yCoords; // Jiwon 22/08
+    private final PieceCoordinates coords; // Jiwon 22/08
+
 
     // Constructor
-    Piece (PieceType type, String position,  PieceDirection dir) {
+    Piece (PieceType type, PieceCoordinates coords, PieceDirection dir) {
         this.type = type;
+        this.coords = coords; // Jiwon 22/08
         this.dir = dir;
-        this.xCoords = getXCoordinate(position); // Jiwon 22/08
-        this.yCoords = getYCoordinate(position); // Jiwon 22/08
-
     }
 
     /* Given a string (two character) position, extract the value of X coordinate.
@@ -52,6 +48,7 @@ public class Piece {
     // method 3 : private int getYCoordinate(String position)
     // returns the set of coordinate of the piece (left-topmost coordinate)
 
-    // method 4 :
+    // method 4 : where the represented coordinates are
+    // Jiwon 22/08
 
 }
