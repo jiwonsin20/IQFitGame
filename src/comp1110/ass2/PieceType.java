@@ -105,26 +105,28 @@ public enum PieceType {
     // Jiwon 22/08
     public int getProtrusion(PieceType Type) {
         switch(Type){
-            case B: protrusion =2;break;
-            case b: protrusion =1;break;
-            case G: protrusion =2;break;
-            case g: protrusion =1;break;
-            case I: protrusion =2;break;
-            case i: protrusion =1;break;
-            case L: protrusion =2;break;
-            case l: protrusion =1;break;
-            case N: protrusion =2;break;
-            case n: protrusion =1;break;
-            case O: protrusion =2;break;
-            case o: protrusion =1;break;
-            case P: protrusion =2;break;
-            case p: protrusion =1;break;
-            case R: protrusion =2;break;
-            case r: protrusion =1;break;
-            case S: protrusion =2;break;
-            case s: protrusion =1;break;
-            case Y: protrusion =2;break;
-            case y: protrusion =1;break;
+            case B:
+            case G:
+            case I:
+            case L:
+            case N:
+            case O:
+            case P:
+            case R:
+            case S:
+            case Y:
+                protrusion =2;break;
+            case b:
+            case y:
+            case g:
+            case i:
+            case l:
+            case n:
+            case o:
+            case p:
+            case r:
+            case s:
+                protrusion =1;break;
         }
         return protrusion;
     }
