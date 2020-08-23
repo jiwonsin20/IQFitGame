@@ -25,7 +25,7 @@ public enum PieceType {
     // Jiwon 22/08/20
 
     private final PieceColour colour;
-    private final int protrusion;
+    private  int protrusion;//protrusion is changed, so it can't be final, Mingxuan Wang 08/23
     private final int spineNum;
 
     PieceType(PieceColour colour, int protrusion, int spineNum) {
@@ -103,9 +103,14 @@ public enum PieceType {
 
     // Added three methods that will get the protrusion value, colour and number of circles of spines
     // Jiwon 22/08
-    public int getProtrusion() {
+    public int getProtrusion(PieceType Type) {
+        switch(Type){
+            case B: protrusion =2;break;
+            case b: protrusion =1;break;
+        }
         return protrusion;
     }
+    //Mingxuan Wang 08/23
 
     public PieceColour getColour() {
         return colour;
