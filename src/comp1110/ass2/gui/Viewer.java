@@ -40,6 +40,7 @@ public class Viewer extends Application {
      * Draw a placement in the window, removing any previously drawn one
      *
      * @param placement A valid placement string
+     * authored by Jiwon Sin
      */
     void makePlacement(String placement) {
         // FIXME Task 4: implement the simple placement viewer
