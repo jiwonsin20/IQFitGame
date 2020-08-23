@@ -18,14 +18,22 @@ public class FitGame {
     // When nothing is placed, it will be noPiece. However when some piece is added, noPiece will change to
     // whatever the colour of the piece is (blue ~ yellow)
 
-    public static PieceType [][] board = {
-            {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP},
-            {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP},
-            {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP},
-            {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP},
-            {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}, {nP}
+    public static PieceType [][] initialBoard = {
+            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
+            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
+            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
+            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
+            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
     };
 
+    public static void main(String[] args) {
+        System.out.println(initialBoard[1][4]);
+        initialBoard[1][4] = y;
+        System.out.println(initialBoard[1][4]);
+        System.out.println(initialBoard[2][4]);
+    }
+
+    // updateBoard(PieceType [][])
 
     /**
      * Determine whether a piece placement is well-formed according to the
@@ -41,7 +49,26 @@ public class FitGame {
      */
     static boolean isPiecePlacementWellFormed(String piecePlacement) {
         // FIXME Task 2: determine whether a piece placement is well-formed
-        return false;
+
+        char [] pieceDescriptor = {'b','g','i','l','n','o','p','r','s','y'};
+
+        if (piecePlacement.length() !=4)
+            return false;
+        if (piecePlacement.charAt(0) != ' ') {
+            for (int i = 0; i < pieceDescriptor.length; i++) {
+                if (piecePlacement.charAt(0) == pieceDescriptor[i] || piecePlacement.charAt(0) == Character.toUpperCase(pieceDescriptor[i]))
+                    break;
+                else if (i == pieceDescriptor.length - 1)
+                    return false;
+            }
+        }
+        if (Character.getNumericValue(piecePlacement.charAt(1)) > 9 || Character.getNumericValue(piecePlacement.charAt(1)) < 0)
+            return false;
+        if (Character.getNumericValue(piecePlacement.charAt(2)) > 4 || Character.getNumericValue(piecePlacement.charAt(2)) < 0)
+            return false;
+        if (piecePlacement.charAt(3) != 'N' && piecePlacement.charAt(3) != 'S' && piecePlacement.charAt(3) != 'E' && piecePlacement.charAt(3) != 'W')
+            return false;
+        return true;
     }
 
     /**
@@ -56,7 +83,48 @@ public class FitGame {
      */
     public static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 3: determine whether a placement is well-formed
-        return false;
+        int pLength = placement.length();
+
+        // For a placement string to be valid, its length must be in multiple of 4
+        // OR not zero.
+        if (pLength % 4 != 0 || pLength == 0)
+            return false;
+
+        // Splitting the placement string into substrings of four and add them to a list.
+        // Example: "r01Nb45S" -> ["r01N", "b45S"].
+        for (int i = 0; i < pLength; i += 4) {
+            if (pLength == 4) {
+                if (!isPiecePlacementWellFormed(placement))
+                    return false;
+            }
+            else {
+                if (!isPiecePlacementWellFormed(placement.substring(i, i + 4))) // Site website
+                    return false;
+            }
+        }
+
+        // Creating new charArray that stores all charAt(0) of placement strings.
+        char [] order = new char[pLength/4];
+        int j = 0;
+        for (int i = 0; i < pLength; i += 4) {
+            order[j] = Character.toLowerCase(placement.charAt(i));
+            j++;
+        }
+
+        // Checking whether there are identical pieces
+        for (int i = 1; i < order.length; i++) {
+            for (int k = 0; k < i; k++) {
+                if (order[i] == order[k])
+                    return false;
+            }
+        }
+
+        // Checking whether pieces are ordered in (b -> g -> i -> l -> n -> o -> p -> r -> s -> y)
+        for (int i = 1; i < order.length; i++) {
+            if (order[i - 1] > order[i])
+                return false;
+        }
+        return true;
     }
 
     /**
