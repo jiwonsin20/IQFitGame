@@ -13,7 +13,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import java.io.File;
 
 /**
  * A very simple viewer for piece placements in the IQ-Fit game.

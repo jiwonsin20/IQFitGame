@@ -13,6 +13,10 @@ Everyone: update the files on git until Sunday 8pm (Canberra time)
 
 Need to start on the tasks 2,3,4,5
 
+Mingxuan: Task 2 due Wednesday
+Di Mou: Task 3 due Wednesday
+Jiwon: Task 4 due Wednesday
+
 
 ## Week 6
 
