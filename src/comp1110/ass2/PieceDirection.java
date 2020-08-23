@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import com.sun.javafx.scene.traversal.Direction;
+
 public enum PieceDirection {
     NORTH('↑'), SOUTH('↓'), EAST('→'), WEST('←');
 
@@ -57,6 +59,16 @@ public enum PieceDirection {
     // method 2 : rotate()
     // parameter : current direction of the piece
     // return : another direction that the player desires.
+    //Mingxuan Wang 08/23
+    public char rotate(char symbol){
+        if(symbol=='↑')
+            symbol = '→';
+        else if(symbol =='→')
+            symbol = '↓';
+        else if(symbol == '↓')
+            symbol = '←';
+        return symbol;
+    }
 
     // method 3: isValidRotation()
     // returns true/false on whether the protrusion is not facing upwards
