@@ -34,6 +34,10 @@ public enum PieceType {
         this.spineNum = spineNum;
     }
 
+    // Need a method that could tell what coordinates each piece occupies
+    // Jiwon 23/08
+
+
     public char toChar(PieceType type) {
         char result = ' ';
         switch (type) {
@@ -96,6 +100,73 @@ public enum PieceType {
                 break;
             case y:
                 result = 'y';
+                break;
+        }
+        return result;
+    }
+
+    public PieceType fromChar(char c) {
+        PieceType result = null;
+        switch (c) {
+            case 'B':
+                result = B;
+                break;
+            case 'b':
+                result = b;
+                break;
+            case 'G':
+                result = G;
+                break;
+            case 'g':
+                result = g;
+                break;
+            case 'I':
+                result = I;
+                break;
+            case 'i':
+                result = i;
+                break;
+            case 'L':
+                result = L;
+                break;
+            case 'l':
+                result = l;
+                break;
+            case 'N':
+                result = N;
+                break;
+            case 'n':
+                result = n;
+                break;
+            case 'O':
+                result = O;
+                break;
+            case 'o':
+                result = o;
+                break;
+            case 'P':
+                result = P;
+                break;
+            case 'p':
+                result = p;
+                break;
+            case 'R':
+                result = R;
+                break;
+            case 'r':
+                result = r;
+                break;
+            case 'S':
+                result = S;
+                break;
+            case 's':
+                result = s;
+                break;
+            case 'Y':
+                result = Y;
+                break;
+            case 'y':
+                result = y;
                 break;
         }
         return result;

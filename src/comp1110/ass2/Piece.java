@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import static comp1110.ass2.PieceType.*;
+
 public class Piece {
 
     private final PieceType type;
@@ -14,6 +16,14 @@ public class Piece {
         this.dir = dir;
     }
 
+//    public Piece toPiece(String placement) {
+//        int pLength = placement.length();
+//        PieceType pTy
+//        if (pLength == 4) {
+//            type.fromChar(placement.charAt(0));
+//        }
+//    }
+
     /* Given a string (two character) position, extract the value of X coordinate.
        Used charAt() to extract the relevant character and since it will be in ASCII code
 
@@ -23,8 +33,8 @@ public class Piece {
      */
 
 
-    public static int getXCoordinate(String position) {
-        return position.charAt(0) - 48;
+    public static int getXCoordinate(String placement) {
+        return placement.charAt(0) - 48;
     }
 
     /* Given a string (two character) position, extract the value of Y coordinate.
@@ -35,8 +45,8 @@ public class Piece {
        // Jiwon 22/08
      */
 
-    public static int getYCoordinate(String position) {
-        return position.charAt(1) - 48;
+    public static int getYCoordinate(String placement) {
+        return placement.charAt(1) - 48;
     }
 
     // method 1 : private static boolean validPosition()

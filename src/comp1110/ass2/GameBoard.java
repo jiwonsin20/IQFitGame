@@ -1,6 +1,9 @@
 package comp1110.ass2;
 
-public class GameBoard {
+public enum GameBoard {
+
+
+
     // position (x, y)
     // x is from 0 to 9
     // y is from 0 to 4
