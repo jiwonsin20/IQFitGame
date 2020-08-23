@@ -55,8 +55,8 @@ public class AssignmentSkeleton {
             -> getChar(PieceType type) : converts PieceType to a char type. For example, if PieceType.B, then return 'B'.
             -> fromChar(String placement) : converts placement (such as "r00N") to PieceType (for example, PieceType.r).
             -> getProtrusion() : returns number of protrusion.
-            -> getColour : returns the colour of the piece.
-            -> getSpineNum : returns the length of spine (whether 3 or 4).
+            -> getColour() : returns the colour of the piece.
+            -> getSpineNum() : returns the length of spine (whether 3 or 4).
 
        4. PieceDirection
         - This enum class defines the direction in which the piece is facing.
@@ -72,8 +72,8 @@ public class AssignmentSkeleton {
         - Each Piece will have 3 components that are described from above.
         - List of methods that needs to be implemented
             -> toPiece(String placement) : Converts the string component, whether length == 4 or longer into Piece objects.
-            -> getXCoordinate(String placement) : returns the value of Y coordinate of this piece.
-            -> getYCoordinate(String placement) : returns the value of X coordinate of this piece.
+            -> getXCoordinate(String placement) : returns the value of X coordinate of this piece.
+            -> getYCoordinate(String placement) : returns the value of Y coordinate of this piece.
             -> updatesPiece : When a piece is placed on the board, left-topmost coordinate is recorded and updates the
                               rest of the Piece's coordinate.
             -> toPlacement : converts the Piece object into a String placement.
@@ -87,12 +87,12 @@ public class AssignmentSkeleton {
             -> Would it be better by just making Piece class as an abstract class and make 10 different subclasses
                that has same methods implemented? (such as blue ~ yellow class)
 
-       6. DifficultyLevel - Optional, Not in full discussion yet -
+       6. DifficultyLevel - Optional, Not discussed fully yet -
         - This class is to set the difficulties of each level.
         - After much research on web, the game objectives were divided into 5 different levels.
         - Starter -> Junior -> Expert -> Master -> Wizard.
-        - Still on debate on whether to separate this into an independent class or just add as a method within the
-          board class.
+        - Still debating whether to separate this into an independent class or just add as a method within the
+          GameBoard class.
         - If it does exist in independent class, it will divide the Games into five different levels and player can
           choose the difficulty level.
         - Also considering adding a method that gives the random number within that difficulty level.
@@ -101,8 +101,8 @@ public class AssignmentSkeleton {
         - The class that will have methods that determines game mechanics.
         - Methods that could be implemented:
             -> initialBoard() : displays initial empty board, by using multidimensional arrays.
-            -> importBoard() : Considering the challenges comes with already placed pieces, change the board state to
-                               suit the needs.
+            -> importBoard() : Considering that the Game objectives comes with pre-placed pieces, change the board state
+                               to suit the needs.
             -> updateBoard() : updates the board status whenever called. Its main purpose is to update the board when
                                the player placed the piece or removed a piece from the board. If the initialBoard()'s
                                array type is in PieceType, then changes from nP to whatever colour of the Piece is.
