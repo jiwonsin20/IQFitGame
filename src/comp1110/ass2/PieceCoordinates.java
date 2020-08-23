@@ -1,7 +1,10 @@
 package comp1110.ass2;
 
-// Added PieceCoordinates to specify the location of the piece on the board
-// Jiwon 22/08
+/** Added PieceCoordinates to specify the location of the piece on the board
+ *
+ *  Created by Jiwon Sin 22/08
+ *
+ */
 
 import comp1110.ass2.PieceType.*;
 

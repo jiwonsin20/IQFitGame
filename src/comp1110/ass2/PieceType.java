@@ -4,10 +4,12 @@ import static comp1110.ass2.PieceColour.*;
 
 public enum PieceType {
 
-    // Changed name from Colour to PieceType because its not the colour that matters
-    // what matters is whether it has multiple protrusion or single
-    // Added spine number
-    // Jiwon 22/08
+    /** Changed name from Colour to PieceType because its not the colour that matter
+     * what matters is whether it has multiple protrusion or single
+     * Added spine number
+     *
+     * Created by Jiwon Sin 22/08
+    */
 
     B(blue, 2,4), b(blue, 1,4),
     G(green, 2,3), g(green, 1,3),
@@ -36,11 +38,7 @@ public enum PieceType {
         this.spineNum = spineNum;
     }
 
-    // Need a method that could tell what coordinates each piece occupies
-    // Jiwon 23/08
-
-
-    public char toChar(PieceType type) {
+    public static char toChar(PieceType type) {
         char result = ' ';
         switch (type) {
             case B:
@@ -107,7 +105,7 @@ public enum PieceType {
         return result;
     }
 
-    public PieceType fromChar(String placement) {
+    public static PieceType fromChar(String placement) {
         char firstChar = placement.charAt(0);
         PieceType result = null;
         switch (firstChar) {
@@ -178,9 +176,7 @@ public enum PieceType {
     // Added three methods that will get the protrusion value, colour and number of circles of spines
     // Jiwon 22/08
 
-    public int getProtrusion() {
-        return protrusion;
-    }
+    public int getProtrusion() { return protrusion; }
 
     public PieceColour getColour() {
         return colour;
@@ -190,15 +186,5 @@ public enum PieceType {
         return spineNum;
     }
 
-    // Uppercase : Double protrusion
-    // Lowercase : Single protrusion
-
-    // Methods that can be implemented
-
-    // method: getProtrusion()
-    // return: char('1') char('2')
-
     //toString
-
-    //
 }

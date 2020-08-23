@@ -2,12 +2,6 @@ package comp1110.ass2;
 
 public enum GameBoard {
 
-
-
-    // position (x, y)
-    // x is from 0 to 9
-    // y is from 0 to 4
-
     // Method 1 : private static String getSolution()
     // return the string that has the answer in sequence (b -> g -> i -> l -> n -> o -> p -> r -> s -> y)
 
