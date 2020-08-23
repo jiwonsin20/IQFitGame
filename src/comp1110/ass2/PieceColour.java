@@ -5,5 +5,5 @@ package comp1110.ass2;
 // 22/08 Jiwon : Added 10 different colours
 
 public enum PieceColour {
-    blue, green, indigo, limegreen, navyblue, orange, purple, red, skyblue, yellow, noPiece;
+    blue, green, indigo, limegreen, navyblue, orange, pink, red, skyblue, yellow, noPiece;
 }

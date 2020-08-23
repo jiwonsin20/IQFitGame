@@ -15,17 +15,19 @@ public enum PieceType {
     L(limegreen, 2,3), l(limegreen, 1,3),
     N(navyblue, 2,3), n(navyblue, 1,3),
     O(orange, 2,4), o(orange, 1,4),
-    P(purple, 2,4), p(purple, 1,4),
+    P(pink, 2,4), p(pink, 1,4),
     R(red, 2,4), r(red, 1,4),
     S(skyblue, 2,4), s(skyblue, 1,4),
-    Y(yellow, 2,4), y(yellow, 1,4);
+    Y(yellow, 2,4), y(yellow, 1,4),
+    nP(noPiece, 0,0);
 
 
     // colour can just be used in constructor
     // Jiwon 22/08/20
 
     private final PieceColour colour;
-    private  int protrusion;//protrusion is changed, so it can't be final, Mingxuan Wang 08/23
+    private final int protrusion;
+    //protrusion is changed, so it can't be final, Mingxuan Wang 08/23
     private final int spineNum;
 
     PieceType(PieceColour colour, int protrusion, int spineNum) {
@@ -105,9 +107,10 @@ public enum PieceType {
         return result;
     }
 
-    public PieceType fromChar(char c) {
+    public PieceType fromChar(String placement) {
+        char firstChar = placement.charAt(0);
         PieceType result = null;
-        switch (c) {
+        switch (firstChar) {
             case 'B':
                 result = B;
                 break;
@@ -174,32 +177,10 @@ public enum PieceType {
 
     // Added three methods that will get the protrusion value, colour and number of circles of spines
     // Jiwon 22/08
-    public int getProtrusion(PieceType Type) {
-        switch(Type){
-            case B: protrusion =2;break;
-            case b: protrusion =1;break;
-            case G: protrusion =2;break;
-            case g: protrusion =1;break;
-            case I: protrusion =2;break;
-            case i: protrusion =1;break;
-            case L: protrusion =2;break;
-            case l: protrusion =1;break;
-            case N: protrusion =2;break;
-            case n: protrusion =1;break;
-            case O: protrusion =2;break;
-            case o: protrusion =1;break;
-            case P: protrusion =2;break;
-            case p: protrusion =1;break;
-            case R: protrusion =2;break;
-            case r: protrusion =1;break;
-            case S: protrusion =2;break;
-            case s: protrusion =1;break;
-            case Y: protrusion =2;break;
-            case y: protrusion =1;break;
-        }
+
+    public int getProtrusion() {
         return protrusion;
     }
-    //Mingxuan Wang 08/23
 
     public PieceColour getColour() {
         return colour;
