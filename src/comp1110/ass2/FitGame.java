@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+import java.util.HashSet;
 import java.util.Set;
 
 // Looked up on internet on how to import static enum class
@@ -84,9 +85,31 @@ public class FitGame {
      * @param placement A string describing a placement of one or more pieces
      * @return True if the placement is well-formed
      */
+    // FIXME Task 3: determine whether a placement is well-formed
+
     public static boolean isPlacementWellFormed(String placement) {
-        return false; // FIXME Task 3: determine whether a placement is well-formed
+        if(placement.length() == 0 || placement.length() % 4 != 0)
+            return false;
+
+        String piece = "";
+        Set<Character> pieces = new HashSet<>();
+
+        for(int i = 0; i < placement.length() / 4; i++) {
+            piece = placement.substring(i*4, (i+1)*4);
+            if(!isPiecePlacementWellFormed(piece))
+                return false;
+            if(pieces.contains(piece.charAt(0)))
+                return false;
+            pieces.add(piece.charAt(0));
+        }
+        return true;
+
     }
+
+
+
+
+
 
     /**
      * Determine whether a placement string is valid.
