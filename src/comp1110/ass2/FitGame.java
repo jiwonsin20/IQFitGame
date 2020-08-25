@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -172,6 +173,12 @@ public class FitGame {
 //        String str = "p01W";
 //        System.out.println(isOnBoard(str));
 //    }
+    public static void main(String[] args) {
+        String str = "b00NB02N";
+
+//        System.out.println(Arrays.toString(initialBoard[4][0]));
+        System.out.println(doesOverlap(str));
+    }
 
     public static boolean isOnBoard(String placement) {
         Piece piece = Piece.toPiece(placement);
@@ -185,25 +192,26 @@ public class FitGame {
     }
 
     public static boolean doesOverlap(String placement) {
-//        int x = Character.getNumericValue(placement.charAt(1));
-//        int y = Character.getNumericValue(placement.charAt(2));
+        int x = Character.getNumericValue(placement.charAt(1));
+        int y = Character.getNumericValue(placement.charAt(2));
         Piece[] pieces = toPieces(placement);
 
-        for (int k = 0; k < placement.length()/4; k++) {
+        for (int k = 0; k < pieces.length; k++) {
             PieceType[][] array = pieces[k].getCoords();
-            int x = pieces[k].coords.getXCoordinate();
-            int y = pieces[k].coords.getYCoordinate();
+//            int x = pieces[k].coords.getXCoordinate();
+//            int y = pieces[k].coords.getYCoordinate();
 
 
-            for (int i = x; i < x + pieces[k].getXDimensions() || i < 10; i++) {
-                for (int j = y; j < y + pieces[k].getYDimensions() || j < 5; j++) {
-                    if (initialBoard[i][j] != nP && array[i - x][j - y] != nP)
+            for (int i = x; i < x + pieces[k].getXDimensions() && i < 10; i++) {
+                for (int j = y; j < y + pieces[k].getYDimensions() && j < 5; j++) {
+                    int currentX = i - x;
+                    int currentY = j - y;
+                    if (initialBoard[i][j] != nP && array[currentX][currentY] != nP)
                         return true;
                     else
-                        initialBoard[i][j] = array[i - x][j - y];
+                        initialBoard[i][j] = array[currentX][currentY];
                 }
             }
-
         }
         return false;
     }

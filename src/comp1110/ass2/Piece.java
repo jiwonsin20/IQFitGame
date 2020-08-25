@@ -46,18 +46,24 @@ public class Piece {
     }
 
     public static void main(String[] args) {
-        String str = "b23NB45N";
-        String str2 = "b43N";
+        String str = "b23NB45Nb67S";
+        String str2 = "b43S";
+        Piece [] pieces = toPieces(str);
+        System.out.println(pieces.length);
+        System.out.println(Arrays.deepToString(toPieces(str)));
+        Piece [] array = toPieces(str);
 
-        System.out.println(Arrays.deepToString(toPiece(str2).getCoords()));
+        for (int k = 0; k < array.length; k++) {
+            System.out.println(Arrays.deepToString(array[k].getCoords()));
+        }
     }
 
     public static Piece [] toPieces(String placement) {
         int r = 0;
         Piece [] pieces = new Piece[placement.length()/4];
-
+        String [] str = new String [placement.length() / 4];
         for (int i = 0; i < placement.length(); i+=4) {
-            String [] str = new String [placement.length() / 4];
+;
             str[r] = placement.substring(i, i + 4);
             pieces[r] = toPiece(str[r]);
             r++;
