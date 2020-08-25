@@ -5,6 +5,8 @@ import java.util.Set;
 // Looked up on internet on how to import static enum class
 // Jiwon 23/08
 import static comp1110.ass2.PieceType.*;
+import static comp1110.ass2.Piece.*;
+import static comp1110.ass2.PieceB1.*;
 /**
  * This class provides the text interface for the IQ Fit Game
  * <p>
@@ -25,13 +27,13 @@ public class FitGame {
             {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
             {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
     };
-
-    public static void main(String[] args) {
-        System.out.println(initialBoard[1][4]);
-        initialBoard[1][4] = y;
-        System.out.println(initialBoard[1][4]);
-        System.out.println(initialBoard[2][4]);
-    }
+//
+//    public static void main(String[] args) {
+//        System.out.println(initialBoard[1][4]);
+//        initialBoard[1][4] = y;
+//        System.out.println(initialBoard[1][4]);
+//        System.out.println(initialBoard[2][4]);
+//    }
 
     // updateBoard(PieceType [][])
 
@@ -49,29 +51,31 @@ public class FitGame {
      */
     static boolean isPiecePlacementWellFormed(String piecePlacement) {
     // FIXME Task 2: determine whether a piece placement is well-formed
+        char [] pieceDescriptor = {'b','g','i','l','n','o','p','r','s','y'};
 
-            return (piecePlacement.length() == 4) &&
-                    (piecePlacement.charAt(0) == 'b' || piecePlacement.charAt(0) == 'B' ||
-                            piecePlacement.charAt(0) == 'g' || piecePlacement.charAt(0) == 'G' ||
-                            piecePlacement.charAt(0) == 'i' || piecePlacement.charAt(0) == 'I' ||
-                            piecePlacement.charAt(0) == 'l' || piecePlacement.charAt(0) == 'L' ||
-                            piecePlacement.charAt(0) == 'n' || piecePlacement.charAt(0) == 'N' ||
-                            piecePlacement.charAt(0) == 'o' || piecePlacement.charAt(0) == 'O' ||
-                            piecePlacement.charAt(0) == 'p' || piecePlacement.charAt(0) == 'P' ||
-                            piecePlacement.charAt(0) == 'r' || piecePlacement.charAt(0) == 'R' ||
-                            piecePlacement.charAt(0) == 's' || piecePlacement.charAt(0) == 'S' ||
-                            piecePlacement.charAt(0) == 'y' || piecePlacement.charAt(0) == 'Y') &&
-                    (piecePlacement.charAt(1) == '0' || piecePlacement.charAt(1) == '1' ||
-                            piecePlacement.charAt(1) == '2' || piecePlacement.charAt(1) == '3' ||
-                            piecePlacement.charAt(1) == '4' || piecePlacement.charAt(1) == '5' ||
-                            piecePlacement.charAt(1) == '6' || piecePlacement.charAt(1) == '7' ||
-                            piecePlacement.charAt(1) == '8' || piecePlacement.charAt(1) == '9') &&
-                    (piecePlacement.charAt(2) == '0' || piecePlacement.charAt(2) == '1' ||
-                            piecePlacement.charAt(2) == '2' || piecePlacement.charAt(2) == '3' ||
-                            piecePlacement.charAt(2) == '4') &&
-                    (piecePlacement.charAt(3) == 'N' || piecePlacement.charAt(3) == 'S' ||
-                            piecePlacement.charAt(3) == 'E' || piecePlacement.charAt(3) == 'W');
-
+        if (piecePlacement.length() !=4)
+            return false;
+        if (piecePlacement.charAt(0) != ' ') {
+            for (int i = 0; i < pieceDescriptor.length; i++) {
+                if (piecePlacement.charAt(0) == pieceDescriptor[i]
+                        || piecePlacement.charAt(0) == Character.toUpperCase(pieceDescriptor[i]))
+                    break;
+                else if (i == pieceDescriptor.length - 1)
+                    return false;
+            }
+        }
+        if (Character.getNumericValue(piecePlacement.charAt(1)) > 9
+                || Character.getNumericValue(piecePlacement.charAt(1)) < 0)
+            return false;
+        if (Character.getNumericValue(piecePlacement.charAt(2)) > 4
+                || Character.getNumericValue(piecePlacement.charAt(2)) < 0)
+            return false;
+        if (piecePlacement.charAt(3) != 'N'
+                && piecePlacement.charAt(3) != 'S'
+                && piecePlacement.charAt(3) != 'E'
+                && piecePlacement.charAt(3) != 'W')
+            return false;
+        return true;
     }
 
     /**
@@ -85,8 +89,136 @@ public class FitGame {
      * @return True if the placement is well-formed
      */
     public static boolean isPlacementWellFormed(String placement) {
-        return false; // FIXME Task 3: determine whether a placement is well-formed
+        // FIXME Task 3: determine whether a placement is well-formed
+        int pLength = placement.length();
+
+        // For a placement string to be valid, its length must be in multiple of 4
+        // OR not zero.
+
+        if (pLength % 4 != 0 || pLength == 0)
+            return false;
+
+        // Splitting the placement string into substrings of four and add them to a list.
+        // Example: "r01Nb45S" -> ["r01N", "b45S"].
+
+        for (int i = 0; i < pLength; i += 4) {
+            if (pLength == 4) {
+                if (!isPiecePlacementWellFormed(placement))
+                    return false;
+            }
+            else {
+                if (!isPiecePlacementWellFormed(placement.substring(i, i + 4))) // Site website
+                    return false;
+            }
+        }
+
+        // Creating new charArray that stores all charAt(0) of placement strings.
+
+        char [] order = new char[pLength/4];
+        int j = 0;
+        for (int i = 0; i < pLength; i += 4) {
+            order[j] = Character.toLowerCase(placement.charAt(i));
+            j++;
+        }
+
+        // Checking whether there are identical pieces
+
+        for (int i = 1; i < order.length; i++) {
+            for (int k = 0; k < i; k++) {
+                if (order[i] == order[k])
+                    return false;
+            }
+        }
+
+        // Checking whether pieces are ordered in (b -> g -> i -> l -> n -> o -> p -> r -> s -> y)
+
+        for (int i = 1; i < order.length; i++) {
+            if (order[i - 1] > order[i])
+                return false;
+        }
+        return true;
     }
+
+
+    // For this problem, need think of a method that can
+    // 1. Entirely on the board
+    // 2. Pieces must not overlap each other
+
+    /**
+     * Given a placement string, the isOnTheBoard method determines whether the piece coordinate (left corner)
+     * exists within the board.
+     *
+     * Since placement string only has coordinate for the left-corner of the piece, the piece's dimension
+     * must be taken into account (whether its 4 x 2, 2 x 4, 3 x 2, or 2 x 3).
+     *
+     * @param
+     * @return True if the placement string is located within the board.
+     */
+
+    // Added by Jiwon 23/08
+//    public static boolean isOnTheBoard(String placement) {
+//        if (placement.length() > 4) {
+//            for (int i = 0; i < placement.length() / 4; i += 4) {
+//                String sepString = placement.substring(i, i + 4);
+//                if (Character.getNumericValue(sepString.charAt(1)) < 0 || Character.getNumericValue(sepString.charAt(1)) > 9)
+//                    return false;
+//                else if (Character.getNumericValue(sepString.charAt(2)) < 0 || Character.getNumericValue(sepString.charAt(2)) > 4)
+//                    return false;
+//            }
+//        } else if (placement.length() == 4) {
+//            if (Character.getNumericValue(placement.charAt(1)) < 0 || Character.getNumericValue(placement.charAt(1)) > 9)
+//                return false;
+//            else if (Character.getNumericValue(placement.charAt(2)) < 0 || Character.getNumericValue(placement.charAt(2)) > 4)
+//                return false;
+//        }
+//        return true;
+//    }
+//    public static void main(String[] args) {
+//        String str = "p01W";
+//        System.out.println(isOnBoard(str));
+//    }
+
+    public static boolean isOnBoard(String placement) {
+        Piece piece = Piece.toPiece(placement);
+
+        int x = piece.getXDimensions();
+        int y = piece.getYDimensions();
+        int xCoord = getXCoordinate(placement);
+        int yCoord = getYCoordinate(placement);
+
+        return xCoord + x - 1 <= 9 && yCoord + y - 1 <= 4;
+    }
+
+    public static void main(String[] args) {
+        String placement = "b20NB12N";
+        System.out.println(doesOverlap(placement));
+    }
+
+    public static boolean doesOverlap(String placement) {
+//        int x = Character.getNumericValue(placement.charAt(1));
+//        int y = Character.getNumericValue(placement.charAt(2));
+        Piece[] pieces = toPieces(placement);
+
+        for (int k = 0; k < placement.length()/4; k++) {
+            PieceType[][] array = pieces[k].getCoords();
+            int x = pieces[k].coords.getXCoordinate();
+            int y = pieces[k].coords.getYCoordinate();
+
+
+            for (int i = x; i < x + pieces[k].getXDimensions() || i < 10; i++) {
+                for (int j = y; j < y + pieces[k].getYDimensions() || j < 5; j++) {
+                    if (initialBoard[i][j] != nP && array[i - x][j - y] != nP)
+                        return true;
+                    else
+                        initialBoard[i][j] = array[i - x][j - y];
+                }
+            }
+
+        }
+        return false;
+    }
+
+
 
     /**
      * Determine whether a placement string is valid.
@@ -104,7 +236,16 @@ public class FitGame {
 
 
     public static boolean isPlacementValid(String placement) {
-        return false; // FIXME Task 5: determine whether a placement string is valid
+        if (!isPiecePlacementWellFormed(placement))
+            return false;
+
+        if (!isOnBoard(placement))
+            return false;
+
+
+        // To check whether they are entirely on the board, need to know the dimension of each piece
+
+        return true; // FIXME Task 5: determine whether a placement string is valid
     }
 
     /**

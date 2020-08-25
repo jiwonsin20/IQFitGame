@@ -1,14 +1,12 @@
 package comp1110.ass2;
 
-import com.sun.javafx.scene.traversal.Direction;
-
 public enum PieceDirection {
     NORTH('↑'), SOUTH('↓'), EAST('→'), WEST('←');
 
     // Changed symbol from character to appropriate direction symbols
     // Jiwon 22/08
 
-    final private char symbol;
+    public char symbol;
 
 
     // Constructor for direction
@@ -21,7 +19,8 @@ public enum PieceDirection {
     // method 1 : private char getChar()
     // Need this to consolidate characters for the solution
     // Done by Jiwon: 22/08
-    private char getChar(PieceDirection dir) {
+
+    public static char getChar(PieceDirection dir) {
         if (dir == NORTH)
             return 'N';
         else if (dir == SOUTH)
@@ -35,8 +34,10 @@ public enum PieceDirection {
     }
 
     // Done by Jiwon: 22/08
-    private PieceDirection getDirection(char c) {
+
+    public static PieceDirection getDirection(String placement) {
         PieceDirection dir;
+        char c = placement.charAt(3);
         switch (c) {
             case 'N':
                 dir = NORTH;
@@ -60,6 +61,7 @@ public enum PieceDirection {
     // parameter : current direction of the piece
     // return : another direction that the player desires.
     //Mingxuan Wang 08/23
+
     public char rotate(char symbol){
         if(symbol=='↑')
             symbol = '→';
@@ -74,6 +76,9 @@ public enum PieceDirection {
     // returns true/false on whether the protrusion is not facing upwards
 
 
+    public char getSymbol() {
+        return symbol;
+    }
 
     @Override
     public String toString() {

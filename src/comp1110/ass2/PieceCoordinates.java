@@ -9,12 +9,22 @@ package comp1110.ass2;
 import comp1110.ass2.PieceType.*;
 
 public class PieceCoordinates {
-    int xCoord;
-    int yCoord;
+    public final int xCoord;
+    public final int yCoord;
 
     PieceCoordinates (int x, int y) {
         this.xCoord = x;
         this.yCoord = y;
+    }
+
+    public static PieceCoordinates getPCoord(String placement) {
+        PieceCoordinates coordinates;
+        int x = Character.getNumericValue(placement.charAt(1));
+        int y = Character.getNumericValue(placement.charAt(2));
+
+        coordinates = new PieceCoordinates (x, y);
+
+        return coordinates;
     }
 
     public int getXCoordinate() {
@@ -24,7 +34,15 @@ public class PieceCoordinates {
         return yCoord;
     }
 
-//    public int [][] getTwoDArray(String placement) {
+    public void setxCoord(int xCoord) {
+        xCoord = xCoord;
+    }
+
+    public void setyCoord(int yCoord) {
+        yCoord = yCoord;
+    }
+
+    //    public int [][] getTwoDArray(String placement) {
 //        PieceType type =
 //
 //

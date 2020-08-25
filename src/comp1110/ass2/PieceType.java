@@ -27,16 +27,18 @@ public enum PieceType {
     // colour can just be used in constructor
     // Jiwon 22/08/20
 
-    private final PieceColour colour;
-    private final int protrusion;
+    public final PieceColour colour;
+    public final int protrusion;
     //protrusion is changed, so it can't be final, Mingxuan Wang 08/23
-    private final int spineNum;
+    public final int spineNum;
 
     PieceType(PieceColour colour, int protrusion, int spineNum) {
         this.colour = colour;
         this.protrusion = protrusion;
         this.spineNum = spineNum;
     }
+
+
 
     public static char toChar(PieceType type) {
         char result = ' ';
@@ -172,6 +174,8 @@ public enum PieceType {
         }
         return result;
     }
+
+
 
     // Added three methods that will get the protrusion value, colour and number of circles of spines
     // Jiwon 22/08

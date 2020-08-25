@@ -1,6 +1,12 @@
 package comp1110.ass2;
 
+
+import java.util.Arrays;
+
 import static comp1110.ass2.PieceDirection.*;
+import static comp1110.ass2.PieceType.*;
+import static comp1110.ass2.PieceCoordinates.*;
+
 
 /** This Class defines each Piece on
  *  (1) PieceType
@@ -14,31 +20,217 @@ import static comp1110.ass2.PieceDirection.*;
 
 public class Piece {
 
-    private final PieceType type;
-    private final PieceDirection dir;
-    private final PieceCoordinates coords; // Jiwon 22/08
+    public final PieceType type;
+    public final PieceDirection dir;
+    public final PieceCoordinates coords; // Jiwon 22/08
 
-
-//     Constructor
     Piece (PieceType type, PieceCoordinates coords, PieceDirection dir) {
         this.type = type;
         this.coords = coords; // Jiwon 22/08
         this.dir = dir;
     }
-    // Need a method that could tell what coordinates each piece occupies
-    // Jiwon 23/08
 
     /**
      * This sets the piece dimension, especially on what space it occupies.
      */
 
-    private Piece [][] piece = new Piece [this.getXDimensions()] [this.getYDimensions()];
-//    public Piece toPiece(String placement) {
-//        int pLength = placement.length();
-//        PieceType pTy
-//        if (pLength == 4) {
-//            type.fromChar(placement.charAt(0));
+    public Piece [][] piece = new Piece [this.getXDimensions()] [this.getYDimensions()];
+
+
+    public static Piece toPiece(String placement) {
+        PieceType type = PieceType.fromChar(placement);
+        PieceCoordinates coords = getPCoord(placement);
+        PieceDirection dir = PieceDirection.getDirection(placement);
+        return new Piece(type, coords, dir);
+
+    }
+
+    public static void main(String[] args) {
+        String str = "b23NB45N";
+        String str2 = "b43N";
+
+        System.out.println(Arrays.deepToString(toPiece(str2).getCoords()));
+    }
+
+    public static Piece [] toPieces(String placement) {
+        int r = 0;
+        Piece [] pieces = new Piece[placement.length()/4];
+
+        for (int i = 0; i < placement.length(); i+=4) {
+            String [] str = new String [placement.length() / 4];
+            str[r] = placement.substring(i, i + 4);
+            pieces[r] = toPiece(str[r]);
+            r++;
+        }
+        return pieces;
+    }
+
+    public PieceType [][] getCoords() {
+        PieceType [][] array = new PieceType[getXDimensions()][getYDimensions()];
+        switch (type) {
+            case b:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getXDimensions(); i++) {
+                        for (int j = 0; j < getYDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = b;
+                            else if (j == 1 && i == 0)
+                                array[i][j] = b;
+                            else
+                                array[i][j] = nP;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getXDimensions(); i++) {
+                        for (int j = 0; j <getYDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = b;
+                            else if (i == 0 && j == 0)
+                                array[i][j] = b;
+                            else
+                                array[i][j] = nP;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getXDimensions(); i++) {
+                        for (int j = 0; j <getYDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = b;
+                            else if (i == 3 && j == 0)
+                                array[i][j] = b;
+                            else
+                                array[i][j] = nP;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getXDimensions(); i++) {
+                        for (int j = 0; j <getYDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = b;
+                            else if (i == 1 && j == 3)
+                                array[i][j] = b;
+                            else
+                                array[i][j] = nP;
+                        }
+                    }
+                }
+                break;
+
+            case B:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getXDimensions(); i++) {
+                        for (int j = 0; j <getYDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = B;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = B;
+                            else if (i == 3 && j == 1)
+                                array[i][j] = B;
+                            else
+                                array[i][j] = nP;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getXDimensions(); i++) {
+                        for (int j = 0; j <getYDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = B;
+                            else if (i == 0 && j == 1)
+                                array[i][j] = B;
+                            else if (i == 0 && j == 3)
+                                array[i][j] = B;
+                            else
+                                array[i][j] = nP;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getXDimensions(); i++) {
+                        for (int j = 0; j <getYDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = B;
+                            else if (i == 0 && j == 0)
+                                array[i][j] = B;
+                            else if (i == 2 && j == 0)
+                                array[i][j] = B;
+                            else
+                                array[i][j] = nP;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getXDimensions(); i++) {
+                        for (int j = 0; j <getYDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = B;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = B;
+                            else if (i == 1 && j == 2)
+                                array[i][j] = B;
+                            else
+                                array[i][j] = nP;
+                        }
+                    }
+                }
+                break;
+        }
+    return array;
+    }
+
+//    public int [] entireCoords(String placement) {
+//        PieceCoordinates [] array = new PieceCoordinates [this.getXDimensions() + this.getYDimensions()];
+//        PieceCoordinates [] hi = new PieceCoordinates[] {(1,2)}
+//        int x = Character.getNumericValue(placement.charAt(1));
+//        int y = Character.getNumericValue(placement.charAt(2));
+//
+//        switch (fromChar(placement)) {
+//            case b:
+//                if (placement.charAt(3) == 'N') {
+//                    array = {(x, y), (x + 1, y + 1)};
+//                }
+//                else if (placement.charAt(3) == 'S') {
+//
+//                }
+//                else if (placement.charAt(3) == 'E') {
+//
+//                }
+//                else if (placement.charAt(3) == 'W') {
+//
+//                }
+//                break;
+//            case B:
+//
 //        }
+//    }
+
+    /**
+     * Using the Piece, find out the coordinates its occupying.
+     *
+     * @param placement : Must be in four letter string.
+     * @return          : Returns the value of coordinates that is occupied by this piece.
+     */
+
+//    public static ArrayList<Integer> getIndividualCoords(String placement) {
+//        int x = Character.getNumericValue(placement.charAt(1));
+//        int y = Character.getNumericValue(placement.charAt(2));
+//        PieceType type = fromChar(placement);
+//        PieceDirection dir = getDirection(placement);
+//        Piece piece = toPiece(placement);
+//
+//
+//        switch (type) {
+//            case b:
+//                if (dir == NORTH) {
+//
+//
+//
+//                }
+//        }
+//        return ;
 //    }
 
     /**
@@ -53,6 +245,7 @@ public class Piece {
 
     public int getXDimensions() {
         int xValue = 0;
+
         if (dir == EAST || dir == WEST)
             xValue = 2;
         else if (dir == NORTH || dir == SOUTH) {
@@ -85,6 +278,7 @@ public class Piece {
         return yValue;
     }
 
+
     /** Given a string (two character) position, extract the value of X coordinate.
      *  Used charAt() to extract the relevant character and since it will be in ASCII code
      *
@@ -95,7 +289,7 @@ public class Piece {
 
 
     public static int getXCoordinate(String placement) {
-        return placement.charAt(0) - 48;
+        return placement.charAt(1) - 48;
     }
 
     /** Given a string (two character) position, extract the value of Y coordinate.
@@ -108,7 +302,7 @@ public class Piece {
      **/
 
     public static int getYCoordinate(String placement) {
-        return placement.charAt(1) - 48;
+        return placement.charAt(2) - 48;
     }
 
     // method 1 : private static boolean validPosition()
@@ -123,4 +317,10 @@ public class Piece {
     // method 4 : where the represented coordinates are
     // Jiwon 22/08
 
+
+
+
+    public PieceDirection getDir() {
+        return dir;
+    }
 }
