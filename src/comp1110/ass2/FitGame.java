@@ -157,11 +157,6 @@ public class FitGame {
         return xCoord + x - 1 <= 9 && yCoord + y - 1 <= 4;
     }
 
-    public static void main(String[] args) {
-        String placement = "b20NB12N";
-        System.out.println(doesOverlap(placement));
-    }
-
     public static boolean doesOverlap(String placement) {
 //        int x = Character.getNumericValue(placement.charAt(1));
 //        int y = Character.getNumericValue(placement.charAt(2));
