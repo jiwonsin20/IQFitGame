@@ -204,16 +204,7 @@ public class FitGame {
 
 
     public static boolean isPlacementValid(String placement) {
-        if (!isPiecePlacementWellFormed(placement))
-            return false;
-
-        if (!isOnBoard(placement))
-            return false;
-
-
-        // To check whether they are entirely on the board, need to know the dimension of each piece
-
-        return true; // FIXME Task 5: determine whether a placement string is valid
+        return false; // FIXME Task 5: determine whether a placement string is valid
     }
 
     /**
