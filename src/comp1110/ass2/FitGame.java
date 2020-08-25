@@ -183,8 +183,8 @@ public class FitGame {
             int x = value.getXDimensions();
             int y = value.getYDimensions();
 
-            int xCoord = getXCoordinate(placement);
-            int yCoord = getYCoordinate(placement);
+            int xCoord = value.coords.xCoord;
+            int yCoord = value.coords.yCoord;
 
             if (xCoord + x - 1 > 9 || yCoord + y - 1 > 4 || xCoord + x - 1 < 0 || yCoord + y - 1 < 0)
                 return false;
@@ -199,24 +199,26 @@ public class FitGame {
             int x = value.getXDimensions();
             int y = value.getYDimensions();
 
-            int xCoord = getXCoordinate(placement);
-            int yCoord = getYCoordinate(placement);
+            int xCoord = value.coords.xCoord;
+            int yCoord = value.coords.yCoord;
 
-            if (xCoord + x - 1 > 9 || yCoord + y - 1 > 4 || xCoord + x - 1 < 0 || yCoord + y - 1 < 0)
-                System.out.println((x + xCoord - 1) + " , " + (y + yCoord - 1));
+            if (xCoord + x - 1 > 9 || yCoord + y - 1 > 4 || xCoord + x - 1 < 0 || yCoord + y - 1 < 0) {
+                System.out.println(Arrays.deepToString(value.getCoords()));
+                System.out.println(( xCoord) + " , " + (yCoord));
+            }
         }
         return;
     }
 
     public static void main(String[] args) {
-        String str = "B03SG70S";
+        String str = "B03SG70Si52SL00Nn01Eo63Sp20Er41WS40Ny62N";
         String str2 = "b00N";
 //        System.out.println(isOnBoard("B44N"));
 //        System.out.println(isPlacementValid("B44N"));
 //        System.out.println(Arrays.toString(initialBoard[4][0]));
         System.out.println("isPlacementWellFormed : " +isPlacementWellFormed(str));
         System.out.println("isOnBoard : "+isOnBoard(str));
-//        isOnBoard2(str);
+        isOnBoard2(str);
         System.out.println("doesNotOverLap : " +doesNotOverlap(str));
         System.out.println("isPlacementValid : " +isPlacementValid(str));
         System.out.println(Arrays.deepToString(initialBoard));
@@ -263,7 +265,7 @@ public class FitGame {
 
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 5: determine whether a placement string is valid
-        return isOnBoard(placement) && isPlacementWellFormed(placement) && doesNotOverlap(placement);
+        return isPlacementWellFormed(placement) && (isOnBoard(placement) && doesNotOverlap(placement));
     }
 
     /**
