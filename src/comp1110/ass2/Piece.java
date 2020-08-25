@@ -46,7 +46,7 @@ public class Piece {
     }
 
     public static void main(String[] args) {
-        String str = "b23NB45Nb67S";
+        String str = "l00S";
         String str2 = "b43S";
         Piece [] pieces = toPieces(str);
         System.out.println(pieces.length);
@@ -72,54 +72,54 @@ public class Piece {
     }
 
     public PieceType [][] getCoords() {
-        PieceType [][] array = new PieceType[getXDimensions()][getYDimensions()];
+        PieceType [][] array = new PieceType[getYDimensions()][getXDimensions()];
         switch (type) {
             case b:
                 if (dir == NORTH) {
-                    for (int i = 0; i < getXDimensions(); i++) {
-                        for (int j = 0; j < getYDimensions(); j++) {
-                            if (j == 0)
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (i == 0)
                                 array[i][j] = b;
-                            else if (j == 1 && i == 0)
+                            else if (i == 1 && j == 0)
                                 array[i][j] = b;
                             else
-                                array[i][j] = nP;
+                                array[i][j] = null;
                         }
                     }
                 }
                 if (dir == EAST) {
-                    for (int i = 0; i < getXDimensions(); i++) {
-                        for (int j = 0; j <getYDimensions(); j++) {
-                            if (i == 1)
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (j == 1)
                                 array[i][j] = b;
                             else if (i == 0 && j == 0)
                                 array[i][j] = b;
                             else
-                                array[i][j] = nP;
+                                array[i][j] = null;
                         }
                     }
                 }
                 if (dir == SOUTH) {
-                    for (int i = 0; i < getXDimensions(); i++) {
-                        for (int j = 0; j <getYDimensions(); j++) {
-                            if (j == 1)
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
                                 array[i][j] = b;
-                            else if (i == 3 && j == 0)
+                            else if (j == 3 && i == 0)
                                 array[i][j] = b;
                             else
-                                array[i][j] = nP;
+                                array[i][j] = null;
                         }
                     }
                 }
                 if (dir == WEST) {
-                    for (int i = 0; i < getXDimensions(); i++) {
-                        for (int j = 0; j <getYDimensions(); j++) {
-                            if (i == 0)
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
                                 array[i][j] = b;
-                            else if (i == 1 && j == 3)
+                            else if (j == 1 && i == 3)
                                 array[i][j] = b;
                             else
-                                array[i][j] = nP;
+                                array[i][j] = null;
                         }
                     }
                 }
@@ -127,62 +127,1035 @@ public class Piece {
 
             case B:
                 if (dir == NORTH) {
-                    for (int i = 0; i < getXDimensions(); i++) {
-                        for (int j = 0; j <getYDimensions(); j++) {
-                            if (j == 0)
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
                                 array[i][j] = B;
-                            else if (j == 1 && i == 1)
+                            else if (i == 1 && j == 1)
                                 array[i][j] = B;
-                            else if (i == 3 && j == 1)
+                            else if (i == 1 && j == 3)
                                 array[i][j] = B;
                             else
-                                array[i][j] = nP;
+                                array[i][j] = null;
                         }
                     }
                 }
                 if (dir == EAST) {
-                    for (int i = 0; i < getXDimensions(); i++) {
-                        for (int j = 0; j <getYDimensions(); j++) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
                             if (i == 1)
                                 array[i][j] = B;
-                            else if (i == 0 && j == 1)
+                            else if (j == 0 && i == 1)
                                 array[i][j] = B;
-                            else if (i == 0 && j == 3)
+                            else if (j == 0 && i == 3)
                                 array[i][j] = B;
                             else
-                                array[i][j] = nP;
+                                array[i][j] = null;
                         }
                     }
                 }
                 if (dir == SOUTH) {
-                    for (int i = 0; i < getXDimensions(); i++) {
-                        for (int j = 0; j <getYDimensions(); j++) {
-                            if (j == 1)
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
                                 array[i][j] = B;
                             else if (i == 0 && j == 0)
                                 array[i][j] = B;
-                            else if (i == 2 && j == 0)
+                            else if (j == 2 && i == 0)
                                 array[i][j] = B;
                             else
-                                array[i][j] = nP;
+                                array[i][j] = null;
                         }
                     }
                 }
                 if (dir == WEST) {
-                    for (int i = 0; i < getXDimensions(); i++) {
-                        for (int j = 0; j <getYDimensions(); j++) {
-                            if (i == 0)
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
                                 array[i][j] = B;
-                            else if (i == 1 && j == 0)
+                            else if (j == 1 && i == 0)
                                 array[i][j] = B;
-                            else if (i == 1 && j == 2)
+                            else if (j == 1 && i == 2)
                                 array[i][j] = B;
                             else
-                                array[i][j] = nP;
+                                array[i][j] = null;
                         }
                     }
                 }
                 break;
+            case g:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = g;
+                            else if (i == 1 && j == 1)
+                                array[i][j] = g;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = g;
+                            else if (j == 0 && i == 1)
+                                array[i][j] = g;
+                            else if (j == 0 && i == 3)
+                                array[i][j] = g;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = g;
+                            else if (i == 0 && j == 1)
+                                array[i][j] = g;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = g;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = g;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case G:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = G;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = G;
+                            else if (i == 1 && j == 1)
+                                array[i][j] = G;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1 || i == 0)
+                                array[i][j] = G;
+                            else if (j == 1 && i == 2)
+                                array[i][j] = G;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = G;
+                            else if (i == 0 && j == 1)
+                                array[i][j] = G;
+                            else if (i == 0 && j == 2)
+                                array[i][j] = G;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1 || i == 2)
+                                array[i][j] = G;
+                            else if (j == 0 && i == 0)
+                                array[i][j] = G;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case i:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = PieceType.i;
+                            else if (i == 1 && j == 2)
+                                array[i][j] = PieceType.i;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = PieceType.i;
+                            else if (j == 0 && i == 2)
+                                array[i][j] = PieceType.i;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = PieceType.i;
+                            else if (i == 0 && j == 0)
+                                array[i][j] = PieceType.i;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = PieceType.i;
+                            else if (j == 1 && i == 0)
+                                array[i][j] = PieceType.i;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case I:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = I;
+                            else if (i == 1 && j == 1)
+                                array[i][j] = I;
+                            else if (i == 1 && j == 2)
+                                array[i][j] = I;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = I;
+                            else if (j == 0 && i == 1)
+                                array[i][j] = I;
+                            else if (j == 0 && i == 2)
+                                array[i][j] = I;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = I;
+                            else if (i == 0 && j == 0)
+                                array[i][j] = I;
+                            else if (j == 1 && i == 0)
+                                array[i][j] = I;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = B;
+                            else if (j == 1 && i == 0)
+                                array[i][j] = B;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = B;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case l:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = l;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = l;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = l;
+                            else if (j == 0 && i == 0)
+                                array[i][j] = l;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = l;
+                            else if (j == 2 && i == 0)
+                                array[i][j] = l;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = l;
+                            else if (j == 1 && i == 2)
+                                array[i][j] = l;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case L:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = L;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = L;
+                            else if (i == 1 && j == 2)
+                                array[i][j] = L;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0 || i == 2)
+                                array[i][j] = L;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = L;
+
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = L;
+                            else if (i == 0 && j == 0)
+                                array[i][j] = L;
+                            else if (j == 2 && i == 0)
+                                array[i][j] = L;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0 || i == 2)
+                                array[i][j] = L;
+                            else if (j == 0 && i == 1)
+                                array[i][j] = L;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case n:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = n;
+                            else if (i == 1 && j == 1)
+                                array[i][j] = n;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = n;
+                            else if (j == 0 && i == 1)
+                                array[i][j] = n;
+                            else if (j == 0 && i == 3)
+                                array[i][j] = n;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = n;
+                            else if (i == 0 && j == 1)
+                                array[i][j] = n;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = n;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = n;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case N:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = N;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = N;
+                            else if (i == 1 && j == 2)
+                                array[i][j] = N;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0 || i == 2)
+                                array[i][j] = N;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = N;
+
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = N;
+                            else if (i == 0 && j == 0)
+                                array[i][j] = N;
+                            else if (j == 2 && i == 0)
+                                array[i][j] = N;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0 || i == 2)
+                                array[i][j] = N;
+                            else if (j == 0 && i == 1)
+                                array[i][j] = N;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case o:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = o;
+                            else if (i == 1 && j == 1)
+                                array[i][j] = o;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = o;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = o;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = o;
+                            else if (j == 2 && i == 0)
+                                array[i][j] = o;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = o;
+                            else if (j == 1 && i == 2)
+                                array[i][j] = o;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case O:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = O;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = O;
+                            else if (i == 1 && j == 2)
+                                array[i][j] = O;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0 || i == 2)
+                                array[i][j] = O;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = O;
+                            else if (j == 1 && i == 3)
+                                array[i][j] = O;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = O;
+                            else if (i == 0 && j == 1)
+                                array[i][j] = O;
+                            else if (i == 0 && j == 3)
+                                array[i][j] = O;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = O;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = O;
+                            else if (j == 1 && i == 3)
+                                array[i][j] = O;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case p:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = p;
+                            else if (i == 1 && j == 2)
+                                array[i][j] = p;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = p;
+                            else if (i == 2 && j == 0)
+                                array[i][j] = p;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = p;
+                            else if (j == 1 && i == 0)
+                                array[i][j] = p;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = p;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = p;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+            case P:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = P;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = P;
+                            else if (i == 1 && j == 1)
+                                array[i][j] = P;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0 || i == 1)
+                                array[i][j] = P;
+                            else if (j == 1 && i == 2)
+                                array[i][j] = P;
+                            else if (j == 1 && i == 3)
+                                array[i][j] = P;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = P;
+                            else if (i == 0 && j == 2)
+                                array[i][j] = P;
+                            else if (i == 0 && j == 3)
+                                array[i][j] = P;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = P;
+                            else if (j == 1 && i == 2)
+                                array[i][j] = P;
+                            else if (j == 1 && i == 3)
+                                array[i][j] = P;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+
+            case r:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = r;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = r;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = r;
+                            else if (i == 0 && j == 0)
+                                array[i][j] = r;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = r;
+                            else if (j == 3 && i == 0)
+                                array[i][j] = r;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = r;
+                            else if (j == 1 && i == 3)
+                                array[i][j] = r;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+
+            case R:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = R;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = R;
+                            else if (i == 1 && j == 3)
+                                array[i][j] = R;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = R;
+                            else if (j == 0 && i == 0)
+                                array[i][j] = R;
+                            else if (j == 0 && i == 3)
+                                array[i][j] = R;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = R;
+                            else if (i == 0 && j == 0)
+                                array[i][j] = R;
+                            else if (i == 0 && j == 3)
+                                array[i][j] = R;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = R;
+                            else if (j == 1 && i == 0)
+                                array[i][j] = R;
+                            else if (j == 1 && i == 3)
+                                array[i][j] = R;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+
+            case s:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = s;
+                            else if (i == 1 && j == 1)
+                                array[i][j] = s;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = s;
+                            else if (i == 1 && j == 0)
+                                array[i][j] = s;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = s;
+                            else if (j == 2 && i == 0)
+                                array[i][j] = s;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = s;
+                            else if (j == 1 && i == 2)
+                                array[i][j] = s;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+
+            case S:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = S;
+                            else if (i == 1 && j == 1)
+                                array[i][j] = S;
+                            else if (i == 1 && j == 2)
+                                array[i][j] = S;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = S;
+                            else if (j == 0 && i == 1)
+                                array[i][j] = S;
+                            else if (j == 0 && i == 2)
+                                array[i][j] = S;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = S;
+                            else if (i == 0 && j == 1)
+                                array[i][j] = S;
+                            else if (i == 0 && j == 2)
+                                array[i][j] = S;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = S;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = S;
+                            else if (j == 1 && i == 2)
+                                array[i][j] = S;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+
+            case y:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = y;
+                            else if (i == 1 && j == 3)
+                                array[i][j] = y;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j < getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = y;
+                            else if (i == 3 && j == 0)
+                                array[i][j] = y;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = y;
+                            else if (j == 0 && i == 0)
+                                array[i][j] = y;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = y;
+                            else if (j == 1 && i == 0)
+                                array[i][j] = y;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+
+            case Y:
+                if (dir == NORTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 0)
+                                array[i][j] = Y;
+                            else if (i == 1 && j == 2)
+                                array[i][j] = Y;
+                            else if (i == 1 && j == 3)
+                                array[i][j] = Y;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == EAST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 1)
+                                array[i][j] = Y;
+                            else if (j == 0 && i == 2)
+                                array[i][j] = Y;
+                            else if (j == 0 && i == 3)
+                                array[i][j] = Y;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == SOUTH) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (i == 1)
+                                array[i][j] = Y;
+                            else if (i == 0 && j == 0)
+                                array[i][j] = Y;
+                            else if (i == 0 && j == 1)
+                                array[i][j] = Y;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                if (dir == WEST) {
+                    for (int i = 0; i < getYDimensions(); i++) {
+                        for (int j = 0; j <getXDimensions(); j++) {
+                            if (j == 0)
+                                array[i][j] = Y;
+                            else if (j == 1 && i == 0)
+                                array[i][j] = Y;
+                            else if (j == 1 && i == 1)
+                                array[i][j] = Y;
+                            else
+                                array[i][j] = null;
+                        }
+                    }
+                }
+                break;
+
         }
     return array;
     }

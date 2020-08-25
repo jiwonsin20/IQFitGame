@@ -9,6 +9,8 @@ import java.util.Set;
 import static comp1110.ass2.PieceType.*;
 import static comp1110.ass2.Piece.*;
 import static comp1110.ass2.PieceB1.*;
+import static comp1110.ass2.PieceType.y;
+
 /**
  * This class provides the text interface for the IQ Fit Game
  * <p>
@@ -23,11 +25,11 @@ public class FitGame {
     // whatever the colour of the piece is (blue ~ yellow)
 
     public static PieceType [][] initialBoard = {
-            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
-            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
-            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
-            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
-            {nP, nP, nP, nP, nP, nP, nP, nP, nP, nP},
+            {null, null, null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null, null, null}
     };
 //
 //    public static void main(String[] args) {
@@ -173,47 +175,73 @@ public class FitGame {
 //        String str = "p01W";
 //        System.out.println(isOnBoard(str));
 //    }
-    public static void main(String[] args) {
-        String str = "b00NB02N";
-
-//        System.out.println(Arrays.toString(initialBoard[4][0]));
-        System.out.println(doesOverlap(str));
-    }
 
     public static boolean isOnBoard(String placement) {
-        Piece piece = Piece.toPiece(placement);
+        Piece [] piece = Piece.toPieces(placement);
 
-        int x = piece.getXDimensions();
-        int y = piece.getYDimensions();
-        int xCoord = getXCoordinate(placement);
-        int yCoord = getYCoordinate(placement);
+        for (Piece value : piece) {
+            int x = value.getXDimensions();
+            int y = value.getYDimensions();
 
-        return xCoord + x - 1 <= 9 && yCoord + y - 1 <= 4;
+            int xCoord = getXCoordinate(placement);
+            int yCoord = getYCoordinate(placement);
+
+            if (xCoord + x - 1 > 9 || yCoord + y - 1 > 4 || xCoord + x - 1 < 0 || yCoord + y - 1 < 0)
+                return false;
+        }
+        return true;
     }
 
-    public static boolean doesOverlap(String placement) {
-        int x = Character.getNumericValue(placement.charAt(1));
-        int y = Character.getNumericValue(placement.charAt(2));
+    public static void isOnBoard2(String placement) {
+        Piece [] piece = Piece.toPieces(placement);
+
+        for (Piece value : piece) {
+            int x = value.getXDimensions();
+            int y = value.getYDimensions();
+
+            int xCoord = getXCoordinate(placement);
+            int yCoord = getYCoordinate(placement);
+
+            if (xCoord + x - 1 > 9 || yCoord + y - 1 > 4 || xCoord + x - 1 < 0 || yCoord + y - 1 < 0)
+                System.out.println((x + xCoord - 1) + " , " + (y + yCoord - 1));
+        }
+        return;
+    }
+
+    public static void main(String[] args) {
+        String str = "B03SG70S";
+        String str2 = "b00N";
+//        System.out.println(isOnBoard("B44N"));
+//        System.out.println(isPlacementValid("B44N"));
+//        System.out.println(Arrays.toString(initialBoard[4][0]));
+        System.out.println("isPlacementWellFormed : " +isPlacementWellFormed(str));
+        System.out.println("isOnBoard : "+isOnBoard(str));
+//        isOnBoard2(str);
+        System.out.println("doesNotOverLap : " +doesNotOverlap(str));
+        System.out.println("isPlacementValid : " +isPlacementValid(str));
+        System.out.println(Arrays.deepToString(initialBoard));
+    }
+
+
+    public static boolean doesNotOverlap(String placement) {
+
         Piece[] pieces = toPieces(placement);
 
-        for (int k = 0; k < pieces.length; k++) {
-            PieceType[][] array = pieces[k].getCoords();
-//            int x = pieces[k].coords.getXCoordinate();
-//            int y = pieces[k].coords.getYCoordinate();
+        for (Piece piece : pieces) {
+            PieceType[][] array = piece.getCoords();
+            int x = piece.coords.getXCoordinate();
+            int y = piece.coords.getYCoordinate();
 
-
-            for (int i = x; i < x + pieces[k].getXDimensions() && i < 10; i++) {
-                for (int j = y; j < y + pieces[k].getYDimensions() && j < 5; j++) {
-                    int currentX = i - x;
-                    int currentY = j - y;
-                    if (initialBoard[i][j] != nP && array[currentX][currentY] != nP)
-                        return true;
-                    else
-                        initialBoard[i][j] = array[currentX][currentY];
+            for (int i = y; i < y + piece.getYDimensions(); i++) {
+                for (int j = x; j < x + piece.getXDimensions(); j++) {
+                    if (initialBoard[i][j] != null && array[i - y][j - x] != null)
+                        return false;
+                    else if (array[i - y][j - x] != null)
+                        initialBoard[i][j] = array[i - y][j - x];
                 }
             }
         }
-        return false;
+        return true;
     }
 
 
@@ -234,7 +262,8 @@ public class FitGame {
 
 
     public static boolean isPlacementValid(String placement) {
-        return false; // FIXME Task 5: determine whether a placement string is valid
+        // FIXME Task 5: determine whether a placement string is valid
+        return isOnBoard(placement) && isPlacementWellFormed(placement) && doesNotOverlap(placement);
     }
 
     /**
