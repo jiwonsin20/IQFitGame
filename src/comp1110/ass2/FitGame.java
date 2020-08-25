@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+import java.util.HashSet;
 import java.util.Set;
 
 // Looked up on internet on how to import static enum class
@@ -51,7 +52,29 @@ public class FitGame {
      */
     static boolean isPiecePlacementWellFormed(String piecePlacement) {
     // FIXME Task 2: determine whether a piece placement is well-formed
-        return false;
+
+        return (piecePlacement.length() == 4) &&
+                (piecePlacement.charAt(0) == 'b' || piecePlacement.charAt(0) == 'B' ||
+                        piecePlacement.charAt(0) == 'g' || piecePlacement.charAt(0) == 'G' ||
+                        piecePlacement.charAt(0) == 'i' || piecePlacement.charAt(0) == 'I' ||
+                        piecePlacement.charAt(0) == 'l' || piecePlacement.charAt(0) == 'L' ||
+                        piecePlacement.charAt(0) == 'n' || piecePlacement.charAt(0) == 'N' ||
+                        piecePlacement.charAt(0) == 'o' || piecePlacement.charAt(0) == 'O' ||
+                        piecePlacement.charAt(0) == 'p' || piecePlacement.charAt(0) == 'P' ||
+                        piecePlacement.charAt(0) == 'r' || piecePlacement.charAt(0) == 'R' ||
+                        piecePlacement.charAt(0) == 's' || piecePlacement.charAt(0) == 'S' ||
+                        piecePlacement.charAt(0) == 'y' || piecePlacement.charAt(0) == 'Y') &&
+                (piecePlacement.charAt(1) == '0' || piecePlacement.charAt(1) == '1' ||
+                        piecePlacement.charAt(1) == '2' || piecePlacement.charAt(1) == '3' ||
+                        piecePlacement.charAt(1) == '4' || piecePlacement.charAt(1) == '5' ||
+                        piecePlacement.charAt(1) == '6' || piecePlacement.charAt(1) == '7' ||
+                        piecePlacement.charAt(1) == '8' || piecePlacement.charAt(1) == '9') &&
+                (piecePlacement.charAt(2) == '0' || piecePlacement.charAt(2) == '1' ||
+                        piecePlacement.charAt(2) == '2' || piecePlacement.charAt(2) == '3' ||
+                        piecePlacement.charAt(2) == '4') &&
+                (piecePlacement.charAt(3) == 'N' || piecePlacement.charAt(3) == 'S' ||
+                        piecePlacement.charAt(3) == 'E' || piecePlacement.charAt(3) == 'W');
+
     }
 
     /**
@@ -66,7 +89,22 @@ public class FitGame {
      */
     public static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 3: determine whether a placement is well-formed
+        if(placement.length() == 0 || placement.length() % 4 != 0)
+            return false;
+
+        String piece = "";
+        Set<Character> pieces = new HashSet<>();
+
+        for(int i = 0; i < placement.length() / 4; i++) {
+            piece = placement.substring(i*4, (i+1)*4);
+            if(!isPiecePlacementWellFormed(piece))
+                return false;
+            if(pieces.contains(piece.charAt(0)))
+                return false;
+            pieces.add(piece.charAt(0));
+        }
         return true;
+
     }
 
 
