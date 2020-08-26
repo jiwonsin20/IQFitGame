@@ -1,7 +1,7 @@
 package gittest;
 
 public class B {
-    @Override
+    B b = new B();
     public String toString() {
         return super.toString();
     }
