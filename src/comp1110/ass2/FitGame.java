@@ -92,47 +92,19 @@ public class FitGame {
      */
     public static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 3: determine whether a placement is well-formed
-
-        int pLength = placement.length();
-
-        // For a placement string to be valid, its length must be in multiple of 4
-        // OR not zero.
-        if (pLength % 4 != 0 || pLength == 0)
+        if(placement.length() == 0 || placement.length() % 4 != 0)
             return false;
 
-        // Splitting the placement string into substrings of four and add them to a list.
-        // Example: "r01Nb45S" -> ["r01N", "b45S"].
-        for (int i = 0; i < pLength; i += 4) {
-            if (pLength == 4) {
-                if (!isPiecePlacementWellFormed(placement))
-                    return false;
-            }
-            else {
-                if (!isPiecePlacementWellFormed(placement.substring(i, i + 4))) // Site website
-                    return false;
-            }
-        }
+        String piece = "";
+        Set<Character> pieces = new HashSet<>();
 
-        // Creating new charArray that stores all charAt(0) of placement strings.
-        char [] order = new char[pLength/4];
-        int j = 0;
-        for (int i = 0; i < pLength; i += 4) {
-            order[j] = Character.toLowerCase(placement.charAt(i));
-            j++;
-        }
-
-        // Checking whether there are identical pieces
-        for (int i = 1; i < order.length; i++) {
-            for (int k = 0; k < i; k++) {
-                if (order[i] == order[k])
-                    return false;
-            }
-        }
-
-        // Checking whether pieces are ordered in (b -> g -> i -> l -> n -> o -> p -> r -> s -> y)
-        for (int i = 1; i < order.length; i++) {
-            if (order[i - 1] > order[i])
+        for(int i = 0; i < placement.length() / 4; i++) {
+            piece = placement.substring(i*4, (i+1)*4);
+            if(!isPiecePlacementWellFormed(piece))
                 return false;
+            if(pieces.contains(piece.charAt(0)))
+                return false;
+            pieces.add(piece.charAt(0));
         }
         return true;
     }
@@ -211,18 +183,19 @@ public class FitGame {
     }
 
     public static void main(String[] args) {
-        String str = "B13SG70Si52SL00Nn01Eo63Sp20Er41WS40Ny62N";
+        String str = "B03SG70S";
         String str2 = "b00N";
 //        System.out.println(isOnBoard("B44N"));
 //        System.out.println(isPlacementValid("B44N"));
 //        System.out.println(Arrays.toString(initialBoard[4][0]));
         System.out.println("isPlacementWellFormed : " +isPlacementWellFormed(str));
         System.out.println("isOnBoard : "+isOnBoard(str));
-        isOnBoard2(str);
+//        isOnBoard2(str);
         System.out.println("overLap : " +overLaps(str));
-        overLaps2(str);
+//        overLaps2(str);
         System.out.println("isPlacementValid : " +isPlacementValid(str));
-        System.out.println(Arrays.deepToString(initialBoard));
+//        System.out.println(Arrays.deepToString(initialBoard));
+//        System.out.println((initialBoard[1][9]));
     }
 
 
@@ -259,7 +232,7 @@ public class FitGame {
             for (int i = y; i < y + piece.getYDimensions(); i++) {
                 for (int j = x; j < x + piece.getXDimensions(); j++) {
                     if (initialBoard[i][j] != null && array[i - y][j - x] != null)
-                        System.out.println(i + " , " + j);
+                        System.out.println((i - y) + " , " + (j - x));
                     else if (array[i - y][j - x] != null)
                         initialBoard[i][j] = array[i - y][j - x];
                 }
@@ -285,7 +258,7 @@ public class FitGame {
 
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 5: determine whether a placement string is valid
-        return isOnBoard(placement) && overLaps(placement) && isPlacementWellFormed(placement);
+        return isOnBoard(placement) && overLaps(placement) && !isPlacementWellFormed(placement);
     }
 
     /**
