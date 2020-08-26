@@ -211,7 +211,7 @@ public class FitGame {
     }
 
     public static void main(String[] args) {
-        String str = "B03SG70Si52SL00Nn01Eo63Sp20Er41WS40Ny62N";
+        String str = "B13SG70Si52SL00Nn01Eo63Sp20Er41WS40Ny62N";
         String str2 = "b00N";
 //        System.out.println(isOnBoard("B44N"));
 //        System.out.println(isPlacementValid("B44N"));
@@ -237,13 +237,13 @@ public class FitGame {
             for (int i = y; i < y + piece.getYDimensions(); i++) {
                 for (int j = x; j < x + piece.getXDimensions(); j++) {
                     if (initialBoard[i][j] != null && array[i - y][j - x] != null)
-                        return false;
+                        return true;
                     else if (array[i - y][j - x] != null)
                         initialBoard[i][j] = array[i - y][j - x];
                 }
             }
         }
-        return true;
+        return false;
     }
 
 
@@ -265,7 +265,7 @@ public class FitGame {
 
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 5: determine whether a placement string is valid
-        return isPlacementWellFormed(placement) && (isOnBoard(placement) && doesNotOverlap(placement));
+        return isPlacementWellFormed(placement) && (isOnBoard(placement) && !doesNotOverlap(placement));
     }
 
     /**
