@@ -6,5 +6,6 @@ public class Main {
         A a = new A();
         B b = new B();
         B b2 = new B();
+        B b3 = new B();
     }
 }
