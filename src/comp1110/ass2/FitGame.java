@@ -24,7 +24,7 @@ public class FitGame {
     // When nothing is placed, it will be noPiece. However when some piece is added, noPiece will change to
     // whatever the colour of the piece is (blue ~ yellow)
 
-    public static PieceType [][] initialBoard = {
+    public static PieceType[][] initialBoard = {
             {null, null, null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null, null, null},
@@ -54,7 +54,7 @@ public class FitGame {
      * @return True if the piece placement is well-formed
      */
     static boolean isPiecePlacementWellFormed(String piecePlacement) {
-    // FIXME Task 2: determine whether a piece placement is well-formed
+        // FIXME Task 2: determine whether a piece placement is well-formed
 
         return (piecePlacement.length() == 4) &&
                 (piecePlacement.charAt(0) == 'b' || piecePlacement.charAt(0) == 'B' ||
@@ -92,25 +92,38 @@ public class FitGame {
      */
     public static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 3: determine whether a placement is well-formed
-        if(placement.length() == 0 || placement.length() % 4 != 0)
+
+        if (placement.length() == 0 || placement.length() % 4 != 0)
             return false;
 
-        String piece = "";
-        Set<Character> pieces = new HashSet<>();
+        char[] order = new char[placement.length() / 4];
+        int temp = 0;
+        for (int i = 0; i < placement.length(); i+= 4) {
+                order[temp++] = Character.toLowerCase(placement.charAt(i));
+        }
 
-        for(int i = 0; i < placement.length() / 4; i++) {
-            piece = placement.substring(i*4, (i+1)*4);
-            if(!isPiecePlacementWellFormed(piece))
+        String tempString = new String(order);
+        for (int i = 1; i < tempString.length(); i++) {
+            if (tempString.charAt(i - 1) > tempString.charAt(i))
                 return false;
-            if(pieces.contains(piece.charAt(0)))
+        }
+
+        Set<Character> pieces = new HashSet<>();
+        String[] piece = new String[placement.length()/4];
+
+        for (int i = 0; i < placement.length() / 4; i++) {
+            piece[i] = placement.substring(i * 4, (i + 1) * 4);
+            if (!isPiecePlacementWellFormed(piece[i]))
                 return false;
-            pieces.add(piece.charAt(0));
+            if (pieces.contains(piece[i].charAt(0)))
+                return false;
+            pieces.add(piece[i].charAt(0));
         }
         return true;
     }
 
 
-    // For this problem, need think of a method that can
+        // For this problem, need think of a method that can
     // 1. Entirely on the board
     // 2. Pieces must not overlap each other
 
@@ -183,7 +196,7 @@ public class FitGame {
     }
 
     public static void main(String[] args) {
-        String str = "B03SG70S";
+        String str = "B13SG70Si52SL00Nn01Eo63Sp20Er41WS40Ny62N";
         String str2 = "b00N";
 //        System.out.println(isOnBoard("B44N"));
 //        System.out.println(isPlacementValid("B44N"));
@@ -193,8 +206,7 @@ public class FitGame {
 //        isOnBoard2(str);
 //        overLaps2(str);
         System.out.println("isPlacementValid : " +isPlacementValid(str));
-//        System.out.println(Arrays.deepToString(initialBoard));
-//        System.out.println((initialBoard[1][9]));
+        System.out.println(Arrays.deepToString(initialBoard));
     }
 
 
