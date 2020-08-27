@@ -1160,31 +1160,6 @@ public class Piece {
     return array;
     }
 
-//    public int [] entireCoords(String placement) {
-//        PieceCoordinates [] array = new PieceCoordinates [this.getXDimensions() + this.getYDimensions()];
-//        PieceCoordinates [] hi = new PieceCoordinates[] {(1,2)}
-//        int x = Character.getNumericValue(placement.charAt(1));
-//        int y = Character.getNumericValue(placement.charAt(2));
-//
-//        switch (fromChar(placement)) {
-//            case b:
-//                if (placement.charAt(3) == 'N') {
-//                    array = {(x, y), (x + 1, y + 1)};
-//                }
-//                else if (placement.charAt(3) == 'S') {
-//
-//                }
-//                else if (placement.charAt(3) == 'E') {
-//
-//                }
-//                else if (placement.charAt(3) == 'W') {
-//
-//                }
-//                break;
-//            case B:
-//
-//        }
-//    }
 
     /**
      * Using the Piece, find out the coordinates its occupying.

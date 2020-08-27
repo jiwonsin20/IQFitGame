@@ -191,7 +191,6 @@ public class FitGame {
         System.out.println("isPlacementWellFormed : " +isPlacementWellFormed(str));
         System.out.println("isOnBoard : "+isOnBoard(str));
 //        isOnBoard2(str);
-        System.out.println("overLap : " +overLaps(str));
 //        overLaps2(str);
         System.out.println("isPlacementValid : " +isPlacementValid(str));
 //        System.out.println(Arrays.deepToString(initialBoard));
@@ -199,7 +198,7 @@ public class FitGame {
     }
 
 
-    public static boolean overLaps(String placement) {
+    public static boolean isOverLapping(String placement) {
 
         Piece[] pieces = toPieces(placement);
 
@@ -207,37 +206,17 @@ public class FitGame {
             PieceType[][] array = piece.getCoords();
             int x = piece.coords.getXCoordinate();
             int y = piece.coords.getYCoordinate();
-
-            for (int i = y; i < y + piece.getYDimensions(); i++) {
-                for (int j = x; j < x + piece.getXDimensions(); j++) {
+            for (int j = x; j < x + piece.getXDimensions(); j++) {
+                for (int i = y; i < y + piece.getYDimensions(); i++) {
                     if (initialBoard[i][j] != null && array[i - y][j - x] != null)
                         return true;
-                    else if (array[i - y][j - x] != null)
-                        initialBoard[i][j] = array[i - y][j - x];
+                    else
+                        if (array[i - y][j - x] != null)
+                            initialBoard[i][j] = array[i - y][j - x];
                 }
             }
         }
         return false;
-    }
-
-    public static void overLaps2(String placement) {
-
-        Piece[] pieces = toPieces(placement);
-
-        for (Piece piece : pieces) {
-            PieceType[][] array = piece.getCoords();
-            int x = piece.coords.getXCoordinate();
-            int y = piece.coords.getYCoordinate();
-
-            for (int i = y; i < y + piece.getYDimensions(); i++) {
-                for (int j = x; j < x + piece.getXDimensions(); j++) {
-                    if (initialBoard[i][j] != null && array[i - y][j - x] != null)
-                        System.out.println((i - y) + " , " + (j - x));
-                    else if (array[i - y][j - x] != null)
-                        initialBoard[i][j] = array[i - y][j - x];
-                }
-            }
-        }
     }
 
 
@@ -258,7 +237,7 @@ public class FitGame {
 
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 5: determine whether a placement string is valid
-        return isOnBoard(placement) && overLaps(placement) && !isPlacementWellFormed(placement);
+        return isOnBoard(placement) && isOverLapping(placement) && !isPlacementWellFormed(placement);
     }
 
     /**
