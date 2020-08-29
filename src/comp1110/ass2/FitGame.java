@@ -126,40 +126,7 @@ public class FitGame {
         // For this problem, need think of a method that can
     // 1. Entirely on the board
     // 2. Pieces must not overlap each other
-
-    /**
-     * Given a placement string, the isOnTheBoard method determines whether the piece coordinate (left corner)
-     * exists within the board.
-     *
-     * Since placement string only has coordinate for the left-corner of the piece, the piece's dimension
-     * must be taken into account (whether its 4 x 2, 2 x 4, 3 x 2, or 2 x 3).
-     *
-     * @param
-     * @return True if the placement string is located within the board.
-     */
-
     // Added by Jiwon 23/08
-//    public static boolean isOnTheBoard(String placement) {
-//        if (placement.length() > 4) {
-//            for (int i = 0; i < placement.length() / 4; i += 4) {
-//                String sepString = placement.substring(i, i + 4);
-//                if (Character.getNumericValue(sepString.charAt(1)) < 0 || Character.getNumericValue(sepString.charAt(1)) > 9)
-//                    return false;
-//                else if (Character.getNumericValue(sepString.charAt(2)) < 0 || Character.getNumericValue(sepString.charAt(2)) > 4)
-//                    return false;
-//            }
-//        } else if (placement.length() == 4) {
-//            if (Character.getNumericValue(placement.charAt(1)) < 0 || Character.getNumericValue(placement.charAt(1)) > 9)
-//                return false;
-//            else if (Character.getNumericValue(placement.charAt(2)) < 0 || Character.getNumericValue(placement.charAt(2)) > 4)
-//                return false;
-//        }
-//        return true;
-//    }
-//    public static void main(String[] args) {
-//        String str = "p01W";
-//        System.out.println(isOnBoard(str));
-//    }
 
     public static boolean isOnBoard(String placement) {
         Piece [] piece = Piece.toPieces(placement);
@@ -182,33 +149,67 @@ public class FitGame {
 
         for (Piece value : piece) {
             int x = value.getXDimensions();
+            System.out.println(x);
             int y = value.getYDimensions();
+            System.out.println(y);
 
             int xCoord = value.coords.xCoord;
+            System.out.println(xCoord);
             int yCoord = value.coords.yCoord;
+            System.out.println(yCoord);
 
             if (xCoord + x - 1 > 9 || yCoord + y - 1 > 4 || xCoord + x - 1 < 0 || yCoord + y - 1 < 0) {
                 System.out.println(Arrays.deepToString(value.getCoords()));
                 System.out.println(( xCoord) + " , " + (yCoord));
+                break;
+            }
+            else {
+                System.out.println(Arrays.deepToString(value.getCoords()));
+                System.out.println("Its on the board");
             }
         }
-        return;
     }
 
     public static void main(String[] args) {
-        String str = "B13SG70Si52SL00Nn01Eo63Sp20Er41WS40Ny62N";
-        String str2 = "b00N";
-//        System.out.println(isOnBoard("B44N"));
-//        System.out.println(isPlacementValid("B44N"));
-//        System.out.println(Arrays.toString(initialBoard[4][0]));
-        System.out.println("isPlacementWellFormed : " +isPlacementWellFormed(str));
-        System.out.println("isOnBoard : "+isOnBoard(str));
-//        isOnBoard2(str);
-//        overLaps2(str);
-        System.out.println("isPlacementValid : " +isPlacementValid(str));
-        System.out.println(Arrays.deepToString(initialBoard));
-    }
+        String str = "B00N";
+        String str2 = "G00WI10N";
+//        System.out.println("isPlacementWellFormed : " +isPlacementWellFormed(str));
+//        System.out.println("isOnBoard : "+isOnBoard(str));
+//        isOnBoard2(str2);
 
+        System.out.println("isOverLapping : "+isOverLapping(str2));
+        isOverLapping2(str2);
+////        isOnBoard2(str);
+////        overLaps2(str);
+        System.out.println("isPlacementValid : " +isPlacementValid(str2));
+
+
+    }
+//    public static boolean isOverLapping(String placement) {
+//
+//        Piece[] pieces = toPieces(placement);
+//
+//        for (Piece piece : pieces) {
+//            PieceType[][] array = piece.getCoords();
+//            int x = piece.coords.getXCoordinate();
+//            int y = piece.coords.getYCoordinate();
+//            for (int j = x; j < x + piece.getXDimensions(); j++) {
+//                for (int i = y; i < y + piece.getYDimensions(); i++) {
+//                    if (initialBoard[i][j] != array[i - y][j - x]) {
+//                        if (initialBoard[i][j] != null && array[i - y][j - x] != null)
+//                            return true;
+//                        else if (initialBoard[i][j] == null)
+//                            initialBoard[i][j] = array[i - y][j - x];
+//                        else if (array[i - y][j - x] == null)
+//                            initialBoard[i][j] = initialBoard[i][j];
+//                    }
+//                    else
+//                            initialBoard[i][j] = array[i - y][j - x];
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     public static boolean isOverLapping(String placement) {
 
@@ -220,15 +221,52 @@ public class FitGame {
             int y = piece.coords.getYCoordinate();
             for (int j = x; j < x + piece.getXDimensions(); j++) {
                 for (int i = y; i < y + piece.getYDimensions(); i++) {
-                    if (initialBoard[i][j] != null && array[i - y][j - x] != null)
-                        return true;
-                    else
-                        if (array[i - y][j - x] != null)
+                    if (initialBoard[i][j] != array[i - y][j - x]) {
+                        if (initialBoard[i][j] != null && array[i - y][j - x] != null)
+                            return true;
+                        else if (initialBoard[i][j] == null)
                             initialBoard[i][j] = array[i - y][j - x];
+                        else if (array[i - y][j - x] == null)
+                            initialBoard[i][j] = initialBoard[i][j];
+                        else
+                            initialBoard[i][j] = array[i - y][j - x];
+                    }
+                    else
+                        initialBoard[i][j] = array[i - y][j - x];
                 }
             }
         }
         return false;
+    }
+
+    public static void isOverLapping2(String placement) {
+
+        Piece[] pieces = toPieces(placement);
+
+        for (Piece piece : pieces) {
+            PieceType[][] array = piece.getCoords();
+            int x = piece.coords.getXCoordinate();
+            int y = piece.coords.getYCoordinate();
+            for (int j = x; j < x + piece.getXDimensions(); j++) {
+                for (int i = y; i < y + piece.getYDimensions(); i++) {
+                    if (initialBoard[i][j] != array[i - y][j - x]) {
+                        if (initialBoard[i][j] != null && array[i - y][j - x] != null)
+                            System.out.println(i + " , " + j + piece.type + " overlapping " + initialBoard[i][j]);
+                        else if (initialBoard[i][j] == null)
+                            initialBoard[i][j] = array[i - y][j - x];
+                        else if (array[i - y][j - x] == null)
+                            initialBoard[i][j] = initialBoard[i][j];
+                        else
+                            initialBoard[i][j] = array[i - y][j - x];
+                    }
+                    else {
+                        if (array[i - y][j - x] != null)
+                            initialBoard[i][j] = array[i - y][j - x];
+                    }
+                }
+            }
+        }
+        System.out.println(Arrays.deepToString(initialBoard));
     }
 
 
@@ -249,7 +287,16 @@ public class FitGame {
 
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 5: determine whether a placement string is valid
-        return isOnBoard(placement) && isOverLapping(placement) && !isPlacementWellFormed(placement);
+        if (!isPlacementWellFormed(placement)) {
+            return false;
+        }
+        else {
+            if (!isOnBoard(placement))
+                return false;
+            else {
+                return !isOverLapping(placement);
+            }
+        }
     }
 
     /**

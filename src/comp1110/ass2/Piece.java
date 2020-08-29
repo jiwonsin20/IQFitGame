@@ -36,17 +36,8 @@ public class Piece {
 
     public Piece [][] piece = new Piece [this.getXDimensions()] [this.getYDimensions()];
 
-
-    public static Piece toPiece(String placement) {
-        PieceType type = PieceType.fromChar(placement);
-        PieceCoordinates coords = getPCoord(placement);
-        PieceDirection dir = PieceDirection.getDirection(placement);
-        return new Piece(type, coords, dir);
-
-    }
-
     public static void main(String[] args) {
-        String str = "l00S";
+        String str = "S21E";
         String str2 = "b43S";
         Piece [] pieces = toPieces(str);
         System.out.println(pieces.length);
@@ -58,14 +49,22 @@ public class Piece {
         }
     }
 
+    public static Piece toPiece(String placement) {
+        PieceType type = PieceType.fromChar(placement);
+        PieceCoordinates coords = getPCoord(placement);
+        PieceDirection dir = PieceDirection.getDirection(placement);
+        return new Piece(type, coords, dir);
+
+    }
+
     public static Piece [] toPieces(String placement) {
         int r = 0;
         Piece [] pieces = new Piece[placement.length()/4];
-        String [] str = new String [placement.length() / 4];
+        String str = "";
         for (int i = 0; i < placement.length(); i+=4) {
 ;
-            str[r] = placement.substring(i, i + 4);
-            pieces[r] = toPiece(str[r]);
+            str = placement.substring(i, i + 4);
+            pieces[r] = toPiece(str);
             r++;
         }
         return pieces;
@@ -1161,31 +1160,6 @@ public class Piece {
     }
 
 
-    /**
-     * Using the Piece, find out the coordinates its occupying.
-     *
-     * @param placement : Must be in four letter string.
-     * @return          : Returns the value of coordinates that is occupied by this piece.
-     */
-
-//    public static ArrayList<Integer> getIndividualCoords(String placement) {
-//        int x = Character.getNumericValue(placement.charAt(1));
-//        int y = Character.getNumericValue(placement.charAt(2));
-//        PieceType type = fromChar(placement);
-//        PieceDirection dir = getDirection(placement);
-//        Piece piece = toPiece(placement);
-//
-//
-//        switch (type) {
-//            case b:
-//                if (dir == NORTH) {
-//
-//
-//
-//                }
-//        }
-//        return ;
-//    }
 
     /**
      * Knowing the piece's direction, return the dimensions of the piece.
@@ -1258,21 +1232,6 @@ public class Piece {
     public static int getYCoordinate(String placement) {
         return placement.charAt(2) - 48;
     }
-
-    // method 1 : private static boolean validPosition()
-    // returns true/false whether the piece can fit the board
-
-    // method 2 : private int getXCoordinate(String position)
-    // returns the set of coordinate of the piece (left-topmost coordinate)
-
-    // method 3 : private int getYCoordinate(String position)
-    // returns the set of coordinate of the piece (left-topmost coordinate)
-
-    // method 4 : where the represented coordinates are
-    // Jiwon 22/08
-
-
-
 
     public PieceDirection getDir() {
         return dir;
