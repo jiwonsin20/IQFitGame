@@ -123,11 +123,6 @@ public class FitGame {
     }
 
 
-        // For this problem, need think of a method that can
-    // 1. Entirely on the board
-    // 2. Pieces must not overlap each other
-    // Added by Jiwon 23/08
-
     public static boolean isOnBoard(String placement) {
         Piece [] piece = Piece.toPieces(placement);
 
@@ -144,76 +139,17 @@ public class FitGame {
         return true;
     }
 
-    public static void isOnBoard2(String placement) {
-        Piece [] piece = Piece.toPieces(placement);
-
-        for (Piece value : piece) {
-            int x = value.getXDimensions();
-            System.out.println(x);
-            int y = value.getYDimensions();
-            System.out.println(y);
-
-            int xCoord = value.coords.xCoord;
-            System.out.println(xCoord);
-            int yCoord = value.coords.yCoord;
-            System.out.println(yCoord);
-
-            if (xCoord + x - 1 > 9 || yCoord + y - 1 > 4 || xCoord + x - 1 < 0 || yCoord + y - 1 < 0) {
-                System.out.println(Arrays.deepToString(value.getCoords()));
-                System.out.println(( xCoord) + " , " + (yCoord));
-                break;
-            }
-            else {
-                System.out.println(Arrays.deepToString(value.getCoords()));
-                System.out.println("Its on the board");
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        String str = "B00N";
-        String str2 = "G00WI10N";
-//        System.out.println("isPlacementWellFormed : " +isPlacementWellFormed(str));
-//        System.out.println("isOnBoard : "+isOnBoard(str));
-//        isOnBoard2(str2);
-
-        System.out.println("isOverLapping : "+isOverLapping(str2));
-        isOverLapping2(str2);
-////        isOnBoard2(str);
-////        overLaps2(str);
-        System.out.println("isPlacementValid : " +isPlacementValid(str2));
-
-
-    }
-//    public static boolean isOverLapping(String placement) {
-//
-//        Piece[] pieces = toPieces(placement);
-//
-//        for (Piece piece : pieces) {
-//            PieceType[][] array = piece.getCoords();
-//            int x = piece.coords.getXCoordinate();
-//            int y = piece.coords.getYCoordinate();
-//            for (int j = x; j < x + piece.getXDimensions(); j++) {
-//                for (int i = y; i < y + piece.getYDimensions(); i++) {
-//                    if (initialBoard[i][j] != array[i - y][j - x]) {
-//                        if (initialBoard[i][j] != null && array[i - y][j - x] != null)
-//                            return true;
-//                        else if (initialBoard[i][j] == null)
-//                            initialBoard[i][j] = array[i - y][j - x];
-//                        else if (array[i - y][j - x] == null)
-//                            initialBoard[i][j] = initialBoard[i][j];
-//                    }
-//                    else
-//                            initialBoard[i][j] = array[i - y][j - x];
-//                }
-//            }
-//        }
-//        return false;
-//    }
-
-    public static boolean isOverLapping(String placement) {
+    public static boolean isNotOverLapping(String placement) {
 
         Piece[] pieces = toPieces(placement);
+
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
 
         for (Piece piece : pieces) {
             PieceType[][] array = piece.getCoords();
@@ -223,9 +159,7 @@ public class FitGame {
                 for (int i = y; i < y + piece.getYDimensions(); i++) {
                     if (initialBoard[i][j] != array[i - y][j - x]) {
                         if (initialBoard[i][j] != null && array[i - y][j - x] != null)
-                            return true;
-                        else if (initialBoard[i][j] == null)
-                            initialBoard[i][j] = array[i - y][j - x];
+                            return false;
                         else if (array[i - y][j - x] == null)
                             initialBoard[i][j] = initialBoard[i][j];
                         else
@@ -236,39 +170,8 @@ public class FitGame {
                 }
             }
         }
-        return false;
+        return true;
     }
-
-    public static void isOverLapping2(String placement) {
-
-        Piece[] pieces = toPieces(placement);
-
-        for (Piece piece : pieces) {
-            PieceType[][] array = piece.getCoords();
-            int x = piece.coords.getXCoordinate();
-            int y = piece.coords.getYCoordinate();
-            for (int j = x; j < x + piece.getXDimensions(); j++) {
-                for (int i = y; i < y + piece.getYDimensions(); i++) {
-                    if (initialBoard[i][j] != array[i - y][j - x]) {
-                        if (initialBoard[i][j] != null && array[i - y][j - x] != null)
-                            System.out.println(i + " , " + j + piece.type + " overlapping " + initialBoard[i][j]);
-                        else if (initialBoard[i][j] == null)
-                            initialBoard[i][j] = array[i - y][j - x];
-                        else if (array[i - y][j - x] == null)
-                            initialBoard[i][j] = initialBoard[i][j];
-                        else
-                            initialBoard[i][j] = array[i - y][j - x];
-                    }
-                    else {
-                        if (array[i - y][j - x] != null)
-                            initialBoard[i][j] = array[i - y][j - x];
-                    }
-                }
-            }
-        }
-        System.out.println(Arrays.deepToString(initialBoard));
-    }
-
 
     /**
      * Determine whether a placement string is valid.
@@ -294,10 +197,11 @@ public class FitGame {
             if (!isOnBoard(placement))
                 return false;
             else {
-                return !isOverLapping(placement);
+                return isNotOverLapping(placement);
             }
         }
     }
+
 
     /**
      * Given a string describing a placement of pieces, and a location
