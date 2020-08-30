@@ -1,15 +1,9 @@
 package comp1110.ass2;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-// Looked up on internet on how to import static enum class
-// Jiwon 23/08
-import static comp1110.ass2.PieceType.*;
 import static comp1110.ass2.Piece.*;
-import static comp1110.ass2.PieceB1.*;
-import static comp1110.ass2.PieceType.y;
+
 
 /**
  * This class provides the text interface for the IQ Fit Game
@@ -31,15 +25,6 @@ public class FitGame {
             {null, null, null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null, null, null}
     };
-//
-//    public static void main(String[] args) {
-//        System.out.println(initialBoard[1][4]);
-//        initialBoard[1][4] = y;
-//        System.out.println(initialBoard[1][4]);
-//        System.out.println(initialBoard[2][4]);
-//    }
-
-    // updateBoard(PieceType [][])
 
     /**
      * Determine whether a piece placement is well-formed according to the
@@ -202,6 +187,82 @@ public class FitGame {
         }
     }
 
+    public static List<String> getMissingPieces (String placement) {
+        Set<String> collect = new HashSet<String>();
+        String [] array = {"b", "g", "i", "l", "n", "o", "p", "r", "s", "y"};
+        if (placement.length() == 0) {
+            List<String> sortedList = new ArrayList<>();
+
+            for (int i = 0; i < array.length; i++) {
+                sortedList.add(array[i]);
+                sortedList.add(array[i].toUpperCase());
+            }
+            Collections.sort(sortedList);
+            return sortedList;
+        }
+
+        for (String c : array) {
+            for (int i = 0; i < placement.length(); i += 4) {
+                if (Character.toString(placement.charAt(i)).equals(c)) {
+                    break;
+                }
+                else if (i == placement.length() - 4) {
+                    collect.add(c);
+                    collect.add(c.toUpperCase());
+                }
+            }
+        }
+        List<String> sortedList = new ArrayList<>(collect);
+        Collections.sort(sortedList);
+        return sortedList;
+    }
+
+    public static void main(String[] args) {
+        String str = "b00No32N";
+        System.out.println(getMissingPieces(str));
+        Piece piece = toPiece("b00N");
+        System.out.println(piece.getXDimensions());
+        System.out.println(piece.getYDimensions());
+//        System.out.println(Arrays.deepToString(updateBoard(str)));
+
+    }
+
+    // GetXSpace
+    // GetYSpace
+    // updateBoard
+
+    public static PieceType[][] updateBoard(String placement, PieceType [][] initialBoard) {
+
+        if (!isPlacementValid(placement))
+            return null;
+        Piece[] pieces = toPieces(placement);
+        for (Piece piece : pieces) {
+            PieceType[][] array = piece.getCoords();
+            int x = piece.coords.getXCoordinate();
+            int y = piece.coords.getYCoordinate();
+            for (int j = x; j < x + piece.getXDimensions(); j++) {
+                for (int i = y; i < y + piece.getYDimensions(); i++) {
+                    if (array[i - y][j - x] == null && initialBoard[i][j] != null)
+                        initialBoard[i][j] = initialBoard[i][j];
+                    else
+                        initialBoard[i][j] = array[i - y][j - x];
+                }
+            }
+        }
+        return initialBoard;
+    }
+    // This method is working in progress
+//    public static int [][] getEmptySpace(int x, int y, PieceType [][] initialBoard) {
+//        int xStart = x;
+//        int yStart = y;
+//        for (int i = xStart; i < 10; i++) {
+//            for (int j = yStart; j < 5; j++) {
+//                if (initialBoard[i][j] == null)
+//            }
+//        }
+//    }
+
+    // Only if piece dimension (both X and Y) covers the GetXSpace * GetYSpace area
 
     /**
      * Given a string describing a placement of pieces, and a location
@@ -220,6 +281,21 @@ public class FitGame {
      * @return A set of all viable piece placements, or null if there are none.
      */
     static Set<String> getViablePiecePlacements(String placement, int col, int row) {
+
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+
+        if (!isPlacementWellFormed(placement))
+            return null;
+        if (!isNotOverLapping(placement))
+            return null;
+        updateBoard(placement, initialBoard);
+
         return null; // FIXME Task 6: determine the set of all viable piece placements given existing placements
     }
 

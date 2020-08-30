@@ -3,6 +3,7 @@ package comp1110.ass2.gui;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,7 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 
@@ -36,59 +40,86 @@ public class Viewer extends Application {
     private final Group board = new Group();
     private TextField textField;
 
+
+
     /**
      * Draw a placement in the window, removing any previously drawn one
      *
      * @param placement A valid placement string
      * authored by Jiwon Sin
      */
+
     void makePlacement(String placement) {
-        // FIXME Task 4: implement the simple placement viewer
-
         // Clearing previous placement group
-        // Jiwon 22/08
         placements.getChildren().clear();
-        char verifier = ' ';
 
-        if (placement.charAt(0) >= 65 && placement.charAt(0) <= 90)
-            verifier = '2';
-        else if (placement.charAt(0) >= 97 && placement.charAt(0) <= 122)
-            verifier = '1';
+        GridPane gridpane = new GridPane();
 
-        // This bit of code is from online, searched it up. Will add in the URL of the source.
-        // Jiwon 22/08
+        for (int j = 0; j< 5;j++) {
+            RowConstraints row = new RowConstraints(61);
+            gridpane.getRowConstraints().add(row);
 
-        ImageView firstImage = new ImageView
-                (new Image(getClass().getResource
-                        (URI_BASE + Character.toUpperCase(placement.charAt(0)) + verifier + ".png").toString()));
-
-        // Check if the rotation is needed
-        // Jiwon 22/08
-        switch (placement.charAt(3)) {
-            case 'N':
-                firstImage.setRotate(0);
-                break;
-            case 'E':
-                firstImage.setRotate(90);
-                break;
-            case 'S':
-                firstImage.setRotate(180);
-                break;
-            case 'W':
-                firstImage.setRotate(270);
-                break;
+            for (int i = 0; i < 2; i++) {
+                ColumnConstraints col = new ColumnConstraints(61);
+                gridpane.getColumnConstraints().add(col);
+            }
         }
+        gridpane.setPadding(new Insets(30,50,50,50));
 
-        firstImage.setFitHeight(125);
-        firstImage.setPreserveRatio(true);
+        for (int i = 0; i < placement.length(); i+=4) {
+            char verifier = ' ';
+            char piece = placement.charAt(i);
 
-        // Position of the image set to the mid point of the scene
-        // Jiwon 22/08
-        firstImage.setX(VIEWER_WIDTH/4);
-        firstImage.setY((VIEWER_HEIGHT - 50)/4);
+            int x = Character.getNumericValue(placement.charAt(i+1));
+            int y = Character.getNumericValue(placement.charAt(i+2));
 
+            if (placement.charAt(i) >= 65 && placement.charAt(i) <= 90)
+                verifier = '2';
+            else if (placement.charAt(i) >= 97 && placement.charAt(i) <= 122)
+                verifier = '1';
 
-        placements.getChildren().add(firstImage);
+            ImageView firstImage = new ImageView (new Image(getClass().getResource
+                    (URI_BASE + Character.toUpperCase(placement.charAt(i)) + verifier + ".png").toString()));
+
+            firstImage.setFitHeight(125);
+            firstImage.setPreserveRatio(true);
+            firstImage.setTranslateY(34);
+
+            boolean threeByTwo = piece == 'g' || piece == 'G' || piece == 'n' || piece == 'N' ||
+                    piece == 'l' || piece == 'L' || piece == 'i' || piece == 'I';
+            switch (placement.charAt(i+3)) {
+                case 'N':
+                    gridpane.add(firstImage, x, y);
+                    break;
+                case 'E':
+                    firstImage.setRotate(90);
+                    if (threeByTwo) {
+                        gridpane.add(firstImage, x , y + 1);
+                        firstImage.setTranslateX(-40);
+                        firstImage.setTranslateY(0);
+                        break;
+                    }
+                    gridpane.add(firstImage, x , y + 1);
+                    firstImage.setTranslateX(-60);
+                    break;
+                case 'S':
+                    firstImage.setRotate(180);
+                    gridpane.add(firstImage, x, y);
+                    break;
+                case 'W':
+                    firstImage.setRotate(-90);
+                    if (threeByTwo) {
+                        gridpane.add(firstImage, x , y + 1);
+                        firstImage.setTranslateX(-30);
+                        firstImage.setTranslateY(0);
+                        break;
+                    }
+                    gridpane.add(firstImage, x , y + 1);
+                    firstImage.setTranslateX(-60);
+                    break;
+            }
+        }
+        placements.getChildren().add(gridpane);
     }
 
 
@@ -129,13 +160,19 @@ public class Viewer extends Application {
         // Setting the scene to
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
+
+
+
+
         // Adding the main board first
         ImageView boardImg = new ImageView(new Image(getClass().getResource(URI_BASE + "board.png").toString()));
+        boardImg.setOpacity(0.7);
         boardImg.setFitWidth(VIEWER_WIDTH);
         boardImg.setPreserveRatio(true);
         board.getChildren().add(boardImg);
         root.getChildren().addAll(board,controls);
         root.getChildren().add(placements);
+
 
         makeControls();
 
