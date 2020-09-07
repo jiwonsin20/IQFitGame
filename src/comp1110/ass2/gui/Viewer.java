@@ -95,7 +95,7 @@ public class Viewer extends Application {
                     firstImage.setRotate(90);
                     if (threeByTwo) {
                         gridpane.add(firstImage, x , y + 1);
-                        firstImage.setTranslateX(-40);
+                        firstImage.setTranslateX(-35);
                         firstImage.setTranslateY(0);
                         break;
                     }

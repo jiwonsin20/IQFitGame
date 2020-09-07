@@ -187,8 +187,10 @@ public class FitGame {
         }
     }
 
+    // returns sorted list of missing pieces, whether its in lower case or Upper case
+
     public static List<String> getMissingPieces (String placement) {
-        Set<String> collect = new HashSet<String>();
+        Set<String> collect = new HashSet<>();
         String [] array = {"b", "g", "i", "l", "n", "o", "p", "r", "s", "y"};
         if (placement.length() == 0) {
             List<String> sortedList = new ArrayList<>();
@@ -203,9 +205,10 @@ public class FitGame {
 
         for (String c : array) {
             for (int i = 0; i < placement.length(); i += 4) {
-                if (Character.toString(placement.charAt(i)).equals(c)) {
+                if (Character.toString(placement.charAt(i)).equals(c) ||
+                        Character.toString(placement.charAt(i)).toLowerCase().equals(c))
                     break;
-                }
+
                 else if (i == placement.length() - 4) {
                     collect.add(c);
                     collect.add(c.toUpperCase());
@@ -217,15 +220,7 @@ public class FitGame {
         return sortedList;
     }
 
-    public static void main(String[] args) {
-        String str = "b00No32N";
-        System.out.println(getMissingPieces(str));
-        Piece piece = toPiece("b00N");
-        System.out.println(piece.getXDimensions());
-        System.out.println(piece.getYDimensions());
-//        System.out.println(Arrays.deepToString(updateBoard(str)));
 
-    }
 
     // GetXSpace
     // GetYSpace
@@ -251,13 +246,25 @@ public class FitGame {
         }
         return initialBoard;
     }
+    public static void main(String[] args) {
+        String str = "";
+        System.out.println(getMissingPieces(str));
+        Piece piece = toPiece("b00N");
+//        System.out.println(Arrays.deepToString(updateBoard(str, initialBoard)));
+//        System.out.println(piece.getXDimensions());
+//        System.out.println(piece.getYDimensions());
+        System.out.println(getViablePiecePlacements(str, 0, 0));
+
+    }
     // This method is working in progress
 //    public static int [][] getEmptySpace(int x, int y, PieceType [][] initialBoard) {
 //        int xStart = x;
 //        int yStart = y;
 //        for (int i = xStart; i < 10; i++) {
 //            for (int j = yStart; j < 5; j++) {
-//                if (initialBoard[i][j] == null)
+//                if (initialBoard[i][j] == null){
+//                    break;
+//                }
 //            }
 //        }
 //    }
@@ -282,21 +289,35 @@ public class FitGame {
      */
     static Set<String> getViablePiecePlacements(String placement, int col, int row) {
 
-        PieceType[][] initialBoard = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
+        List<String> listOfMissingPieces = getMissingPieces(placement);
+        List<String> possiblePiecePlacements = new ArrayList<>();
+        String colString = Integer.toString(col);
+        String rowString = Integer.toString(row);
 
-        if (!isPlacementWellFormed(placement))
-            return null;
-        if (!isNotOverLapping(placement))
-            return null;
-        updateBoard(placement, initialBoard);
+        for (String listOfMissingPiece : listOfMissingPieces) {
+            String northNew = listOfMissingPiece + colString + rowString + "N";
+            String southNew = listOfMissingPiece + colString + rowString + "S";
+            String eastNew = listOfMissingPiece + colString + rowString + "E";
+            String westNew = listOfMissingPiece + colString + rowString + "W";
 
-        return null; // FIXME Task 6: determine the set of all viable piece placements given existing placements
+
+            possiblePiecePlacements.add(northNew);
+            possiblePiecePlacements.add(southNew);
+            possiblePiecePlacements.add(eastNew);
+            possiblePiecePlacements.add(westNew);
+        }
+
+        possiblePiecePlacements.removeIf(piecePlacement -> !isPlacementWellFormed(piecePlacement));
+        possiblePiecePlacements.removeIf(piecePlacement -> !isOnBoard(piecePlacement));
+        possiblePiecePlacements.removeIf(piecePlacement -> !isNotOverLapping(piecePlacement));
+
+        Collections.sort(possiblePiecePlacements);
+
+        Set<String> result = new HashSet<>(possiblePiecePlacements);
+        if (result.size() == 0)
+            return null;
+
+        return result; // FIXME Task 6: determine the set of all viable piece placements given existing placements
     }
 
     /**
