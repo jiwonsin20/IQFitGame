@@ -246,30 +246,68 @@ public class FitGame {
         }
         return initialBoard;
     }
-    public static void main(String[] args) {
-        String str = "";
-        System.out.println(getMissingPieces(str));
-        Piece piece = toPiece("b00N");
-//        System.out.println(Arrays.deepToString(updateBoard(str, initialBoard)));
-//        System.out.println(piece.getXDimensions());
-//        System.out.println(piece.getYDimensions());
-        System.out.println(getViablePiecePlacements(str, 0, 0));
 
+    public static boolean piecePlacementOverlapping (String placement, String newPlacement, int colX, int rowY) {
+
+        Piece[] pieces = toPieces(newPlacement);
+
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        updateBoard(placement, initialBoard);
+        if (initialBoard[rowY][colX] != null)
+            return false;
+
+        for (Piece piece : pieces) {
+            PieceType[][] array = piece.getCoords();
+            int x = piece.coords.getXCoordinate();
+            int y = piece.coords.getYCoordinate();
+            for (int j = x; j < x + piece.getXDimensions(); j++) {
+                for (int i = y; i < y + piece.getYDimensions(); i++) {
+                    if (initialBoard[i][j] != array[i - y][j - x]) {
+                        if (initialBoard[i][j] != null && array[i - y][j - x] != null)
+                            return false;
+                        else if (array[i - y][j - x] == null)
+                            initialBoard[i][j] = initialBoard[i][j];
+                        else
+                            initialBoard[i][j] = array[i - y][j - x];
+                    }
+                    else
+                        initialBoard[i][j] = array[i - y][j - x];
+                }
+            }
+            if (initialBoard[rowY][colX] == null)
+                return false;
+        }
+        return true;
     }
-    // This method is working in progress
-//    public static int [][] getEmptySpace(int x, int y, PieceType [][] initialBoard) {
-//        int xStart = x;
-//        int yStart = y;
-//        for (int i = xStart; i < 10; i++) {
-//            for (int j = yStart; j < 5; j++) {
-//                if (initialBoard[i][j] == null){
-//                    break;
-//                }
-//            }
-//        }
-//    }
 
-    // Only if piece dimension (both X and Y) covers the GetXSpace * GetYSpace area
+    // checking if this piece covers certain coordinate given by the system
+
+    public static boolean isCovered (String placement, int x, int y) {
+        Piece piece = toPiece(placement);
+        PieceType [][] pieceTypes = piece.getCoords();
+        int xMin = piece.coords.xCoord;
+        int xMax = xMin + piece.getXDimensions() - 1;
+        int yMin = piece.coords.yCoord;
+        int yMax = yMin + piece.getYDimensions() - 1;
+
+//        if (pieceTypes[x - yMin][y - xMin] == null)
+//            return false;
+
+        if (xMin > x || xMax < x)
+            return false;
+        else {
+            if (yMin > y || yMax < y)
+                return false;
+            else
+                return true;
+        }
+    }
 
     /**
      * Given a string describing a placement of pieces, and a location
@@ -289,27 +327,47 @@ public class FitGame {
      */
     static Set<String> getViablePiecePlacements(String placement, int col, int row) {
 
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        updateBoard(placement, initialBoard);
+
         List<String> listOfMissingPieces = getMissingPieces(placement);
         List<String> possiblePiecePlacements = new ArrayList<>();
-        String colString = Integer.toString(col);
-        String rowString = Integer.toString(row);
-
-        for (String listOfMissingPiece : listOfMissingPieces) {
-            String northNew = listOfMissingPiece + colString + rowString + "N";
-            String southNew = listOfMissingPiece + colString + rowString + "S";
-            String eastNew = listOfMissingPiece + colString + rowString + "E";
-            String westNew = listOfMissingPiece + colString + rowString + "W";
 
 
-            possiblePiecePlacements.add(northNew);
-            possiblePiecePlacements.add(southNew);
-            possiblePiecePlacements.add(eastNew);
-            possiblePiecePlacements.add(westNew);
+
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 5; j++) {
+                String colString = Integer.toString(i);
+                String rowString = Integer.toString(j);
+
+                for (int k = 0; k < listOfMissingPieces.size(); k++) {
+                    String pieceN = listOfMissingPieces.get(k) + colString + rowString + "N";
+                    String pieceS = listOfMissingPieces.get(k) + colString + rowString + "S";
+                    String pieceE = listOfMissingPieces.get(k) + colString + rowString + "E";
+                    String pieceW = listOfMissingPieces.get(k) + colString + rowString + "W";
+
+                    possiblePiecePlacements.add(pieceN);
+                    possiblePiecePlacements.add(pieceS);
+                    possiblePiecePlacements.add(pieceE);
+                    possiblePiecePlacements.add(pieceW);
+                }
+            }
         }
+
+
 
         possiblePiecePlacements.removeIf(piecePlacement -> !isPlacementWellFormed(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isOnBoard(piecePlacement));
-        possiblePiecePlacements.removeIf(piecePlacement -> !isNotOverLapping(piecePlacement));
+        possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
+        possiblePiecePlacements.removeIf(piecePlacement ->
+                !piecePlacementOverlapping(placement, piecePlacement, col, row));
+
 
         Collections.sort(possiblePiecePlacements);
 

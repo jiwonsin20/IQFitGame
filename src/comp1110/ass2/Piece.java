@@ -37,7 +37,7 @@ public class Piece {
     public Piece [][] piece = new Piece [this.getXDimensions()] [this.getYDimensions()];
 
     public static void main(String[] args) {
-        String str = "S21E";
+        String str = "S30E";
         String str2 = "b43S";
         Piece [] pieces = toPieces(str);
         System.out.println(pieces.length);
@@ -142,7 +142,7 @@ public class Piece {
                 if (dir == EAST) {
                     for (int i = 0; i < getYDimensions(); i++) {
                         for (int j = 0; j <getXDimensions(); j++) {
-                            if (i == 1)
+                            if (j == 1)
                                 array[i][j] = B;
                             else if (j == 0 && i == 1)
                                 array[i][j] = B;
