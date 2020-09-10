@@ -5,7 +5,9 @@ public class AssignmentSkeleton {
 
        Printer-friendly version of this can be found in the repository.
 
-       Members: Mingxuan Wang (u7202260), Di Mou (u6553212) and Jiwon Sin (u5666033)
+       Members: Mingxuan Wang (u7202260), Di Mou (u6553212) and Jiwon Sin (u5666033).
+
+       Authored by Jiwon Sin.
 
        The main objective of this assignment is to create a simple application that visualises
        IQ Fit board game, made by SmartGames.

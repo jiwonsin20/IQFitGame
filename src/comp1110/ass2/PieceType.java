@@ -4,12 +4,9 @@ import static comp1110.ass2.PieceColour.*;
 
 public enum PieceType {
 
-    /** Changed name from Colour to PieceType because its not the colour that matter
-     * what matters is whether it has multiple protrusion or single
-     * Added spine number
-     *
-     * Created by Jiwon Sin 22/08
-    */
+    /**
+     * This
+     */
 
     B(blue, 2,4), b(blue, 1,4),
     G(green, 2,3), g(green, 1,3),
@@ -20,8 +17,7 @@ public enum PieceType {
     P(pink, 2,4), p(pink, 1,4),
     R(red, 2,4), r(red, 1,4),
     S(skyblue, 2,4), s(skyblue, 1,4),
-    Y(yellow, 2,4), y(yellow, 1,4),
-    nP(noPiece, 0,0);
+    Y(yellow, 2,4), y(yellow, 1,4);
 
 
     // colour can just be used in constructor
@@ -175,11 +171,6 @@ public enum PieceType {
         return result;
     }
 
-
-
-    // Added three methods that will get the protrusion value, colour and number of circles of spines
-    // Jiwon 22/08
-
     public int getProtrusion() { return protrusion; }
 
     public PieceColour getColour() {
@@ -189,6 +180,4 @@ public enum PieceType {
     public int getSpineNum() {
         return spineNum;
     }
-
-    //toString
 }

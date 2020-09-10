@@ -20,4 +20,6 @@ public enum GameBoard {
     // Method 4 : changePlacement()
     // After playing the game and need to revert back, change the String placements.
 
+    // This class is quite redundant, so remove this. Jiwon.
+
 }

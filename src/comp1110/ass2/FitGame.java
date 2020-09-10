@@ -17,6 +17,7 @@ public class FitGame {
     // Used multi-dimensional array that can keep the values of PieceColour elements.
     // When nothing is placed, it will be noPiece. However when some piece is added, noPiece will change to
     // whatever the colour of the piece is (blue ~ yellow)
+    // Authored by Jiwon Sin
 
     public static PieceType[][] initialBoard = {
             {null, null, null, null, null, null, null, null, null, null},
@@ -37,9 +38,10 @@ public class FitGame {
      *
      * @param piecePlacement A string describing a piece placement
      * @return True if the piece placement is well-formed
+     *
+     * Code written by Mingxuan Wang
      */
     static boolean isPiecePlacementWellFormed(String piecePlacement) {
-        // FIXME Task 2: determine whether a piece placement is well-formed
 
         return (piecePlacement.length() == 4) &&
                 (piecePlacement.charAt(0) == 'b' || piecePlacement.charAt(0) == 'B' ||
@@ -74,9 +76,10 @@ public class FitGame {
      *
      * @param placement A string describing a placement of one or more pieces
      * @return True if the placement is well-formed
+     *
+     * Code written by Di Mou
      */
     public static boolean isPlacementWellFormed(String placement) {
-        // FIXME Task 3: determine whether a placement is well-formed
 
         if (placement.length() == 0 || placement.length() % 4 != 0)
             return false;
@@ -107,6 +110,16 @@ public class FitGame {
         return true;
     }
 
+    /**
+     * isOnBoard function determines whether the piece is located within the board parameters
+     * - For x values, it must be between 0 and 9. For y values it must be between 0 and 5.
+     *
+     * @param placement A String describing the shape, x and y coordinates and direction.
+     * @return False if the piece is out of bounds. True if the position is within board boundaries.
+     *
+     * Code written by Jiwon Sin
+     */
+
 
     public static boolean isOnBoard(String placement) {
         Piece [] piece = Piece.toPieces(placement);
@@ -123,6 +136,18 @@ public class FitGame {
         }
         return true;
     }
+
+    /**
+     * Determines whether the current piece overlaps with the board.
+     * To check whether the piece is overlapping,
+     * - Update the board
+     * - Then check whether there is a piece(other than null) at the position where piece should be placed.
+     *
+     * @param placement A String describing the shape, x and y coordinates and direction.
+     * @return False if the piece overlaps with already-placed board pieces.
+     *
+     * Code written by Jiwon Sin
+     */
 
     public static boolean isNotOverLapping(String placement) {
 
@@ -170,11 +195,11 @@ public class FitGame {
      *
      * @param placement A placement string
      * @return True if the placement sequence is valid
+     *
+     * Code modified by Jiwon Sin
      */
 
-
     public static boolean isPlacementValid(String placement) {
-        // FIXME Task 5: determine whether a placement string is valid
         if (!isPlacementWellFormed(placement)) {
             return false;
         }
@@ -187,8 +212,18 @@ public class FitGame {
         }
     }
 
-    // returns sorted list of missing pieces, whether its in lower case or Upper case
-
+    /**
+     * Determines the missing pieces in String by comparing the default array with the input placement.
+     * Checking the missing pieces is done by
+     * - if the length of placement is zero (meaning any piece possible), return entire list in both upper and lowercase.
+     * - if there is a viable placement String, then compare its first letter.
+     *
+     * @param placement A String describing the shape, x and y coordinates and direction.
+     * @return List of String of pieces that is absent.
+     *
+     * Code written by Jiwon Sin
+     */
+    // what if there is all the elements?
     public static List<String> getMissingPieces (String placement) {
         Set<String> collect = new HashSet<>();
         String [] array = {"b", "g", "i", "l", "n", "o", "p", "r", "s", "y"};
@@ -220,11 +255,16 @@ public class FitGame {
         return sortedList;
     }
 
-
-
-    // GetXSpace
-    // GetYSpace
-    // updateBoard
+    /**
+     * This method updates the board with the input placement String.
+     * If the piece is considered invalid, then returns null.
+     *
+     * @param placement A String describing the shape, x and y coordinates and direction.
+     * @param initialBoard A PieceType multidimensional array that has piece's locations.
+     * @return PieceType 2D-array with updated board. If the placement is invalid, then return null.
+     *
+     * Code written by Jiwon Sin
+     */
 
     public static PieceType[][] updateBoard(String placement, PieceType [][] initialBoard) {
 
@@ -246,6 +286,20 @@ public class FitGame {
         }
         return initialBoard;
     }
+
+    /**
+     * This method checks whether the piece placement overlaps the updated board.
+     * updateBoard method is called to change the piece positions of pre-placed pieces (placement)
+     * Then method checks whether the newPlacement piece overlaps with the current board.
+     *
+     * @param placement A String describing the shape, x and y coordinates and direction.
+     * @param newPlacement A String that is going to be added, with shape, x, y coordinates and direction.
+     * @param colX A column value
+     * @param rowY A row value
+     * @return True if the newPlacement does not overlaps with current board. False if it does.
+     *
+     * Code written by Jiwon Sin
+     */
 
     public static boolean piecePlacementOverlapping (String placement, String newPlacement, int colX, int rowY) {
 
@@ -286,26 +340,27 @@ public class FitGame {
         return true;
     }
 
-    // checking if this piece covers certain coordinate given by the system
+    /**
+     * This method checks whether the (x, y) values are covered by the certain piece
+     * @param placement A String describing the shape, x and y coordinates and direction.
+     * @param x X coordinate value
+     * @param y Y coordinate value
+     * @return True if the piece covers the (x, y) coordinate. Else return false.
+     *
+     * Code written by Jiwon Sin
+     */
 
     public static boolean isCovered (String placement, int x, int y) {
         Piece piece = toPiece(placement);
-        PieceType [][] pieceTypes = piece.getCoords();
         int xMin = piece.coords.xCoord;
         int xMax = xMin + piece.getXDimensions() - 1;
         int yMin = piece.coords.yCoord;
         int yMax = yMin + piece.getYDimensions() - 1;
 
-//        if (pieceTypes[x - yMin][y - xMin] == null)
-//            return false;
-
         if (xMin > x || xMax < x)
             return false;
         else {
-            if (yMin > y || yMax < y)
-                return false;
-            else
-                return true;
+            return yMin <= y && yMax >= y;
         }
     }
 
@@ -324,6 +379,8 @@ public class FitGame {
      * @param col      The location's column.
      * @param row      The location's row.
      * @return A set of all viable piece placements, or null if there are none.
+     *
+     * Code written by Jiwon Sin
      */
     static Set<String> getViablePiecePlacements(String placement, int col, int row) {
 
@@ -360,8 +417,6 @@ public class FitGame {
             }
         }
 
-
-
         possiblePiecePlacements.removeIf(piecePlacement -> !isPlacementWellFormed(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isOnBoard(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
@@ -375,8 +430,20 @@ public class FitGame {
         if (result.size() == 0)
             return null;
 
-        return result; // FIXME Task 6: determine the set of all viable piece placements given existing placements
+        return result;
     }
+
+//    public static void main(String[] args) {
+//        String str = "B03SG70Si52SL00Nn01Er41WS40Ny62N";
+//        System.out.println(getMissingPieces(str));
+//    }
+////    public static String findSolution (String placement) {
+////
+////    }
+//
+//    public static int [][] findEmptySpaces(PieceType[][] board) {
+//
+//    }
 
     /**
      * Return the solution to a particular challenge.

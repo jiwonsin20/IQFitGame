@@ -33,6 +33,27 @@ public enum PieceDirection {
             return ' ';
     }
 
+    public static int fromChar(char c) {
+        int dir = 0;
+        switch (c) {
+            case 'N':
+                dir = 0;
+                break;
+            case 'E':
+                dir =  1;
+                break;
+            case 'S':
+                dir =  2;
+                break;
+            case 'W':
+                dir =  3;
+                break;
+            default:
+                break;
+        }
+        return dir;
+    }
+
     // Done by Jiwon: 22/08
 
     public static PieceDirection getDirection(String placement) {

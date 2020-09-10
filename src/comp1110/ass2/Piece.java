@@ -1,20 +1,13 @@
 package comp1110.ass2;
 
-
-import java.util.Arrays;
-
 import static comp1110.ass2.PieceDirection.*;
 import static comp1110.ass2.PieceType.*;
 import static comp1110.ass2.PieceCoordinates.*;
 
-
-/** This Class defines each Piece on
- *  (1) PieceType
- *  (2) PieceDirection
- *  (3) PieceCoordinates
+/**
+ * This class describes what a piece is made up with, methods that a piece could apply
  *
- *
- *
+ * Class created and written by Jiwon Sin
  */
 
 
@@ -22,32 +15,30 @@ public class Piece {
 
     public final PieceType type;
     public final PieceDirection dir;
-    public final PieceCoordinates coords; // Jiwon 22/08
+    public final PieceCoordinates coords;
+
+    /**
+     * The pieces we set has three different elements.
+     * @param type Defines the piece's type, number of protrusions and spine length.
+     * @param coords Defines the piece's direction, whether its N,S,E,W.
+     * @param dir Defines where the piece is located on the board.
+     *
+     * Code written by Jiwon Sin
+     */
 
     Piece (PieceType type, PieceCoordinates coords, PieceDirection dir) {
         this.type = type;
-        this.coords = coords; // Jiwon 22/08
+        this.coords = coords;
         this.dir = dir;
     }
 
     /**
-     * This sets the piece dimension, especially on what space it occupies.
+     * This method changes single 4 letter long String into Piece.
+     * For example, "R00N" String is converted to relevant Piece value.
+     *
+     * @param placement A String with type of piece, coordinates and direction.
+     * @return Piece value of String placement.
      */
-
-    public Piece [][] piece = new Piece [this.getXDimensions()] [this.getYDimensions()];
-
-    public static void main(String[] args) {
-        String str = "S30E";
-        String str2 = "b43S";
-        Piece [] pieces = toPieces(str);
-        System.out.println(pieces.length);
-        System.out.println(Arrays.deepToString(toPieces(str)));
-        Piece [] array = toPieces(str);
-
-        for (int k = 0; k < array.length; k++) {
-            System.out.println(Arrays.deepToString(array[k].getCoords()));
-        }
-    }
 
     public static Piece toPiece(String placement) {
         PieceType type = PieceType.fromChar(placement);
@@ -57,18 +48,38 @@ public class Piece {
 
     }
 
+    /**
+     * This method repeatedly calls toPiece method to covert String with multiple pieces into Pieces.
+     * The initial string is divided into 4 letter length at the start.
+     *
+     * @param placement A String with type of piece, coordinates and direction.
+     * @return Pieces that are derived from String placements
+     *
+     * Code written by Jiwon Sin
+     */
+
     public static Piece [] toPieces(String placement) {
         int r = 0;
         Piece [] pieces = new Piece[placement.length()/4];
-        String str = "";
+        String str;
         for (int i = 0; i < placement.length(); i+=4) {
-;
             str = placement.substring(i, i + 4);
             pieces[r] = toPiece(str);
             r++;
         }
         return pieces;
     }
+
+    /**
+     * This entire method represents the 2D array of each Piece's relative coordinates.
+     * For example, "B00N" piece will have
+     * [B]   [B][B]   [B]
+     * [null][B][null][B]
+     *
+     * @return 2D array with respective spaces occupied by PieceTypes.
+     *
+     * Code written by Jiwon Sin
+     */
 
     public PieceType [][] getCoords() {
         PieceType [][] array = new PieceType[getYDimensions()][getXDimensions()];
@@ -1169,6 +1180,8 @@ public class Piece {
      * And if the direction is West or East, dimension will always be 2 by Spine length.
      *
      * @return An integer value that indicates the width of piece.
+     *
+     * Code written by Jiwon Sin
      */
 
     public int getXDimensions() {
@@ -1192,6 +1205,8 @@ public class Piece {
      * And if the direction is West or East, dimension will always be 2 by Spine length.
      *
      * @return An integer value that indicates the height of piece.
+     *
+     * Code written by Jiwon Sin
      */
 
     public int getYDimensions() {
@@ -1206,32 +1221,39 @@ public class Piece {
         return yValue;
     }
 
-
-    /** Given a string (two character) position, extract the value of X coordinate.
-     *  Used charAt() to extract the relevant character and since it will be in ASCII code
+    /**
+     * Method returns the x coordinate value from the String
      *
-     *  returns integer value of x coordinate
+     * @param placement A String with type of piece, coordinates and direction.
+     * @return value of x coordinate
      *
-     *  Jiwon 22/08
-     **/
-
+     * Code written by Jiwon Sin
+     */
 
     public static int getXCoordinate(String placement) {
         return placement.charAt(1) - 48;
     }
 
-    /** Given a string (two character) position, extract the value of Y coordinate.
-     *  Used charAt() to extract the relevant character and since it will be in ASCII code
+    /**
+     * Method returns the y coordinate value from the String
      *
-     *  Param: String type input
-     *  Returns: Y coordinate of this Piece.
+     * @param placement A String with type of piece, coordinates and direction.
+     * @return value of y coordinate
      *
-     *  Jiwon 22/08
-     **/
+     * Code written by Jiwon Sin
+     */
 
     public static int getYCoordinate(String placement) {
         return placement.charAt(2) - 48;
     }
+
+    /**
+     * Method that returns the direction of piece
+     *
+     * @return Direction in terms to NORTH, SOUTH, EAST, WEST.
+     *
+     * Code written by Jiwon Sin
+     */
 
     public PieceDirection getDir() {
         return dir;

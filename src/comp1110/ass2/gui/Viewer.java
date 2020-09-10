@@ -160,10 +160,6 @@ public class Viewer extends Application {
         // Setting the scene to
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
-
-
-
-
         // Adding the main board first
         ImageView boardImg = new ImageView(new Image(getClass().getResource(URI_BASE + "board.png").toString()));
         boardImg.setOpacity(0.7);
