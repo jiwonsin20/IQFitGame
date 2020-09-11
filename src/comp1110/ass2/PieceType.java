@@ -25,7 +25,6 @@ public enum PieceType {
 
     public final PieceColour colour;
     public final int protrusion;
-    //protrusion is changed, so it can't be final, Mingxuan Wang 08/23
     public final int spineNum;
 
     PieceType(PieceColour colour, int protrusion, int spineNum) {
