@@ -454,6 +454,14 @@ public class FitGame {
      * the challenge.
      */
     public static String getSolution(String challenge) {
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        updateBoard(challenge, initialBoard);
         return null;  // FIXME Task 9: determine the solution to the game, given a particular challenge
     }
 }
