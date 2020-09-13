@@ -17,7 +17,7 @@ public class FitGame {
     // Used multi-dimensional array that can keep the values of PieceColour elements.
     // When nothing is placed, it will be noPiece. However when some piece is added, noPiece will change to
     // whatever the colour of the piece is (blue ~ yellow)
-    // Authored by Jiwon Sin
+    // Code written by Jiwon Sin
 
     public static PieceType[][] initialBoard = {
             {null, null, null, null, null, null, null, null, null, null},
@@ -225,6 +225,7 @@ public class FitGame {
      */
 
     // what if there is all the elements?
+
     public static List<String> getMissingPieces (String placement) {
         Set<String> collect = new HashSet<>();
         String [] array = {"b", "g", "i", "l", "n", "o", "p", "r", "s", "y"};
