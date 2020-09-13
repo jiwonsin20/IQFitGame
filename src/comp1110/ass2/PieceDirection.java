@@ -43,25 +43,26 @@ public enum PieceDirection {
      * This method is reverse of getChar method.
      * Takes in the character and returns
      * @param c character c of direction
-     * @return Value of direction in terms of PieceDirection
+     * @return Value of direction in terms of int.
+     * eg.North = 0, East = 1 South = 2, West = 3
      *
      * Code written by Jiwon Sin
      */
 
-    public static PieceDirection fromChar(char c) {
-        PieceDirection dir = null;
+    public static int fromChar(char c) {
+        int dir = 0;
         switch (c) {
             case 'N':
-                dir = NORTH;
+                dir = 0;
                 break;
             case 'E':
-                dir = EAST;
+                dir = 1;
                 break;
             case 'S':
-                dir = SOUTH;
+                dir = 2;
                 break;
             case 'W':
-                dir = WEST;
+                dir = 3;
                 break;
             default:
                 break;
