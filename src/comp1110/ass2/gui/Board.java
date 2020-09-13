@@ -3,7 +3,7 @@ package comp1110.ass2.gui;
 import comp1110.ass2.PieceDirection;
 import static comp1110.ass2.PieceType.*;
 import static comp1110.ass2.Piece.*;
-import javafx.scene.transform.Rotate;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -13,7 +13,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 
 public class Board extends Application {
 
@@ -53,9 +55,11 @@ public class Board extends Application {
 
         ImageView backgroundImg = new ImageView(new Image(getClass().getResource(URI_BASE + "board.png").toString()));
         backgroundImg.setFitWidth(933);
+        backgroundImg.setOpacity(0.7);
         backgroundImg.setPreserveRatio(true);
 
         background.getChildren().addAll(gridPane,backgroundImg);
+
     }
 
     class PieceTile extends ImageView {
@@ -86,18 +90,20 @@ public class Board extends Application {
         }
     }
 
-    class DraggableTile extends PieceTile {
+    class DraggablePiece extends PieceTile {
         double initialX, initialY;
         double mouseX, mouseY;
         int orientation; // 0 = NORTH, 1 = EAST 2 = SOUTH 3 = WEST
         int number = 2; // 1 = lowercase 2 = uppercase
+        char currentPID;
+
 
         /**
          * Constructor for pieces that can be played
          *
          * @param placement
          */
-        DraggableTile(String placement) {
+        DraggablePiece(String placement) {
             super(placement);
             orientation = PieceDirection.fromChar(placement.charAt(3));
 
@@ -161,6 +167,8 @@ public class Board extends Application {
                 initialY = getLayoutY();
                 mouseX = mouseEvent.getSceneX();
                 mouseY = mouseEvent.getSceneY();
+                currentPID = pieceID;
+                toFront();
             });
             setOnMouseDragged(mouseEvent -> {
                 double movementX = mouseEvent.getSceneX() - mouseX;
@@ -182,26 +190,59 @@ public class Board extends Application {
             });
 
             setOnMouseReleased(mouseEvent -> {
-//                snapToGrid();
+                snapToGrid();
             });
         }
 
 
-//        private void snapToGrid() {
-//
-//        }
-//
-//        private boolean isPieceOnBoard(){
-//            if (getLayoutX())
-//        }
+        private void snapToGrid() {
+            snapLayoutToGrid(snapXtoGrid(), snapYtoGrid());
+            ImageView image = new ImageView(new Image(getClass().getResource(URI_BASE + currentPID + number + ".png").toString()));
+            gridPane.add(image, snapXtoGrid(),snapYtoGrid());
+        }
+
+        private void snapLayoutToGrid(double x, double y) {
+            setLayoutX(x);
+            setLayoutY(y);
+        }
+
+        private boolean isPieceOnBoard(){
+            if ((getLayoutX() > PLAYABLE_AREA_X || getLayoutX() < BOARD_MARGIN_X) &&
+                (getLayoutY() > PLAYABLE_AREA_Y || getLayoutY() < BOARD_MARGIN_Y)) {
+                return false;
+            }
+            else
+                return true;
+        }
+        private int snapXtoGrid () {
+            int currentX = (int) ((getLayoutX() - GRID_L_PADDING) / SQUARE_SIZE);
+            if (getLayoutX() <= SQUARE_SIZE / 2 && getLayoutX() >=0)
+                return currentX;
+            else if (getLayoutX() >= SQUARE_SIZE / 2 && getLayoutX() <= SQUARE_SIZE)
+                return currentX;
+            assert false;
+            return 0;
+        }
+
+        private int snapYtoGrid () {
+            int currentY = (int) ((getLayoutY() - GRID_TOP_PADDING) / SQUARE_SIZE);
+
+            if (getLayoutY() <= SQUARE_SIZE / 2 && getLayoutY() >=0)
+                return currentY;
+            else if (getLayoutY() >= SQUARE_SIZE / 2 && getLayoutY() <= SQUARE_SIZE)
+                return currentY;
+            assert false;
+            return 0;
+        }
 
     }
 
     private void makePieces(){
         char[] pieceType = {'b','g','i','l','n','o','p','r','s','y'};
         for (char piece : pieceType) {
-            gamePiece.getChildren().add(new DraggableTile((Character.toUpperCase(piece)) + "00N"));
+            gamePiece.getChildren().add(new DraggablePiece((Character.toUpperCase(piece)) + "00N"));
         }
+        gamePiece.toFront();
     }
 
     // FIXME Task 7: Implement a basic playable Fix Game in JavaFX that only allows pieces to be placed in valid places
