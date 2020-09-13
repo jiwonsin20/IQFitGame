@@ -16,6 +16,17 @@ public class Games {
     placements.add(iPlacement);
   }
 
+  /**
+   * Returns the iPlacement string from this class
+   * @param iNumber Game number from 1 to 120
+   * @return Game iPlacement string
+   *
+   * Code written by Jiwon Sin
+   */
+  public static String getPlacement (int iNumber) {
+    return SOLUTIONS[iNumber].objective;
+  }
+
   public static final Games[] SOLUTIONS = {
           new Games(1, "B03SG70Si52SL00Nn01Er41WS40Ny62N", "B03SG70Si52SL00Nn01Eo63Sp20Er41WS40Ny62N"),
           new Games(2, "G00WI10Nl02SN82Eo31Sr40Ns52Sy43S", "b03SG00WI10Nl02SN82Eo31SP60Sr40Ns52Sy43S"),
