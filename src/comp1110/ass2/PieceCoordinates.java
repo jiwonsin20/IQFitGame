@@ -1,35 +1,69 @@
 package comp1110.ass2;
 
-/** Added PieceCoordinates to specify the location of the piece on the board
+/**
+ * Added PieceCoordinates to specify the location of the piece on the board
  *
  *  Created by Jiwon Sin 22/08
  *
  */
 
-import comp1110.ass2.PieceType.*;
-
 public class PieceCoordinates {
     public final int xCoord;
     public final int yCoord;
 
-    PieceCoordinates (int x, int y) {
+    /**
+     * Constructor for piece's coordinate
+     *
+     * @param x Value of X coordinate
+     * @param y Value of Y coordinate
+     *
+     * Code written by Jiwon Sin
+     */
+
+    PieceCoordinates(int x, int y) {
         this.xCoord = x;
         this.yCoord = y;
     }
+
+    /**
+     * PieceCoordinates returns the value of piece's coordinates in tuple form
+     *
+     * @param placement Piece's 4-character long string
+     * @return Coordinate of the piece in (x, y) form
+     *
+     * Code written by Jiwon Sin
+     */
 
     public static PieceCoordinates getPCoord(String placement) {
         PieceCoordinates coordinates;
         int x = Character.getNumericValue(placement.charAt(1));
         int y = Character.getNumericValue(placement.charAt(2));
 
-        coordinates = new PieceCoordinates (x, y);
+        coordinates = new PieceCoordinates(x, y);
 
         return coordinates;
     }
 
+    /**
+     * Returns the value of X coordinate of piece
+     *
+     * @return x coordinate of piece
+     *
+     * Code written by Jiwon Sin
+     */
+
     public int getXCoordinate() {
         return xCoord;
     }
+
+    /**
+     * Returns the value of y coordinate of piece
+     *
+     * @return y coordinate of piece
+     *
+     * Code written by Jiwon Sin
+     */
+
     public int getYCoordinate() {
         return yCoord;
     }
@@ -42,75 +76,4 @@ public class PieceCoordinates {
         yCoord = yCoord;
     }
 
-    //    public int [][] getTwoDArray(String placement) {
-//        PieceType type =
-//
-//
-////        char firstChar = placement.charAt(0);
-////        PieceType type;
-////        switch (firstChar) {
-////            case 'b':
-////                type = PieceType.b;
-////                break;
-////            case 'B':
-////                type = PieceType.B;
-////                break;
-////            case 'g':
-////                type = PieceType.g;
-////                break;
-////            case 'G':
-////                type = PieceType.G;
-////                break;
-////            case 'i':
-////                type = PieceType.i;
-////                break;
-////            case 'I':
-////                type = PieceType.I;
-////                break;
-////            case 'l':
-////                type = PieceType.l;
-////                break;
-////            case 'L':
-////                type = PieceType.L;
-////                break;
-////            case 'n':
-////                type = PieceType.n;
-////                break;
-////            case 'N':
-////                type = PieceType.N;
-////                break;
-////            case 'o':
-////                type = PieceType.o;
-////                break;
-////            case 'O':
-////                type = PieceType.O;
-////                break;
-////            case 'p':
-////                type = PieceType.p;
-////                break;
-////            case 'P':
-////                type = PieceType.P;
-////                break;
-////            case 'r':
-////                type = PieceType.r;
-////                break;
-////            case 'R':
-////                type = PieceType.R;
-////                break;
-////            case 's':
-////                type = PieceType.s;
-////                break;
-////            case 'S':
-////                type = PieceType.S;
-////                break;
-////            case 'y':
-////                type = PieceType.y;
-////                break;
-////            case 'Y':
-////                type = PieceType.Y;
-////                break;
-////        }
-//
-//
-//    }
 }

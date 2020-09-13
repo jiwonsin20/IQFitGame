@@ -223,6 +223,7 @@ public class FitGame {
      *
      * Code written by Jiwon Sin
      */
+
     // what if there is all the elements?
     public static List<String> getMissingPieces (String placement) {
         Set<String> collect = new HashSet<>();

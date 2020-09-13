@@ -1,25 +1,31 @@
 package comp1110.ass2;
 
+// This class defines the direction of all pieces, in N,E,S,W format.
+// Class created and written by Jiwon Sin
+
 public enum PieceDirection {
     NORTH('↑'), SOUTH('↓'), EAST('→'), WEST('←');
-
-    // Changed symbol from character to appropriate direction symbols
-    // Jiwon 22/08
 
     public char symbol;
 
 
-    // Constructor for direction
+    /**
+     * Constructor for piece's direction
+     * @param symbol The symbol (in direction) of the piece
+     *
+     * Code written by Jiwon Sin
+     */
     PieceDirection(char symbol) {
         this.symbol = symbol;
     }
 
-    // methods
-
-    // method 1 : private char getChar()
-    // Need this to consolidate characters for the solution
-    // Done by Jiwon: 22/08
-
+    /**
+     * This method returns the direction of the piece in char form.
+     * @param dir Direction of the piece in terms of PieceDirection
+     * @return Direction in char form
+     *
+     * Code written by Jiwon Sin
+     */
     public static char getChar(PieceDirection dir) {
         if (dir == NORTH)
             return 'N';
@@ -33,20 +39,29 @@ public enum PieceDirection {
             return ' ';
     }
 
-    public static int fromChar(char c) {
-        int dir = 0;
+    /**
+     * This method is reverse of getChar method.
+     * Takes in the character and returns
+     * @param c character c of direction
+     * @return Value of direction in terms of PieceDirection
+     *
+     * Code written by Jiwon Sin
+     */
+
+    public static PieceDirection fromChar(char c) {
+        PieceDirection dir = null;
         switch (c) {
             case 'N':
-                dir = 0;
+                dir = NORTH;
                 break;
             case 'E':
-                dir =  1;
+                dir = EAST;
                 break;
             case 'S':
-                dir =  2;
+                dir = SOUTH;
                 break;
             case 'W':
-                dir =  3;
+                dir = WEST;
                 break;
             default:
                 break;
@@ -54,7 +69,14 @@ public enum PieceDirection {
         return dir;
     }
 
-    // Done by Jiwon: 22/08
+    /**
+     * From the placement string, which is 4 character long, returns the direction
+     *
+     * @param placement 4-word length String eg. "B12S"
+     * @return Direction of the piece, as written from the placement string.
+     *
+     * Code written by Jiwon Sin
+     */
 
     public static PieceDirection getDirection(String placement) {
         PieceDirection dir;
@@ -99,12 +121,5 @@ public enum PieceDirection {
 
     public char getSymbol() {
         return symbol;
-    }
-
-    @Override
-    public String toString() {
-        return "Direction{" +
-                "symbol=" + symbol +
-                '}';
     }
 }

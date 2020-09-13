@@ -38,6 +38,8 @@ public class Piece {
      *
      * @param placement A String with type of piece, coordinates and direction.
      * @return Piece value of String placement.
+     *
+     * Code written by Jiwon Sin
      */
 
     public static Piece toPiece(String placement) {
