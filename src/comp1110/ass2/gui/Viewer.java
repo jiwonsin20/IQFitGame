@@ -28,7 +28,6 @@ import javafx.stage.Stage;
 public class Viewer extends Application {
 
     /* board layout */
-    private static final int SQUARE_SIZE = 60;
     private static final int VIEWER_WIDTH = 720;
     private static final int VIEWER_HEIGHT = 480;
 

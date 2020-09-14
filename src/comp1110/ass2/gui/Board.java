@@ -19,8 +19,8 @@ import java.util.Random;
 
 public class Board extends Application {
 
-    private static final int BOARD_WIDTH = 1500;
-    private static final int BOARD_HEIGHT = 1000;
+    private static final int BOARD_WIDTH = 933;
+    private static final int BOARD_HEIGHT = 700;
     private static final int BOARD_MARGIN_X = 300;
     private static final int BOARD_MARGIN_Y = 150;
     private static final int PLAYABLE_AREA_X = BOARD_WIDTH - BOARD_MARGIN_X;
