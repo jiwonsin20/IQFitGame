@@ -355,15 +355,20 @@ public class FitGame {
     public static boolean isCovered (String placement, int x, int y) {
         Piece piece = toPiece(placement);
         int xMin = piece.coords.xCoord;
-        int xMax = xMin + piece.getXDimensions() - 1;
+        int xDim = piece.getXDimensions();
+        int xMax = xMin + xDim - 1;
         int yMin = piece.coords.yCoord;
-        int yMax = yMin + piece.getYDimensions() - 1;
+        int yDim = piece.getYDimensions();
+        int yMax = yMin + yDim - 1;
 
-        if (xMin > x || xMax < x)
+        if (xMin > x || xMax < x || yMin > y || yMax < y) {
             return false;
-        else {
-            return yMin <= y && yMax >= y;
         }
+
+        PieceType[][] array = piece.getCoords();
+
+        return array[y - yMin][x - xMin] != null;
+
     }
 
     /**
@@ -698,6 +703,7 @@ public class FitGame {
                 challenge = initial;
             }
         }
+
 //        List<String> nList = new ArrayList<>();
 //        for (int i = 0; i < challenge.length(); i+=4) {
 //            nList.add(challenge.substring(i,i+4));
