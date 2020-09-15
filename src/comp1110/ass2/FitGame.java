@@ -103,7 +103,9 @@ public class FitGame {
             piece[i] = placement.substring(i * 4, (i + 1) * 4);
             if (!isPiecePlacementWellFormed(piece[i]))
                 return false;
-            if (pieces.contains(piece[i].charAt(0)))
+            char colorChar = piece[i].charAt(0);
+            if (pieces.contains(Character.toLowerCase(colorChar)) ||
+                    pieces.contains(Character.toUpperCase(colorChar)))
                 return false;
             pieces.add(piece[i].charAt(0));
         }
