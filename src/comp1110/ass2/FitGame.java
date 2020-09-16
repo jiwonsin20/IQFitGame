@@ -366,6 +366,13 @@ public class FitGame {
         }
     }
 
+    public static void main(String[] args) {
+        String str = "b41Wg81WY01W";
+        System.out.println(getViablePiecePlacements(str,0,0));
+        System.out.println(getViablePiecePlacements(str,4,0));
+        System.out.println(getViablePiecePlacements(str, 2,1));
+    }
+
     /**
      * Given a string describing a placement of pieces, and a location
      * that must be covered by the next move, return a set of all
@@ -425,9 +432,30 @@ public class FitGame {
 
         return result;
     }
+//    public static String getSol (String str) {
+//        PieceType[][] board = {
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null}
+//        };
+//        boardUpdate(str, board);
+//        Set<String> set1 = new HashSet<>();
+//
+//        for (int i = 0; i < 5; i++) {
+//            for (int j = 0; j < 10; j++) {
+//                if (board[i][j] == null) {
+//                    set1 = getViablePiecePlacements(str, j, i);
+//                    boardUpdate();
+//                }
+//            }
+//        }
+//    }
 
-    public static void boardUpdate (String placement, PieceType [][] initialBoard) {
-
+    public static void boardUpdate (String placement, PieceType [][] board) {
+        if (placement.length() == 0)
+            board = initialBoard;
         Piece[] pieces = toPieces(placement);
         for (Piece piece : pieces) {
             PieceType[][] array = piece.getCoords();
@@ -435,10 +463,10 @@ public class FitGame {
             int y = piece.coords.getYCoordinate();
             for (int j = x; j < x + piece.getXDimensions(); j++) {
                 for (int i = y; i < y + piece.getYDimensions(); i++) {
-                    if (array[i - y][j - x] == null && initialBoard[i][j] != null)
-                        initialBoard[i][j] = initialBoard[i][j];
+                    if (array[i - y][j - x] == null && board[i][j] != null)
+                        board[i][j] = board[i][j];
                     else
-                        initialBoard[i][j] = array[i - y][j - x];
+                        board[i][j] = array[i - y][j - x];
                 }
             }
         }
@@ -579,34 +607,6 @@ public class FitGame {
         return possibleP;
     }
 
-    public static void main(String[] args) {
-        String str = "g60Sl41WB01EI52NN00NO30NP63SY23S";
-        String str2 = "N80E";
-        PieceType[][] initialBoard = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
-        updateBoard(str, initialBoard);
-//        System.out.println(Arrays.toString(nullXCoordinate(initialBoard)));
-//        System.out.println(Arrays.toString(nullYCoordinate(initialBoard)));
-//        System.out.println(combinationXY(nullXCoordinate(initialBoard),nullYCoordinate(initialBoard)));
-//        System.out.println(listOfPieces(str));
-//        System.out.println(findSolution(str));
-//        System.out.println(seekSolution(str));
-//        System.out.println(getSolution(str));
-//        System.out.println(isPieceOverlappingBoard(str, "b00N"));
-//        System.out.println(Arrays.deepToString(initialBoard));
-        System.out.println(pieceNotUsed(str, str2));
-
-    }
-
-    // methods needed
-    // find missing pieces
-    //
-
     public static boolean isComplete(PieceType[][] initialBoard) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 10; j++) {
@@ -628,38 +628,6 @@ public class FitGame {
         return true;
     }
 
-    public static String seekSolution(String challenge) {
-        String initial = challenge;
-        PieceType[][] initialBoard = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
-        boardUpdate(challenge,initialBoard);
-        List<String> listOfSolutions = findSolution(challenge);
-
-        for (int i = 0; i < listOfSolutions.size(); i++) {
-            if (isPieceOverlappingBoard(challenge, listOfSolutions.get(i))) {
-                challenge += listOfSolutions.get(i);
-                updateBoard(listOfSolutions.get(i),initialBoard);
-            }
-            for (int j = i + 1; j < listOfSolutions.size(); j++) {
-                if (pieceNotUsed(challenge, listOfSolutions.get(j))) {
-                    if (isPieceOverlappingBoard(challenge, listOfSolutions.get(j))) {
-                        challenge += listOfSolutions.get(j);
-                        updateBoard(listOfSolutions.get(j),initialBoard);
-                    }
-                }
-            }
-            if (!isComplete(initialBoard)) {
-                challenge = initial;
-            }
-        }
-        return challenge;
-    }
-
     /**
      * Return the solution to a particular challenge.
      **
@@ -667,7 +635,6 @@ public class FitGame {
      * @return A placement string describing the encoding of the solution to
      * the challenge.
      *
-     * Code written by Mingxuan Wang
      */
     public static String getSolution(String challenge) {
         String initial = challenge;
@@ -690,7 +657,7 @@ public class FitGame {
                 if (pieceNotUsed(challenge, listOfSolutions.get(j))) {
                     if (isPieceOverlappingBoard(challenge, listOfSolutions.get(j))) {
                         challenge += listOfSolutions.get(j);
-                        updateBoard(listOfSolutions.get(j),initialBoard);
+                        updateBoard(challenge,initialBoard);
                     }
                 }
             }
@@ -714,4 +681,9 @@ public class FitGame {
         return challenge;
         // FIXME Task 9: determine the solution to the game, given a particular challenge
     }
+
+//    public static String getSol (String str) {
+//        // String is basically pre-positioned placement value
+//
+//    }
 }
