@@ -169,16 +169,12 @@ public class FitGame {
             int y = piece.coords.getYCoordinate();
             for (int j = x; j < x + piece.getXDimensions(); j++) {
                 for (int i = y; i < y + piece.getYDimensions(); i++) {
-                    if (initialBoard[i][j] != array[i - y][j - x]) {
-                        if (initialBoard[i][j] != null && array[i - y][j - x] != null)
-                            return false;
-                        else if (array[i - y][j - x] == null)
-                            initialBoard[i][j] = initialBoard[i][j];
-                        else
-                            initialBoard[i][j] = array[i - y][j - x];
+                    if (initialBoard[i][j] != null && array[i - y][j - x] != null) {
+                        return false;
                     }
-                    else
+                    if (array[i - y][j - x] != null) {
                         initialBoard[i][j] = array[i - y][j - x];
+                    }
                 }
             }
         }
