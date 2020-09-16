@@ -103,7 +103,9 @@ public class FitGame {
             piece[i] = placement.substring(i * 4, (i + 1) * 4);
             if (!isPiecePlacementWellFormed(piece[i]))
                 return false;
-            if (pieces.contains(piece[i].charAt(0)))
+            char colorChar = piece[i].charAt(0);
+            if (pieces.contains(Character.toLowerCase(colorChar)) ||
+                    pieces.contains(Character.toUpperCase(colorChar)))
                 return false;
             pieces.add(piece[i].charAt(0));
         }
@@ -167,16 +169,12 @@ public class FitGame {
             int y = piece.coords.getYCoordinate();
             for (int j = x; j < x + piece.getXDimensions(); j++) {
                 for (int i = y; i < y + piece.getYDimensions(); i++) {
-                    if (initialBoard[i][j] != array[i - y][j - x]) {
-                        if (initialBoard[i][j] != null && array[i - y][j - x] != null)
-                            return false;
-                        else if (array[i - y][j - x] == null)
-                            initialBoard[i][j] = initialBoard[i][j];
-                        else
-                            initialBoard[i][j] = array[i - y][j - x];
+                    if (initialBoard[i][j] != null && array[i - y][j - x] != null) {
+                        return false;
                     }
-                    else
+                    if (array[i - y][j - x] != null) {
                         initialBoard[i][j] = array[i - y][j - x];
+                    }
                 }
             }
         }
@@ -355,15 +353,20 @@ public class FitGame {
     public static boolean isCovered (String placement, int x, int y) {
         Piece piece = toPiece(placement);
         int xMin = piece.coords.xCoord;
-        int xMax = xMin + piece.getXDimensions() - 1;
+        int xDim = piece.getXDimensions();
+        int xMax = xMin + xDim - 1;
         int yMin = piece.coords.yCoord;
-        int yMax = yMin + piece.getYDimensions() - 1;
+        int yDim = piece.getYDimensions();
+        int yMax = yMin + yDim - 1;
 
-        if (xMin > x || xMax < x)
+        if (xMin > x || xMax < x || yMin > y || yMax < y) {
             return false;
-        else {
-            return yMin <= y && yMax >= y;
         }
+
+        PieceType[][] array = piece.getCoords();
+
+        return array[y - yMin][x - xMin] != null;
+
     }
 
     public static void main(String[] args) {
@@ -665,6 +668,7 @@ public class FitGame {
                 challenge = initial;
             }
         }
+
 //        List<String> nList = new ArrayList<>();
 //        for (int i = 0; i < challenge.length(); i+=4) {
 //            nList.add(challenge.substring(i,i+4));

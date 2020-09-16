@@ -24,7 +24,7 @@ public class Games {
    * Code written by Jiwon Sin
    */
   public static String getPlacement (int iNumber) {
-    return SOLUTIONS[iNumber].objective;
+    return SOLUTIONS[iNumber].placement;
   }
 
   public static final Games[] SOLUTIONS = {
