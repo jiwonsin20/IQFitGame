@@ -53,16 +53,16 @@ public enum PieceDirection {
         int dir = 0;
         switch (c) {
             case 'N':
-                dir = 0;
-                break;
-            case 'E':
                 dir = 1;
                 break;
-            case 'S':
+            case 'E':
                 dir = 2;
                 break;
-            case 'W':
+            case 'S':
                 dir = 3;
+                break;
+            case 'W':
+                dir = 4;
                 break;
             default:
                 break;
