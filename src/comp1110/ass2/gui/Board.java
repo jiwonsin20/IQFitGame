@@ -26,8 +26,8 @@ public class Board extends Application {
 //    private static final int BOARD_MARGIN_Y = 150;
     private static final int GRID_L_PADDING = 48;
     private static final int GRID_TOP_PADDING = 25;
-    private static final int PLAYABLE_AREA_X = 10 * SQUARE_SIZE + GRID_L_PADDING;
-    private static final int PLAYABLE_AREA_Y = 5 * SQUARE_SIZE + GRID_TOP_PADDING;
+    private static final int PLAYABLE_AREA_X = 10 * SQUARE_SIZE + GRID_L_PADDING * 2;
+    private static final int PLAYABLE_AREA_Y = 5 * SQUARE_SIZE + GRID_TOP_PADDING * 2;
     private static final int START_X = 10;
     private static final int START_Y = BOARD_HEIGHT - 6 * SQUARE_SIZE;
 
@@ -253,15 +253,17 @@ public class Board extends Application {
                 mouseEvent.consume();
             });
 
-            setOnScroll(scrollEvent -> {
-                setRotate((orientation) * 90);
-                orientation++;
-                setFitWidth(getPieceSpineNum(pieceID) * SQUARE_SIZE);
-                setPreserveRatio(true);
-                if (orientation == 5)
-                    orientation = 1;
+            if (!pieceInsideBoard()) {
+                setOnScroll(scrollEvent -> {
+                    setRotate((orientation) * 90);
+                    orientation++;
+                    setFitWidth(getPieceSpineNum(pieceID) * SQUARE_SIZE);
+                    setPreserveRatio(true);
+                    if (orientation == 5)
+                        orientation = 1;
 
-            });
+                });
+            }
 
             setOnMouseReleased(mouseEvent -> {
                 positionX = (int) getLayoutX() / 50;
@@ -273,6 +275,13 @@ public class Board extends Application {
 //                updatePosition();
                 mouseEvent.consume();
             });
+        }
+
+        private boolean pieceInsideBoard() {
+            if (getLayoutX() < 600 && getLayoutY() < 300)
+                return true;
+            else
+                return false;
         }
 
 //        private void updatePosition() {
