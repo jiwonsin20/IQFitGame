@@ -264,11 +264,17 @@ public class Board extends Application {
 
                 });
             }
+            else {
+                setOnScroll(scrollEvent -> {});
+            }
 
             setOnMouseReleased(mouseEvent -> {
                 positionX = (int) getLayoutX() / 50;
                 positionY = (int) getLayoutY() / 50;
-                snapToGrid();
+//                if (isPieceOnBoard())
+                    snapToGrid();
+//                else
+//                    backHome();
 //                if (!isPieceOnBoard())
 //                    snapToHome();
 //                if (isBoardOccupied())
@@ -277,8 +283,13 @@ public class Board extends Application {
             });
         }
 
+        private void backHome() {
+            setLayoutX(initialX);
+            setLayoutX(initialY);
+        }
+
         private boolean pieceInsideBoard() {
-            if (getLayoutX() < 600 && getLayoutY() < 300)
+            if (getLayoutX() < PLAYABLE_AREA_X && getLayoutY() < PLAYABLE_AREA_Y)
                 return true;
             else
                 return false;
@@ -324,7 +335,7 @@ public class Board extends Application {
 
         private boolean isPieceOnBoard(){
             if (getLayoutX() > GRID_L_PADDING && (getLayoutX() < PLAYABLE_AREA_X)
-                && getLayoutY() > GRID_TOP_PADDING && (getLayoutY() < PLAYABLE_AREA_Y)) {
+                    && getLayoutY() > GRID_TOP_PADDING && (getLayoutY() < PLAYABLE_AREA_Y)) {
                 return true;
             }
             else
@@ -439,6 +450,7 @@ public class Board extends Application {
             }
         }
     }
+
 
 
     // Need to change this
