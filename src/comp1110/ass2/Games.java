@@ -23,8 +23,16 @@ public class Games {
    *
    * Code written by Jiwon Sin
    */
-  public static String getPlacement (int iNumber) {
-    return SOLUTIONS[iNumber].placement;
+  public static String getObjective (int iNumber) {
+    return SOLUTIONS[iNumber].objective;
+  }
+
+  public static String getSolution (String objective) {
+    for (Games solution : SOLUTIONS) {
+      if (objective.equals(solution.objective))
+        return solution.placement;
+    }
+    return "";
   }
 
   public static final Games[] SOLUTIONS = {
