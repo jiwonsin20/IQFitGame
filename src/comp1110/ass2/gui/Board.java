@@ -189,7 +189,7 @@ public class Board extends Application {
 
             switch (Character.toUpperCase(piece)) {
                 case 'B':
-                    initialX = START_X;
+                    initialX = PLAYABLE_AREA_X;
                     initialY = START_Y;
                     break;
                 case 'G':
@@ -201,7 +201,7 @@ public class Board extends Application {
                     initialY = START_Y + SQUARE_SIZE * 4.1;
                     break;
                 case 'L':
-                    initialX = START_X + SQUARE_SIZE * 4.5;
+                    initialX = PLAYABLE_AREA_X;
                     initialY = START_Y;
                     break;
                 case 'N':
@@ -209,20 +209,20 @@ public class Board extends Application {
                     initialY = START_Y + SQUARE_SIZE * 2.05;
                     break;
                 case 'O':
-                    initialX = START_X + SQUARE_SIZE * 4.5;
+                    initialX = PLAYABLE_AREA_X;
                     initialY = START_Y + SQUARE_SIZE * 4.1;
                     break;
                 case 'P':
-                    initialX = START_X + SQUARE_SIZE * 9;
+                    initialX = PLAYABLE_AREA_X;
                     initialY = START_Y;
                     break;
                 case 'R':
-                    initialX = START_X + SQUARE_SIZE * 9;
+                    initialX = PLAYABLE_AREA_X;
                     initialY = START_Y + SQUARE_SIZE * 2.05;
                     break;
                 case 'S':
-                    initialX = START_X + SQUARE_SIZE * 9;
-                    initialY = START_Y + SQUARE_SIZE * 4.1;
+                    initialX = PLAYABLE_AREA_X;
+                    initialY = START_Y + SQUARE_SIZE * 5;
                     break;
                 case 'Y':
                     initialX = START_X + SQUARE_SIZE * 13.5;
@@ -253,84 +253,86 @@ public class Board extends Application {
                 mouseEvent.consume();
             });
 
-            if (!pieceInsideBoard()) {
-                setOnScroll(scrollEvent -> {
+            setOnScroll(scrollEvent -> {
+                if (!isPieceOnBoard()) {
                     setRotate((orientation) * 90);
                     orientation++;
                     setFitWidth(getPieceSpineNum(pieceID) * SQUARE_SIZE);
                     setPreserveRatio(true);
                     if (orientation == 5)
                         orientation = 1;
+                }
 
                 });
-            }
-            else {
-                setOnScroll(scrollEvent -> {});
-            }
 
             setOnMouseReleased(mouseEvent -> {
                 positionX = (int) getLayoutX() / 50;
                 positionY = (int) getLayoutY() / 50;
-//                if (isPieceOnBoard())
-                    snapToGrid();
-//                else
-//                    backHome();
-//                if (!isPieceOnBoard())
-//                    snapToHome();
+                snapToGrid();
+
 //                if (isBoardOccupied())
 //                updatePosition();
                 mouseEvent.consume();
             });
         }
 
-        private void backHome() {
-            setLayoutX(initialX);
-            setLayoutX(initialY);
-        }
-
-        private boolean pieceInsideBoard() {
-            if (getLayoutX() < PLAYABLE_AREA_X && getLayoutY() < PLAYABLE_AREA_Y)
-                return true;
-            else
-                return false;
-        }
-
-//        private void updatePosition() {
-//
-//        }
-
-
-//        private boolean isBoardOccupied() {
-//            String str = type + Integer.toString(positionX) + Integer.toString(positionY + pieceID.charAt(3));
-//        }
-//
-//        private void snapToHome() {
-//            setLayoutX(initialX);
-//            setLayoutY(initialY);
-//            // needs adjustment
-//        }
-
         private boolean isThreeByTwo(String piece) {
             return getPieceSpineNum(piece) == 3;
         }
 
         private void snapToGrid() {
-
-
-            System.out.println("X :" + getLayoutX());
-            System.out.println("Y :" + getLayoutY());
-
-            System.out.println("gridX : " +snapXtoGrid(getLayoutX()));
-            System.out.println("gridY : " +snapYtoGrid(getLayoutY()));
-
-            snapLayoutToGrid(snapXtoGrid(getLayoutX()), snapYtoGrid(getLayoutY()));
-            System.out.println(orientation);
-            System.out.println(pieceID);
+//
+//
+//            System.out.println("X :" + getLayoutX());
+//            System.out.println("Y :" + getLayoutY());
+//
+//            System.out.println("gridX : " +snapXToGrid(getLayoutX()));
+//            System.out.println("gridY : " +snapYToGrid(getLayoutY()));
+            snapLayoutToGrid(snapXToGrid(getLayoutX()), snapYToGrid(getLayoutY()));
+//            System.out.println(orientation);
+//            System.out.println(pieceID);
         }
 
         private void snapLayoutToGrid(double x, double y) {
             setLayoutX(x);
             setLayoutY(y);
+        }
+
+        private int getPositionX() {
+            double snapXValue = snapXToGrid(getLayoutX());
+            if (isThreeByTwo(pieceID)) {
+                if (orientation == 1 || orientation == 3)
+                    return (int) snapXValue / (SQUARE_SIZE + 1);
+                else
+                    return (int) snapXValue / SQUARE_SIZE;
+            }
+            else {
+                if (orientation == 1 || orientation == 3) {
+                    return (int) snapXValue / (SQUARE_SIZE + 3);
+                }
+                else
+                    return (int) snapXValue / (SQUARE_SIZE + 3);
+            }
+        }
+
+        private int getPositionY() {
+            double snapYValue = snapYToGrid(getLayoutY());
+            if (isThreeByTwo(pieceID)) {
+                if (orientation == 1 || orientation == 3) {
+                    return (int) snapYValue / SQUARE_SIZE;
+                }
+                else {
+                    return (int) snapYValue / (SQUARE_SIZE + 10);
+                }
+            }
+            else {
+                if (orientation == 1 || orientation == 3) {
+                    return (int) snapYValue / SQUARE_SIZE;
+                }
+                else {
+                    return (int) snapYValue / (SQUARE_SIZE + 26);
+                }
+            }
         }
 
         private boolean isPieceOnBoard() {
@@ -366,126 +368,143 @@ public class Board extends Application {
                 return false;
         }
 
-        private double snapXtoGrid (double xLayout) {
-
-            if (isThreeByTwo(pieceID) && (orientation == 2 || orientation == 4)) {
-                if (xLayout >= -25 && xLayout < (SQUARE_SIZE))
-                    return (SQUARE_SIZE / 2f) -5;
-                else if (xLayout >= (SQUARE_SIZE) && xLayout < (SQUARE_SIZE * 2))
-                    return SQUARE_SIZE * 1.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 2) && xLayout < (SQUARE_SIZE * 3))
-                    return SQUARE_SIZE * 2.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 3) && xLayout < (SQUARE_SIZE * 4))
-                    return SQUARE_SIZE * 3.5;
-                else if (xLayout >= (SQUARE_SIZE * 4) && xLayout < (SQUARE_SIZE * 5))
-                    return SQUARE_SIZE * 4.5;
-                else if (xLayout >= (SQUARE_SIZE * 5) && xLayout < (SQUARE_SIZE * 6))
-                    return SQUARE_SIZE * 5.5;
-                else if (xLayout >= (SQUARE_SIZE * 6) && xLayout < (SQUARE_SIZE * 7))
-                    return SQUARE_SIZE * 6.5;
-                else if (xLayout >= (SQUARE_SIZE * 7) && xLayout < (SQUARE_SIZE * 8))
-                    return SQUARE_SIZE * 7.5 + 5;
-                else if (xLayout >= (SQUARE_SIZE * 8) && xLayout < (SQUARE_SIZE * 9))
-                    return SQUARE_SIZE * 8.5 + 7;
-//                else if (xLayout >= (SQUARE_SIZE * 9) && xLayout < (SQUARE_SIZE * 10))
-//                    return SQUARE_SIZE * 9.5 + 10;
-                else
-                    return 600;
+        private double snapXToGrid(double xLayout) {
+            if (isThreeByTwo(pieceID)) {
+                if (orientation == 1 || orientation == 3) { // North and South
+                    if (xLayout >= 20 && xLayout < SQUARE_SIZE + 19)
+                        return SQUARE_SIZE - 3;
+                    else if (xLayout >= SQUARE_SIZE + 19 && xLayout < 2 * SQUARE_SIZE + 19)
+                        return SQUARE_SIZE * 2 - 5;
+                    else if (xLayout >= SQUARE_SIZE * 2 + 19 && xLayout < 3 * SQUARE_SIZE + 19)
+                        return SQUARE_SIZE * 3;
+                    else if (xLayout >= SQUARE_SIZE * 3 + 19 && xLayout < 4 * SQUARE_SIZE + 19)
+                        return SQUARE_SIZE * 4;
+                    else if (xLayout >= SQUARE_SIZE * 4 + 19 && xLayout < 5 * SQUARE_SIZE +19)
+                        return SQUARE_SIZE * 5;
+                    else if (xLayout >= SQUARE_SIZE * 5 + 19 && xLayout < 6 * SQUARE_SIZE +19)
+                        return SQUARE_SIZE * 6;
+                    else if (xLayout >= SQUARE_SIZE * 6 + 19 && xLayout < 7 * SQUARE_SIZE +19)
+                        return SQUARE_SIZE * 7;
+                    else if (xLayout >= SQUARE_SIZE * 7 + 19 && xLayout < 8 * SQUARE_SIZE + 19)
+                        return SQUARE_SIZE * 8 + 2;
+                    else
+                        return initialX;
+                }
+                else { //East and West
+                    if (xLayout >= -5 && xLayout < SQUARE_SIZE * 0.5 + 20)
+                        return 20;
+                    else if (xLayout >= SQUARE_SIZE * 0.5 + 20 && xLayout < 1.5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 1.5 - 5;
+                    else if (xLayout >= 1.5 * SQUARE_SIZE + 20 && xLayout < 2.5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 2.5 - 5;
+                    else if (xLayout >= 2.5 * SQUARE_SIZE + 20 && xLayout < 3.5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 3.5 - 5;
+                    else if (xLayout >= 3.5 * SQUARE_SIZE + 20 && xLayout < 4.5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 4.5 - 2;
+                    else if (xLayout >= 4.5 * SQUARE_SIZE + 20 && xLayout < 5.5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 5.5 + 2;
+                    else if (xLayout >= 5.5 * SQUARE_SIZE + 20 && xLayout < 6.5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 6.5 + 2;
+                    else if (xLayout >= 6.5 * SQUARE_SIZE + 20 && xLayout < 7.5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 7.5 + 2;
+                    else if (xLayout >= 7.5 * SQUARE_SIZE + 20 && xLayout < 8.5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 8.5 + 3;
+                    else
+                        return initialX;
+                }
             }
-            else if (!isThreeByTwo(pieceID) && (orientation == 2 || orientation == 4)) {
-                if (xLayout >= -25 && xLayout < (SQUARE_SIZE * 0.5))
-                    return (-10);
-                else if (xLayout >= (SQUARE_SIZE * 0.5) && xLayout < (SQUARE_SIZE * 1.5))
-                    return SQUARE_SIZE - 7;
-                else if (xLayout >= (SQUARE_SIZE * 1.5) && xLayout < (SQUARE_SIZE * 2.5))
-                    return SQUARE_SIZE * 2 - 5;
-                else if (xLayout >= (SQUARE_SIZE * 2.5) && xLayout < (SQUARE_SIZE * 3.5))
-                    return SQUARE_SIZE * 3 - 7;
-                else if (xLayout >= (SQUARE_SIZE * 3.5) && xLayout < (SQUARE_SIZE * 4.5))
-                    return SQUARE_SIZE * 4 - 2;
-                else if (xLayout >= (SQUARE_SIZE * 4.5) && xLayout < (SQUARE_SIZE * 5.5))
-                    return SQUARE_SIZE * 5;
-                else if (xLayout >= (SQUARE_SIZE * 5.5) && xLayout < (SQUARE_SIZE * 6.5))
-                    return SQUARE_SIZE * 6;
-                else if (xLayout >= (SQUARE_SIZE * 6.5) && xLayout < (SQUARE_SIZE * 7.5))
-                    return SQUARE_SIZE * 7;
-                else if (xLayout >= (SQUARE_SIZE * 7.5) && xLayout < (SQUARE_SIZE * 8.5))
-                    return SQUARE_SIZE * 8;
-                else if (xLayout >= (SQUARE_SIZE * 8.5) && xLayout < (SQUARE_SIZE * 9.5))
-                    return SQUARE_SIZE * 9;
-                else
-                    return 600;
-            }
-            else {
-                if (xLayout > 0 && xLayout < (SQUARE_SIZE + 19))
-                    return (SQUARE_SIZE / 2f + 19);
-                else if (xLayout >= (SQUARE_SIZE + 19) && xLayout < (SQUARE_SIZE * 2 + 19))
-                    return SQUARE_SIZE * 1.5 + 16;
-                else if (xLayout >= (SQUARE_SIZE * 2 + 19) && xLayout < (SQUARE_SIZE * 3 + 19))
-                    return SQUARE_SIZE * 2.5 + 18;
-                else if (xLayout >= (SQUARE_SIZE * 3 + 19) && xLayout < (SQUARE_SIZE * 4 + 19))
-                    return SQUARE_SIZE * 3.5 + 20;
-                else if (xLayout >= (SQUARE_SIZE * 4 + 19) && xLayout < (SQUARE_SIZE * 5 + 19))
-                    return SQUARE_SIZE * 4.5 + 22;
-                else if (xLayout >= (SQUARE_SIZE * 5 + 19) && xLayout < (SQUARE_SIZE * 6 + 19))
-                    return SQUARE_SIZE * 5.5 + 24;
-                else if (xLayout >= (SQUARE_SIZE * 6 + 19) && xLayout < (SQUARE_SIZE * 7 + 19))
-                    return SQUARE_SIZE * 6.5 + 25;
-                else if (xLayout >= (SQUARE_SIZE * 7 + 19) && xLayout < (SQUARE_SIZE * 8 + 19))
-                    return SQUARE_SIZE * 7.5 + 26;
-                else if (xLayout >= (SQUARE_SIZE * 8 + 19) && xLayout < (SQUARE_SIZE * 9 + 19))
-                    return SQUARE_SIZE * 8.5 + 28;
-                else if (xLayout >= (SQUARE_SIZE * 9 + 19) && xLayout < (SQUARE_SIZE * 10 + 19))
-                    return SQUARE_SIZE * 9.5 + 29;
-                else
-                    return 600;
+            else { // if piece is in 4 by 2 orientation
+                if (orientation == 1 || orientation == 3) { //North and South
+                    if (xLayout >= 20 && xLayout < SQUARE_SIZE + 20)
+                        return 45;
+                    else if (xLayout >= SQUARE_SIZE + 20 && xLayout < 2 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 2 - 5;
+                    else if (xLayout >= 2 * SQUARE_SIZE + 20 && xLayout < 3 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 3 - 3;
+                    else if (xLayout >= 3 * SQUARE_SIZE + 20 && xLayout < 4 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 4;
+                    else if (xLayout >= 4 * SQUARE_SIZE + 20 && xLayout < 5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 5 - 1;
+                    else if (xLayout >= 5 * SQUARE_SIZE + 20 && xLayout < 6 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 6;
+                    else if (xLayout >= 6 * SQUARE_SIZE + 20 && xLayout < 7 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 7 + 2;
+                    else
+                        return initialX;
+                }
+                else { // East and West
+                    if (xLayout >= -30 && xLayout < 20)
+                        return -5;
+                    else if (xLayout >= 20 && xLayout < SQUARE_SIZE + 20)
+                        return SQUARE_SIZE - 5;
+                    else if (xLayout >= SQUARE_SIZE + 20 && xLayout < 2 * SQUARE_SIZE + 20)
+                        return 2 * SQUARE_SIZE - 5;
+                    else if (xLayout >= 2 * SQUARE_SIZE + 20 && xLayout < 3 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 3 - 2;
+                    else if (xLayout >= 3 * SQUARE_SIZE + 20 && xLayout < 4 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 4 - 2;
+                    else if (xLayout >= 4 * SQUARE_SIZE + 20 && xLayout < 5 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 5;
+                    else if (xLayout >= 5 * SQUARE_SIZE + 20 && xLayout < 6 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 6;
+                    else if (xLayout >= 6 * SQUARE_SIZE + 20 && xLayout < 7 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 7;
+                    else if (xLayout >= 7 * SQUARE_SIZE + 20 && xLayout < 8 * SQUARE_SIZE + 20)
+                        return SQUARE_SIZE * 8 + 2;
+                    else
+                        return initialX;
+                }
             }
         }
 
-        private double snapYtoGrid (double yLayout) {
-            if (isThreeByTwo(pieceID) && (orientation == 2 || orientation == 4)) {
-                if (yLayout > 20 && yLayout < (SQUARE_SIZE * 1.5))
-                    return SQUARE_SIZE;
-                else if (yLayout >= (SQUARE_SIZE * 1.5) && yLayout < (SQUARE_SIZE * 2.5))
-                    return SQUARE_SIZE * 2 + 2;
-                else if (yLayout >= (SQUARE_SIZE * 2.5) && yLayout < (SQUARE_SIZE * 3.5))
-                    return SQUARE_SIZE * 3 + 2;
-                else if (yLayout >= (SQUARE_SIZE * 3.5) && yLayout < (SQUARE_SIZE * 4.5))
-                    return SQUARE_SIZE * 4 + 3;
-//                else if (yLayout >= (SQUARE_SIZE * 4.5) && yLayout < (SQUARE_SIZE * 5.5))
-//                    return SQUARE_SIZE * 5 + 4;
-                else
-                    return START_Y;
+        private double snapYToGrid (double yLayout) {
+            if (isThreeByTwo(pieceID)) {
+                if (orientation == 1 || orientation == 3) { //North and South
+                    if (yLayout >= 0 && yLayout < SQUARE_SIZE)
+                        return SQUARE_SIZE * 0.5;
+                    else if (yLayout >= SQUARE_SIZE && yLayout < SQUARE_SIZE * 2 + 1)
+                        return SQUARE_SIZE * 1.5 + 1;
+                    else if (yLayout >= SQUARE_SIZE * 2 + 1 && yLayout < SQUARE_SIZE * 3 + 2)
+                        return SQUARE_SIZE * 2.5 + 3;
+                    else if (yLayout >= SQUARE_SIZE * 3 + 2 && yLayout < SQUARE_SIZE * 4 + 2)
+                        return SQUARE_SIZE * 3.5 + 5;
+                    else
+                        return initialY;
+                }
+                else { //West and East
+                    if (yLayout >= 30 && yLayout < 30 + SQUARE_SIZE)
+                        return SQUARE_SIZE + 5;
+                    else if (yLayout >= SQUARE_SIZE + 30 && yLayout < SQUARE_SIZE * 2 + 30)
+                        return SQUARE_SIZE * 2 + 4;
+                    else if (yLayout >= SQUARE_SIZE * 2 + 30 && yLayout < SQUARE_SIZE * 3 + 30)
+                        return SQUARE_SIZE * 3 + 4;
+                    else
+                        return initialY;
+                }
             }
-            else if (!isThreeByTwo(pieceID) && (orientation == 2 || orientation == 4)) {
-                if (yLayout > 0 && yLayout < (SQUARE_SIZE))
-                    return SQUARE_SIZE * 0.5 - 2;
-                else if (yLayout >= (SQUARE_SIZE) && yLayout < (SQUARE_SIZE * 2))
-                    return SQUARE_SIZE * 1.5 + 2;
-                else if (yLayout >= (SQUARE_SIZE * 2) && yLayout < (SQUARE_SIZE * 3))
-                    return SQUARE_SIZE * 2.5 + 2;
-                else if (yLayout >= (SQUARE_SIZE * 3) && yLayout < (SQUARE_SIZE * 4))
-                    return SQUARE_SIZE * 3.5 + 5;
-                else if (yLayout >= (SQUARE_SIZE * 4) && yLayout < (SQUARE_SIZE * 5))
-                    return SQUARE_SIZE * 4.5;
-                else
-                    return START_Y;
+            else { // Four by two piece
+                if (orientation == 1 || orientation == 3) { // North and South
+                    if (yLayout >= 0 && yLayout < SQUARE_SIZE)
+                        return SQUARE_SIZE * 0.5;
+                    else if (yLayout >= SQUARE_SIZE && yLayout < 2 * SQUARE_SIZE)
+                        return SQUARE_SIZE * 1.5;
+                    else if (yLayout >= 2 * SQUARE_SIZE && yLayout < 3 * SQUARE_SIZE)
+                        return SQUARE_SIZE * 2.5 + 2;
+                    else if (yLayout >= 3 * SQUARE_SIZE && yLayout < 4 * SQUARE_SIZE)
+                        return SQUARE_SIZE * 3.5 + 4;
+                    else
+                        return initialY;
+                }
+                else { // West and East
+                    if (yLayout >= SQUARE_SIZE && yLayout < SQUARE_SIZE * 2)
+                        return SQUARE_SIZE * 1.5;
+                    else if (yLayout >= SQUARE_SIZE * 2 && yLayout < SQUARE_SIZE * 3)
+                        return SQUARE_SIZE * 2.5 + 2;
+                    else
+                        return initialY;
+                }
             }
 
-            else {
-                if (yLayout > 0 && yLayout < (SQUARE_SIZE))
-                    return SQUARE_SIZE * 0.5;
-                else if (yLayout >= (SQUARE_SIZE) && yLayout < (SQUARE_SIZE * 2))
-                    return SQUARE_SIZE * 1.5;
-                else if (yLayout >= (SQUARE_SIZE * 2) && yLayout < (SQUARE_SIZE * 3))
-                    return SQUARE_SIZE * 2.5;
-                else if (yLayout >= (SQUARE_SIZE * 3) && yLayout < (SQUARE_SIZE * 4))
-                    return SQUARE_SIZE * 3.5;
-                else if (yLayout >= (SQUARE_SIZE * 4) && yLayout < (SQUARE_SIZE * 5))
-                    return SQUARE_SIZE * 4.5;
-                else
-                    return START_Y;
-            }
         }
     }
 
@@ -494,7 +513,9 @@ public class Board extends Application {
     private void makePieces(String placement){
         //List<String> missing = FitGame.getMissingPieces(placement);
         for (int i = 0; i < placement.length(); i+=4) {
-            gamePiece.getChildren().add(new DraggablePiece(placement.charAt(i) + "00" + placement.charAt(i + 3)));
+            String x = Character.toString(placement.charAt(i + 1));
+            String y = Character.toString(placement.charAt(i + 2));
+            gamePiece.getChildren().add(new DraggablePiece(placement.charAt(i) + x + y + placement.charAt(i + 3)));
         }
         gamePiece.toFront();
     }
@@ -563,10 +584,12 @@ public class Board extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("IQ-Fit Game");
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
+        FitGame.boardUpdate("", initialBoard);
         // add an event that determines the difficulty of this piece
 
         String currentObjective = chooseObjective( 2);
         setBoard(currentObjective);
+        FitGame.boardUpdate(currentObjective, initialBoard);
 //        makePieces(currentObjective);
 
         String missing = setPlayablePieces(currentObjective, Games.getSolution(currentObjective));
