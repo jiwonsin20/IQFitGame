@@ -266,30 +266,30 @@ public class FitGame {
      * Code written by Jiwon Sin
      */
 
-    public static PieceType[][] updateBoard(String placement, PieceType [][] initialBoard) {
-
-        if (!isPlacementValid(placement))
-            return null;
-        Piece[] pieces = toPieces(placement);
-        for (Piece piece : pieces) {
-            PieceType[][] array = piece.getCoords();
-            int x = piece.coords.getXCoordinate();
-            int y = piece.coords.getYCoordinate();
-            for (int j = x; j < x + piece.getXDimensions(); j++) {
-                for (int i = y; i < y + piece.getYDimensions(); i++) {
-                    if (array[i - y][j - x] == null && initialBoard[i][j] != null)
-                        initialBoard[i][j] = initialBoard[i][j];
-                    else
-                        initialBoard[i][j] = array[i - y][j - x];
-                }
-            }
-        }
-        return initialBoard;
-    }
+//    public static PieceType[][] updateBoard(String placement, PieceType [][] initialBoard) {
+//
+//        if (!isPlacementValid(placement))
+//            return null;
+//        Piece[] pieces = toPieces(placement);
+//        for (Piece piece : pieces) {
+//            PieceType[][] array = piece.getCoords();
+//            int x = piece.coords.getXCoordinate();
+//            int y = piece.coords.getYCoordinate();
+//            for (int j = x; j < x + piece.getXDimensions(); j++) {
+//                for (int i = y; i < y + piece.getYDimensions(); i++) {
+//                    if (array[i - y][j - x] == null && initialBoard[i][j] != null)
+//                        initialBoard[i][j] = initialBoard[i][j];
+//                    else
+//                        initialBoard[i][j] = array[i - y][j - x];
+//                }
+//            }
+//        }
+//        return initialBoard;
+//    }
 
     /**
      * This method checks whether the piece placement overlaps the updated board.
-     * updateBoard method is called to change the piece positions of pre-placed pieces (placement)
+     * boardUpdate method is called to change the piece positions of pre-placed pieces (placement)
      * Then method checks whether the newPlacement piece overlaps with the current board.
      *
      * @param placement A String describing the shape, x and y coordinates and direction.
@@ -312,7 +312,7 @@ public class FitGame {
                 {null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null}
         };
-        updateBoard(placement, initialBoard);
+        boardUpdate(placement, initialBoard);
         if (initialBoard[rowY][colX] != null)
             return false;
 
@@ -582,33 +582,6 @@ public class FitGame {
         return possibleP;
     }
 
-    public static void main(String[] args) {
-        String str = "g60Sl41WB01EI52NN00NO30NP63SY23S";
-        String str2 = "N80E";
-        PieceType[][] initialBoard = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
-        updateBoard(str, initialBoard);
-//        System.out.println(Arrays.toString(nullXCoordinate(initialBoard)));
-//        System.out.println(Arrays.toString(nullYCoordinate(initialBoard)));
-//        System.out.println(combinationXY(nullXCoordinate(initialBoard),nullYCoordinate(initialBoard)));
-//        System.out.println(listOfPieces(str));
-//        System.out.println(findSolution(str));
-//        System.out.println(seekSolution(str));
-//        System.out.println(getSolution(str));
-//        System.out.println(isPieceOverlappingBoard(str, "b00N"));
-//        System.out.println(Arrays.deepToString(initialBoard));
-        System.out.println(pieceNotUsed(str, str2));
-
-    }
-
-    // methods needed
-    // find missing pieces
-    //
 
     public static boolean isComplete(PieceType[][] initialBoard) {
         for (int i = 0; i < 5; i++) {
@@ -646,13 +619,13 @@ public class FitGame {
         for (int i = 0; i < listOfSolutions.size(); i++) {
             if (isPieceOverlappingBoard(challenge, listOfSolutions.get(i))) {
                 challenge += listOfSolutions.get(i);
-                updateBoard(listOfSolutions.get(i),initialBoard);
+                boardUpdate(listOfSolutions.get(i),initialBoard);
             }
             for (int j = i + 1; j < listOfSolutions.size(); j++) {
                 if (pieceNotUsed(challenge, listOfSolutions.get(j))) {
                     if (isPieceOverlappingBoard(challenge, listOfSolutions.get(j))) {
                         challenge += listOfSolutions.get(j);
-                        updateBoard(listOfSolutions.get(j),initialBoard);
+                        boardUpdate(listOfSolutions.get(j),initialBoard);
                     }
                 }
             }
@@ -687,13 +660,13 @@ public class FitGame {
         for (int i = 0; i < listOfSolutions.size(); i++) {
             if (isPieceOverlappingBoard(challenge, listOfSolutions.get(i))) {
                 challenge += listOfSolutions.get(i);
-                updateBoard(listOfSolutions.get(i),initialBoard);
+                boardUpdate(listOfSolutions.get(i),initialBoard);
             }
             for (int j = i + 1; j < listOfSolutions.size(); j++) {
                 if (pieceNotUsed(challenge, listOfSolutions.get(j))) {
                     if (isPieceOverlappingBoard(challenge, listOfSolutions.get(j))) {
                         challenge += listOfSolutions.get(j);
-                        updateBoard(listOfSolutions.get(j),initialBoard);
+                        boardUpdate(listOfSolutions.get(j),initialBoard);
                     }
                 }
             }
