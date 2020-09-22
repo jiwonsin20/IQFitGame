@@ -333,10 +333,34 @@ public class Board extends Application {
             setLayoutY(y);
         }
 
-        private boolean isPieceOnBoard(){
-            if (getLayoutX() > GRID_L_PADDING && (getLayoutX() < PLAYABLE_AREA_X)
-                    && getLayoutY() > GRID_TOP_PADDING && (getLayoutY() < PLAYABLE_AREA_Y)) {
-                return true;
+        private boolean isPieceOnBoard() {
+            double xMax;
+            double yMax;
+            if (getLayoutX() >= 0 && getLayoutX() <= PLAYABLE_AREA_X && getLayoutY() >= 0 && getLayoutY() <= PLAYABLE_AREA_Y) {
+                if (isThreeByTwo(pieceID)) {
+                    if (orientation % 2 == 0) {
+                        xMax = getLayoutX() + SQUARE_SIZE * 2;
+                        yMax = getLayoutY() + SQUARE_SIZE * 3;
+                    }
+                    else {
+                        xMax = getLayoutX() + SQUARE_SIZE * 3;
+                        yMax = getLayoutY() + SQUARE_SIZE * 2;
+                    }
+                }
+                else {
+                    if (orientation % 2 == 0) {
+                        xMax = getLayoutX() + SQUARE_SIZE * 2;
+                        yMax = getLayoutY() + SQUARE_SIZE * 4;
+                    }
+                    else {
+                        xMax = getLayoutX() + SQUARE_SIZE * 4;
+                        yMax = getLayoutY() + SQUARE_SIZE * 2;
+                    }
+                }
+                if (xMax > PLAYABLE_AREA_X || yMax == PLAYABLE_AREA_Y)
+                    return false;
+                else
+                    return true;
             }
             else
                 return false;
@@ -345,40 +369,40 @@ public class Board extends Application {
         private double snapXtoGrid (double xLayout) {
 
             if (isThreeByTwo(pieceID) && (orientation == 2 || orientation == 4)) {
-                if (xLayout >= -25 && xLayout < (SQUARE_SIZE + 19))
+                if (xLayout >= -25 && xLayout < (SQUARE_SIZE))
                     return (SQUARE_SIZE / 2f) -5;
-                else if (xLayout >= (SQUARE_SIZE + 19) && xLayout < (SQUARE_SIZE * 2 + 19))
+                else if (xLayout >= (SQUARE_SIZE) && xLayout < (SQUARE_SIZE * 2))
                     return SQUARE_SIZE * 1.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 2 + 19) && xLayout < (SQUARE_SIZE * 3 + 19))
+                else if (xLayout >= (SQUARE_SIZE * 2) && xLayout < (SQUARE_SIZE * 3))
                     return SQUARE_SIZE * 2.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 3 + 19) && xLayout < (SQUARE_SIZE * 4 + 19))
-                    return SQUARE_SIZE * 3.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 4 + 19) && xLayout < (SQUARE_SIZE * 5 + 19))
-                    return SQUARE_SIZE * 4.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 5 + 19) && xLayout < (SQUARE_SIZE * 6 + 19))
-                    return SQUARE_SIZE * 5.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 6 + 19) && xLayout < (SQUARE_SIZE * 7 + 19))
-                    return SQUARE_SIZE * 6.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 7 + 19) && xLayout < (SQUARE_SIZE * 8 + 19))
-                    return SQUARE_SIZE * 7.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 8 + 19) && xLayout < (SQUARE_SIZE * 9 + 19))
-                    return SQUARE_SIZE * 8.5 -5;
-                else if (xLayout >= (SQUARE_SIZE * 9 + 19) && xLayout < (SQUARE_SIZE * 10 + 19))
-                    return SQUARE_SIZE * 9.5 -5;
+                else if (xLayout >= (SQUARE_SIZE * 3) && xLayout < (SQUARE_SIZE * 4))
+                    return SQUARE_SIZE * 3.5;
+                else if (xLayout >= (SQUARE_SIZE * 4) && xLayout < (SQUARE_SIZE * 5))
+                    return SQUARE_SIZE * 4.5;
+                else if (xLayout >= (SQUARE_SIZE * 5) && xLayout < (SQUARE_SIZE * 6))
+                    return SQUARE_SIZE * 5.5;
+                else if (xLayout >= (SQUARE_SIZE * 6) && xLayout < (SQUARE_SIZE * 7))
+                    return SQUARE_SIZE * 6.5;
+                else if (xLayout >= (SQUARE_SIZE * 7) && xLayout < (SQUARE_SIZE * 8))
+                    return SQUARE_SIZE * 7.5 + 5;
+                else if (xLayout >= (SQUARE_SIZE * 8) && xLayout < (SQUARE_SIZE * 9))
+                    return SQUARE_SIZE * 8.5 + 7;
+//                else if (xLayout >= (SQUARE_SIZE * 9) && xLayout < (SQUARE_SIZE * 10))
+//                    return SQUARE_SIZE * 9.5 + 10;
                 else
                     return 600;
             }
             else if (!isThreeByTwo(pieceID) && (orientation == 2 || orientation == 4)) {
                 if (xLayout >= -25 && xLayout < (SQUARE_SIZE * 0.5))
-                    return (0);
+                    return (-10);
                 else if (xLayout >= (SQUARE_SIZE * 0.5) && xLayout < (SQUARE_SIZE * 1.5))
-                    return SQUARE_SIZE;
+                    return SQUARE_SIZE - 7;
                 else if (xLayout >= (SQUARE_SIZE * 1.5) && xLayout < (SQUARE_SIZE * 2.5))
-                    return SQUARE_SIZE * 2;
+                    return SQUARE_SIZE * 2 - 5;
                 else if (xLayout >= (SQUARE_SIZE * 2.5) && xLayout < (SQUARE_SIZE * 3.5))
-                    return SQUARE_SIZE * 3;
+                    return SQUARE_SIZE * 3 - 7;
                 else if (xLayout >= (SQUARE_SIZE * 3.5) && xLayout < (SQUARE_SIZE * 4.5))
-                    return SQUARE_SIZE * 4;
+                    return SQUARE_SIZE * 4 - 2;
                 else if (xLayout >= (SQUARE_SIZE * 4.5) && xLayout < (SQUARE_SIZE * 5.5))
                     return SQUARE_SIZE * 5;
                 else if (xLayout >= (SQUARE_SIZE * 5.5) && xLayout < (SQUARE_SIZE * 6.5))
@@ -393,7 +417,7 @@ public class Board extends Application {
                     return 600;
             }
             else {
-                if (xLayout >= -50 && xLayout < (SQUARE_SIZE + 19))
+                if (xLayout > 0 && xLayout < (SQUARE_SIZE + 19))
                     return (SQUARE_SIZE / 2f + 19);
                 else if (xLayout >= (SQUARE_SIZE + 19) && xLayout < (SQUARE_SIZE * 2 + 19))
                     return SQUARE_SIZE * 1.5 + 16;
@@ -428,8 +452,22 @@ public class Board extends Application {
                     return SQUARE_SIZE * 3 + 2;
                 else if (yLayout >= (SQUARE_SIZE * 3.5) && yLayout < (SQUARE_SIZE * 4.5))
                     return SQUARE_SIZE * 4 + 3;
-                else if (yLayout >= (SQUARE_SIZE * 4.5) && yLayout < (SQUARE_SIZE * 5.5))
-                    return SQUARE_SIZE * 5 + 4;
+//                else if (yLayout >= (SQUARE_SIZE * 4.5) && yLayout < (SQUARE_SIZE * 5.5))
+//                    return SQUARE_SIZE * 5 + 4;
+                else
+                    return START_Y;
+            }
+            else if (!isThreeByTwo(pieceID) && (orientation == 2 || orientation == 4)) {
+                if (yLayout > 0 && yLayout < (SQUARE_SIZE))
+                    return SQUARE_SIZE * 0.5 - 2;
+                else if (yLayout >= (SQUARE_SIZE) && yLayout < (SQUARE_SIZE * 2))
+                    return SQUARE_SIZE * 1.5 + 2;
+                else if (yLayout >= (SQUARE_SIZE * 2) && yLayout < (SQUARE_SIZE * 3))
+                    return SQUARE_SIZE * 2.5 + 2;
+                else if (yLayout >= (SQUARE_SIZE * 3) && yLayout < (SQUARE_SIZE * 4))
+                    return SQUARE_SIZE * 3.5 + 5;
+                else if (yLayout >= (SQUARE_SIZE * 4) && yLayout < (SQUARE_SIZE * 5))
+                    return SQUARE_SIZE * 4.5;
                 else
                     return START_Y;
             }
@@ -450,7 +488,6 @@ public class Board extends Application {
             }
         }
     }
-
 
 
     // Need to change this
