@@ -435,26 +435,6 @@ public class FitGame {
 
         return result;
     }
-//    public static String getSol (String str) {
-//        PieceType[][] board = {
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null}
-//        };
-//        boardUpdate(str, board);
-//        Set<String> set1 = new HashSet<>();
-//
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if (board[i][j] == null) {
-//                    set1 = getViablePiecePlacements(str, j, i);
-//                    boardUpdate();
-//                }
-//            }
-//        }
-//    }
 
     public static void boardUpdate (String placement, PieceType [][] board) {
         if (placement.length() == 0)
