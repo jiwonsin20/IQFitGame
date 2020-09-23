@@ -230,9 +230,9 @@ public class FitGame {
         if (placement.length() == 0) {
             List<String> sortedList = new ArrayList<>();
 
-            for (int i = 0; i < array.length; i++) {
-                sortedList.add(array[i]);
-                sortedList.add(array[i].toUpperCase());
+            for (String s : array) {
+                sortedList.add(s);
+                sortedList.add(s.toUpperCase());
             }
             Collections.sort(sortedList);
             return sortedList;
