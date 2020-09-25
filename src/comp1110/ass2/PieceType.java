@@ -127,7 +127,7 @@ public enum PieceType {
      */
     public static PieceType fromChar(String placement) {
         char firstChar = placement.charAt(0);
-        PieceType result = null;
+        PieceType result = B;
         switch (firstChar) {
             case 'B':
                 result = B;

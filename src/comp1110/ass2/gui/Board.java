@@ -13,10 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Board extends Application {
 
@@ -26,9 +23,9 @@ public class Board extends Application {
     private static final int GRID_L_PADDING = 48;
     private static final int GRID_TOP_PADDING = 25;
     private static final int PLAYABLE_AREA_X = 10 * SQUARE_SIZE + GRID_L_PADDING * 2;
-    private static final int PLAYABLE_AREA_Y = 5 * SQUARE_SIZE + GRID_TOP_PADDING * 2;
+    private static final int PLAYABLE_AREA_Y = 275;
     private static final int START_X = 10;
-    private static final int START_Y = BOARD_HEIGHT - 6 * SQUARE_SIZE;
+    private static final int START_Y = BOARD_HEIGHT - 6 * SQUARE_SIZE -25;
 
     // This part is for board image
     private static final String URI_BASE = "assets/";
@@ -187,58 +184,59 @@ public class Board extends Application {
             // This section will be edited by this week -- Jiwon Sin
             switch (Character.toUpperCase(piece)) {
                 case 'B':
-                    initialX = PLAYABLE_AREA_X;
-                    initialY = START_Y;
-                    break;
-                case 'G':
-                    initialX = START_X;
-                    initialY = START_Y + SQUARE_SIZE * 2.05;
-                    break;
-                case 'I':
-                    initialX = START_X;
-                    initialY = START_Y + SQUARE_SIZE * 4.1;
-                    break;
-                case 'L':
-                    initialX = PLAYABLE_AREA_X;
-                    initialY = START_Y;
-                    break;
-                case 'N':
-                    initialX = START_X + SQUARE_SIZE * 4.5;
-                    initialY = START_Y + SQUARE_SIZE * 2.05;
+                    homeX = 0;
+                    homeY = START_Y;
                     break;
                 case 'O':
-                    initialX = PLAYABLE_AREA_X;
-                    initialY = START_Y + SQUARE_SIZE * 4.1;
-                    break;
-                case 'P':
-                    initialX = PLAYABLE_AREA_X;
-                    initialY = START_Y;
+                    homeX = SQUARE_SIZE * 4 - 1;
+                    homeY = START_Y;
                     break;
                 case 'R':
-                    initialX = PLAYABLE_AREA_X;
-                    initialY = START_Y + SQUARE_SIZE * 2.05;
+                    homeX = SQUARE_SIZE * 8;
+                    homeY = START_Y;
                     break;
-                case 'S':
-                    initialX = PLAYABLE_AREA_X;
-                    initialY = START_Y + SQUARE_SIZE * 5;
+                case 'I':
+                    homeX = SQUARE_SIZE * 12;
+                    homeY = START_Y;
+                    break;
+                case 'N':
+                    homeX = 0;
+                    homeY = START_Y + SQUARE_SIZE * 3.5;
+                    break;
+                case 'G':
+                    homeX = SQUARE_SIZE * 3 - 1;
+                    homeY = START_Y + SQUARE_SIZE * 3.5;
+                    break;
+                case 'P':
+                    homeX = SQUARE_SIZE * 6 - 1;
+                    homeY = START_Y + SQUARE_SIZE * 3.5;
                     break;
                 case 'Y':
-                    initialX = START_X + SQUARE_SIZE * 13.5;
-                    initialY = START_Y;
+                    homeX = SQUARE_SIZE * 10;
+                    homeY = START_Y + SQUARE_SIZE * 3.5;
+                    break;
+                case 'S':
+                    homeX = SQUARE_SIZE * 14;
+                    homeY = START_Y + SQUARE_SIZE * 3.5;
+                    break;
+                case 'L':
+                    homeX = SQUARE_SIZE * 15;
+                    homeY = START_Y;
                     break;
             }
-            setLayoutX(initialX);
-            setLayoutY(initialY);
+            setLayoutX(homeX);
+            setLayoutY(homeY);
 
         // Handling events
 
             setOnMousePressed(mouseEvent -> {
-                homeX = getLayoutX();
-                homeY = getLayoutY();
                 mouseX = mouseEvent.getSceneX();
                 mouseY = mouseEvent.getSceneY();
                 toFront();
-                clearInitialBoard(pieceID);
+                System.out.println(pieceID);
+                if (FitGame.isPlacementValid(pieceID))
+                    clearInitialBoard(pieceID);
+                System.out.println(Arrays.deepToString(initialBoard));
                 mouseEvent.consume();
             });
 
@@ -261,24 +259,28 @@ public class Board extends Application {
                     if (orientation == 5)
                         orientation = 1;
                 }
-
                 });
 
             setOnMouseReleased(mouseEvent -> {
-                if (getLayoutX() < PLAYABLE_AREA_X && getLayoutY() < PLAYABLE_AREA_Y) {
-                    updatePieceID();
-                    System.out.println(pieceID);
+                updatePieceID();
+                System.out.println(pieceID);
+                if (FitGame.isPlacementValid(pieceID)) {
                     if (FitGame.isPlacementNotOverlapping(initialBoard, pieceID)) {
                         snapToGrid();
-                    } else {
-                        setLayoutX(initialX);
-                        setLayoutY(initialY);
+                        FitGame.boardUpdate(pieceID, initialBoard);
+                    }
+                    else {
+                        System.out.println("It's Here 1");
+                        setLayoutX(homeX);
+                        setLayoutY(homeY);
                     }
                 }
                 else {
-                    setLayoutX(initialX);
-                    setLayoutY(initialY);
+                    System.out.println("It's Here 2");
+                    setLayoutX(homeX);
+                    setLayoutY(homeY);
                 }
+                System.out.println(Arrays.deepToString(initialBoard));
                 mouseEvent.consume();
             });
         }
@@ -290,19 +292,27 @@ public class Board extends Application {
             Piece piece = toPiece(placement);
 
             if (FitGame.isPlacementValid(placement)) {
-
-                for (int i = xLocation; i < xLocation + getPieceSpineNum(placement); i++) {
-                    for (int j = yLocation; j < yLocation + piece.getYDimensions(); j++) {
-                        if (Board.initialBoard[j][i] == piece.getType())
-                            Board.initialBoard[j][i] = null;
+                if (orientation == 1 || orientation == 3) {
+                    for (int i = xLocation; i < xLocation + getPieceSpineNum(placement); i++) {
+                        for (int j = yLocation; j < yLocation + 2; j++) {
+                            if (Board.initialBoard[j][i] == piece.getType())
+                                Board.initialBoard[j][i] = null;
+                        }
+                    }
+                } else { // West or East
+                    for (int i = xLocation; i < xLocation + 2; i++) {
+                        for (int j = yLocation; j < yLocation + getPieceSpineNum(placement); j++) {
+                            if (Board.initialBoard[j][i] == piece.getType())
+                                Board.initialBoard[j][i] = null;
+                        }
                     }
                 }
             }
         }
 
         private void updatePieceID() {
-            int xValue = getPositionX();
-            int yValue = getPositionY();
+            int xValue = getPositionX(snapXToGrid(getLayoutX()));
+            int yValue = getPositionY(snapYToGrid(getLayoutY()));
             pieceID = type + Integer.toString(xValue) + yValue + PieceDirection.getChar(orientation);
         }
 
@@ -312,53 +322,57 @@ public class Board extends Application {
 
         private void snapToGrid() {
             snapLayoutToGrid(snapXToGrid(getLayoutX()), snapYToGrid(getLayoutY()));
-            System.out.println(Arrays.deepToString(initialBoard));
         }
 
         private void snapLayoutToGrid(double x, double y) {
-            setLayoutX(x);
-            setLayoutY(y);
+            if (getPositionX(x) <= 9 && getPositionY(y) <= 4) {
+                setLayoutX(x);
+                setLayoutY(y);
+            }
+            else {
+                setLayoutX(homeX);
+                setLayoutY(homeY);
+            }
         }
 
 
-        private int getPositionX() {
-            double snapXValue = snapXToGrid(getLayoutX());
-            if (snapXValue != initialX) {
+        private int getPositionX(double x) {
+//            double snapXValue = snapXToGrid(getLayoutX());
+            if (x != homeX) {
                 if (isThreeByTwo(pieceID)) {
                     if (orientation == 1 || orientation == 3)
-                        return (int) snapXValue / (SQUARE_SIZE + 1);
+                        return (int) x / (SQUARE_SIZE + 1);
                     else
-                        return (int) snapXValue / SQUARE_SIZE;
+                        return (int) x / SQUARE_SIZE;
                 } else {
                     if (orientation == 1 || orientation == 3) {
-                        return (int) snapXValue / (SQUARE_SIZE + 3);
+                        return (int) x / (SQUARE_SIZE + 3);
                     } else
-                        return (int) snapXValue / (SQUARE_SIZE - 5);
+                        return (int) x / (SQUARE_SIZE - 5);
                 }
             }
             else
-                return (int) initialX;
+                return (int) homeX;
         }
 
-        private int getPositionY() {
-            double snapYValue = snapYToGrid(getLayoutY());
-            if (snapYValue != initialY) {
+        private int getPositionY(double y) {
+            if (y != homeY) {
                 if (isThreeByTwo(pieceID)) {
                     if (orientation == 1 || orientation == 3) {
-                        return (int) snapYValue / SQUARE_SIZE;
+                        return (int) y / SQUARE_SIZE;
                     } else {
-                        return (int) snapYValue / (SQUARE_SIZE + 10);
+                        return (int) y / (SQUARE_SIZE + 10);
                     }
                 } else {
                     if (orientation == 1 || orientation == 3) {
-                        return (int) snapYValue / SQUARE_SIZE;
+                        return (int) y / (SQUARE_SIZE + 1);
                     } else {
-                        return (int) snapYValue / (SQUARE_SIZE + 26);
+                        return (int) y / (SQUARE_SIZE + 26);
                     }
                 }
             }
             else
-                return (int) initialY;
+                return (int) homeY;
         }
 
         private boolean isPieceOnBoard() {
@@ -411,7 +425,7 @@ public class Board extends Application {
                     else if (xLayout >= SQUARE_SIZE * 7 + 19 && xLayout < 8 * SQUARE_SIZE + 19)
                         return SQUARE_SIZE * 8 + 2;
                     else
-                        return initialX;
+                        return homeX;
                 }
                 else { //East and West
                     if (xLayout >= -5 && xLayout < SQUARE_SIZE * 0.5 + 20)
@@ -433,7 +447,7 @@ public class Board extends Application {
                     else if (xLayout >= 7.5 * SQUARE_SIZE + 20 && xLayout < 8.5 * SQUARE_SIZE + 20)
                         return SQUARE_SIZE * 8.5 + 3;
                     else
-                        return initialX;
+                        return homeX;
                 }
             }
             else { // if piece is in 4 by 2 orientation
@@ -453,7 +467,7 @@ public class Board extends Application {
                     else if (xLayout >= 6 * SQUARE_SIZE + 20 && xLayout < 7 * SQUARE_SIZE + 20)
                         return SQUARE_SIZE * 7 + 2;
                     else
-                        return initialX;
+                        return homeX;
                 }
                 else { // East and West
                     if (xLayout >= -30 && xLayout < 20)
@@ -475,7 +489,7 @@ public class Board extends Application {
                     else if (xLayout >= 7 * SQUARE_SIZE + 20 && xLayout < 8 * SQUARE_SIZE + 20)
                         return SQUARE_SIZE * 8 + 2;
                     else
-                        return initialX;
+                        return homeX;
                 }
             }
         }
@@ -492,7 +506,7 @@ public class Board extends Application {
                     else if (yLayout >= SQUARE_SIZE * 3 + 2 && yLayout < SQUARE_SIZE * 4 + 2)
                         return SQUARE_SIZE * 3.5 + 5;
                     else
-                        return initialY;
+                        return homeY;
                 }
                 else { //West and East
                     if (yLayout >= 30 && yLayout < 30 + SQUARE_SIZE)
@@ -502,7 +516,7 @@ public class Board extends Application {
                     else if (yLayout >= SQUARE_SIZE * 2 + 30 && yLayout < SQUARE_SIZE * 3 + 30)
                         return SQUARE_SIZE * 3 + 4;
                     else
-                        return initialY;
+                        return homeY;
                 }
             }
             else { // Four by two piece
@@ -516,7 +530,7 @@ public class Board extends Application {
                     else if (yLayout >= 3 * SQUARE_SIZE && yLayout < 4 * SQUARE_SIZE)
                         return SQUARE_SIZE * 3.5 + 4;
                     else
-                        return initialY;
+                        return homeY;
                 }
                 else { // West and East
                     if (yLayout >= SQUARE_SIZE && yLayout < SQUARE_SIZE * 2)
@@ -524,10 +538,9 @@ public class Board extends Application {
                     else if (yLayout >= SQUARE_SIZE * 2 && yLayout < SQUARE_SIZE * 3)
                         return SQUARE_SIZE * 2.5 + 2;
                     else
-                        return initialY;
+                        return homeY;
                 }
             }
-
         }
     }
 
@@ -600,12 +613,13 @@ public class Board extends Application {
         FitGame.boardUpdate("", initialBoard);
         // add an event that determines the difficulty of this piece
 
-        String currentObjective = chooseObjective( 3);
+        String currentObjective = chooseObjective( 5);
         setBoard(currentObjective);
         FitGame.boardUpdate(currentObjective, initialBoard);
 
         String missing = setPlayablePieces(currentObjective, Games.getSolution(currentObjective));
         makePieces(missing);
+
         root.getChildren().add(board);
         root.getChildren().add(gamePiece);
         primaryStage.setScene(scene);

@@ -421,28 +421,32 @@ public class FitGame {
     }
 
     public static void boardUpdate (String placement, PieceType [][] initialBoard) {
-
-        Piece[] pieces = toPieces(placement);
-        for (Piece piece : pieces) {
-            PieceType[][] array = piece.getCoords();
-            int x = piece.coords.getXCoordinate();
-            int y = piece.coords.getYCoordinate();
-            for (int j = x; j < x + piece.getXDimensions(); j++) {
-                for (int i = y; i < y + piece.getYDimensions(); i++) {
-                    if (array[i - y][j - x] == null && initialBoard[i][j] != null)
-                        initialBoard[i][j] = initialBoard[i][j];
-                    else
-                        initialBoard[i][j] = array[i - y][j - x];
+//        if (isPlacementNotOverlapping(initialBoard, placement)) {
+            Piece[] pieces = toPieces(placement);
+            for (Piece piece : pieces) {
+                PieceType[][] array = piece.getCoords();
+                int x = piece.coords.getXCoordinate();
+                int y = piece.coords.getYCoordinate();
+                for (int j = x; j < x + piece.getXDimensions(); j++) {
+                    for (int i = y; i < y + piece.getYDimensions(); i++) {
+                        if (array[i - y][j - x] == null && initialBoard[i][j] != null)
+                            initialBoard[i][j] = initialBoard[i][j];
+                        else
+                            initialBoard[i][j] = array[i - y][j - x];
+                    }
                 }
             }
-        }
+
     }
 
     public static boolean isPlacementNotOverlapping(PieceType [][] board, String placement) {
         // For 4-character length placement
         Piece piece = toPiece(placement);
+        if (piece == null)
+            return true;
 
         PieceType[][] array = piece.getCoords();
+
         int x = piece.coords.getXCoordinate();
         int y = piece.coords.getYCoordinate();
         for (int j = x; j < x + piece.getXDimensions(); j++) {
@@ -450,20 +454,18 @@ public class FitGame {
                 if (board[i][j] != null && array[i - y][j - x] != null) {
                     return false;
                 }
-                if (array[i - y][j - x] != null) {
-                    board[i][j] = array[i - y][j - x];
-                }
             }
         }
         return true;
     }
 
     public static void main(String[] args) {
-        String str = "b30Ng41WI00NN12NP80Es63S";
+        String str = "b33Sp30S";
         boardUpdate(str, initialBoard);
-        String str2 = "o03S";
+        System.out.println(Arrays.deepToString(initialBoard));
+        String str2 = "O33N";
         System.out.println(isPlacementNotOverlapping(initialBoard, str2));
-        boardUpdate(str2, initialBoard);
+//        boardUpdate(str2, initialBoard);
         System.out.println(Arrays.deepToString(initialBoard));
 
     }

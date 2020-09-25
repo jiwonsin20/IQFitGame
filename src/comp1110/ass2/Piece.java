@@ -43,6 +43,8 @@ public class Piece {
      */
 
     public static Piece toPiece(String placement) {
+        if (placement.length() == 0)
+            return null;
         PieceType type = PieceType.fromChar(placement);
         PieceCoordinates coords = getPCoord(placement);
         PieceDirection dir = PieceDirection.getDirection(placement);
