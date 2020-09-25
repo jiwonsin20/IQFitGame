@@ -1260,4 +1260,8 @@ public class Piece {
     public PieceDirection getDir() {
         return dir;
     }
+
+    public PieceType getType() {
+        return type;
+    }
 }

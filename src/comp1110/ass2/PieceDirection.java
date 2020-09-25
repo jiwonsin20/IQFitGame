@@ -26,14 +26,14 @@ public enum PieceDirection {
      *
      * Code written by Jiwon Sin
      */
-    public static char getChar(PieceDirection dir) {
-        if (dir == NORTH)
+    public static char getChar(int dir) {
+        if (dir == 1)
             return 'N';
-        else if (dir == SOUTH)
-            return 'S';
-        else if (dir == EAST)
+        else if (dir == 2)
             return 'E';
-        else if (dir == WEST)
+        else if (dir == 3)
+            return 'S';
+        else if (dir == 4)
             return 'W';
         else
             return ' ';

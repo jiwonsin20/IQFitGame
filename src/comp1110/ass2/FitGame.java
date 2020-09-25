@@ -442,26 +442,28 @@ public class FitGame {
         // For 4-character length placement
         Piece piece = toPiece(placement);
 
-        PieceType [][] pieceCoords = piece.getCoords();
-
+        PieceType[][] array = piece.getCoords();
         int x = piece.coords.getXCoordinate();
         int y = piece.coords.getYCoordinate();
         for (int j = x; j < x + piece.getXDimensions(); j++) {
             for (int i = y; i < y + piece.getYDimensions(); i++) {
-                if (pieceCoords[i - y][j - x] == null && board[i][j] != null)
+                if (board[i][j] != null && array[i - y][j - x] != null) {
                     return false;
+                }
+                if (array[i - y][j - x] != null) {
+                    board[i][j] = array[i - y][j - x];
+                }
             }
         }
         return true;
     }
 
     public static void main(String[] args) {
-        String str = "b33Sp30S";
-        System.out.println(Arrays.deepToString(initialBoard));
+        String str = "b30Ng41WI00NN12NP80Es63S";
         boardUpdate(str, initialBoard);
-        System.out.println(Arrays.deepToString(initialBoard));
-        String str2 = "r00E";
+        String str2 = "o03S";
         System.out.println(isPlacementNotOverlapping(initialBoard, str2));
+        boardUpdate(str2, initialBoard);
         System.out.println(Arrays.deepToString(initialBoard));
 
     }

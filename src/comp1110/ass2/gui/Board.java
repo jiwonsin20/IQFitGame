@@ -1,5 +1,6 @@
 package comp1110.ass2.gui;
 
+// Entire Board Application created by Jiwon Sin, edited by Jiwon Sin
 
 import comp1110.ass2.*;
 
@@ -22,8 +23,6 @@ public class Board extends Application {
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
     private static final int SQUARE_SIZE = 50;
-//    private static final int BOARD_MARGIN_X = 300;
-//    private static final int BOARD_MARGIN_Y = 150;
     private static final int GRID_L_PADDING = 48;
     private static final int GRID_TOP_PADDING = 25;
     private static final int PLAYABLE_AREA_X = 10 * SQUARE_SIZE + GRID_L_PADDING * 2;
@@ -39,7 +38,7 @@ public class Board extends Application {
     private final Group board = new Group();
     private final Group gamePiece = new Group();
 
-    private static PieceType[][] initialBoard = {
+    private static final PieceType[][] initialBoard = {
             {null, null, null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null, null, null},
@@ -130,7 +129,7 @@ public class Board extends Application {
             FitGame.boardUpdate(placement, initialBoard);
             gamePiece.getChildren().add(pieceImage);
         }
-
+        FitGame.boardUpdate(placement, initialBoard);
         root.getChildren().add(board);
     }
 
@@ -157,7 +156,6 @@ public class Board extends Application {
             this.pieceID = piece;
             setFitWidth(SQUARE_SIZE * fromChar(piece).getSpineNum());
             setPreserveRatio(true);
-//            setFitHeight(SQUARE_SIZE * toPiece(piece).getYDimensions());
         }
     }
 
@@ -172,10 +170,9 @@ public class Board extends Application {
         DraggablePiece(String placement) {
             super(placement);
             type = placement.charAt(0);
-            orientation = 1;//PieceDirection.fromChar(placement.charAt(3));
+            orientation = 1;
             char piece = placement.charAt(0);
-            boolean threeByTwo = piece == 'g' || piece == 'G' || piece == 'n' || piece == 'N' ||
-                    piece == 'l' || piece == 'L' || piece == 'i' || piece == 'I';
+
             Image pieceImage;
 
             positionX = Character.getNumericValue(placement.charAt(1));
@@ -187,6 +184,7 @@ public class Board extends Application {
                 pieceImage = new Image(getClass().getResource(URI_BASE + (placement.charAt(0)) +"2.png").toString());
             setImage(pieceImage);
 
+            // This section will be edited by this week -- Jiwon Sin
             switch (Character.toUpperCase(piece)) {
                 case 'B':
                     initialX = PLAYABLE_AREA_X;
@@ -240,6 +238,7 @@ public class Board extends Application {
                 mouseX = mouseEvent.getSceneX();
                 mouseY = mouseEvent.getSceneY();
                 toFront();
+                clearInitialBoard(pieceID);
                 mouseEvent.consume();
             });
 
@@ -266,14 +265,45 @@ public class Board extends Application {
                 });
 
             setOnMouseReleased(mouseEvent -> {
-                positionX = (int) getLayoutX() / 50;
-                positionY = (int) getLayoutY() / 50;
-                snapToGrid();
-
-//                if (isBoardOccupied())
-//                updatePosition();
+                if (getLayoutX() < PLAYABLE_AREA_X && getLayoutY() < PLAYABLE_AREA_Y) {
+                    updatePieceID();
+                    System.out.println(pieceID);
+                    if (FitGame.isPlacementNotOverlapping(initialBoard, pieceID)) {
+                        snapToGrid();
+                    } else {
+                        setLayoutX(initialX);
+                        setLayoutY(initialY);
+                    }
+                }
+                else {
+                    setLayoutX(initialX);
+                    setLayoutY(initialY);
+                }
                 mouseEvent.consume();
             });
+        }
+
+        private void clearInitialBoard(String placement) {
+            int xLocation = Character.getNumericValue(placement.charAt(1));
+            int yLocation = Character.getNumericValue(placement.charAt(2));
+
+            Piece piece = toPiece(placement);
+
+            if (FitGame.isPlacementValid(placement)) {
+
+                for (int i = xLocation; i < xLocation + getPieceSpineNum(placement); i++) {
+                    for (int j = yLocation; j < yLocation + piece.getYDimensions(); j++) {
+                        if (Board.initialBoard[j][i] == piece.getType())
+                            Board.initialBoard[j][i] = null;
+                    }
+                }
+            }
+        }
+
+        private void updatePieceID() {
+            int xValue = getPositionX();
+            int yValue = getPositionY();
+            pieceID = type + Integer.toString(xValue) + yValue + PieceDirection.getChar(orientation);
         }
 
         private boolean isThreeByTwo(String piece) {
@@ -281,16 +311,8 @@ public class Board extends Application {
         }
 
         private void snapToGrid() {
-//
-//
-//            System.out.println("X :" + getLayoutX());
-//            System.out.println("Y :" + getLayoutY());
-//
-//            System.out.println("gridX : " +snapXToGrid(getLayoutX()));
-//            System.out.println("gridY : " +snapYToGrid(getLayoutY()));
             snapLayoutToGrid(snapXToGrid(getLayoutX()), snapYToGrid(getLayoutY()));
-//            System.out.println(orientation);
-//            System.out.println(pieceID);
+            System.out.println(Arrays.deepToString(initialBoard));
         }
 
         private void snapLayoutToGrid(double x, double y) {
@@ -298,41 +320,45 @@ public class Board extends Application {
             setLayoutY(y);
         }
 
+
         private int getPositionX() {
             double snapXValue = snapXToGrid(getLayoutX());
-            if (isThreeByTwo(pieceID)) {
-                if (orientation == 1 || orientation == 3)
-                    return (int) snapXValue / (SQUARE_SIZE + 1);
-                else
-                    return (int) snapXValue / SQUARE_SIZE;
-            }
-            else {
-                if (orientation == 1 || orientation == 3) {
-                    return (int) snapXValue / (SQUARE_SIZE + 3);
+            if (snapXValue != initialX) {
+                if (isThreeByTwo(pieceID)) {
+                    if (orientation == 1 || orientation == 3)
+                        return (int) snapXValue / (SQUARE_SIZE + 1);
+                    else
+                        return (int) snapXValue / SQUARE_SIZE;
+                } else {
+                    if (orientation == 1 || orientation == 3) {
+                        return (int) snapXValue / (SQUARE_SIZE + 3);
+                    } else
+                        return (int) snapXValue / (SQUARE_SIZE - 5);
                 }
-                else
-                    return (int) snapXValue / (SQUARE_SIZE + 3);
             }
+            else
+                return (int) initialX;
         }
 
         private int getPositionY() {
             double snapYValue = snapYToGrid(getLayoutY());
-            if (isThreeByTwo(pieceID)) {
-                if (orientation == 1 || orientation == 3) {
-                    return (int) snapYValue / SQUARE_SIZE;
-                }
-                else {
-                    return (int) snapYValue / (SQUARE_SIZE + 10);
+            if (snapYValue != initialY) {
+                if (isThreeByTwo(pieceID)) {
+                    if (orientation == 1 || orientation == 3) {
+                        return (int) snapYValue / SQUARE_SIZE;
+                    } else {
+                        return (int) snapYValue / (SQUARE_SIZE + 10);
+                    }
+                } else {
+                    if (orientation == 1 || orientation == 3) {
+                        return (int) snapYValue / SQUARE_SIZE;
+                    } else {
+                        return (int) snapYValue / (SQUARE_SIZE + 26);
+                    }
                 }
             }
-            else {
-                if (orientation == 1 || orientation == 3) {
-                    return (int) snapYValue / SQUARE_SIZE;
-                }
-                else {
-                    return (int) snapYValue / (SQUARE_SIZE + 26);
-                }
-            }
+            else
+                return (int) initialY;
         }
 
         private boolean isPieceOnBoard() {
@@ -359,10 +385,7 @@ public class Board extends Application {
                         yMax = getLayoutY() + SQUARE_SIZE * 2;
                     }
                 }
-                if (xMax > PLAYABLE_AREA_X || yMax == PLAYABLE_AREA_Y)
-                    return false;
-                else
-                    return true;
+                return !(xMax > PLAYABLE_AREA_X) && yMax != PLAYABLE_AREA_Y;
             }
             else
                 return false;
@@ -511,11 +534,10 @@ public class Board extends Application {
 
     // Need to change this
     private void makePieces(String placement){
-        //List<String> missing = FitGame.getMissingPieces(placement);
         for (int i = 0; i < placement.length(); i+=4) {
             String x = Character.toString(placement.charAt(i + 1));
             String y = Character.toString(placement.charAt(i + 2));
-            gamePiece.getChildren().add(new DraggablePiece(placement.charAt(i) + x + y + placement.charAt(i + 3)));
+            gamePiece.getChildren().add(new DraggablePiece(placement.charAt(i) + x + y + "N"));
         }
         gamePiece.toFront();
     }
@@ -563,15 +585,6 @@ public class Board extends Application {
         return result;
     }
 
-
-
-//    public static void main(String[] args) {
-//        String obj = "B03SG70Si52SL00Nn01Er41WS40Ny62N";
-//        String solution = "B03SG70Si52SL00Nn01Eo63Sp20Er41WS40Ny62N";
-//        String missingP = setPlayablePieces(obj, solution);
-//        System.out.println(missingP);
-//    }
-
     // FIXME Task 7: Implement a basic playable Fix Game in JavaFX that only allows pieces to be placed in valid places
 
     // FIXME Task 8: Implement challenges (you may use assets provided for you in comp1110.ass2.gui.assets)
@@ -587,10 +600,9 @@ public class Board extends Application {
         FitGame.boardUpdate("", initialBoard);
         // add an event that determines the difficulty of this piece
 
-        String currentObjective = chooseObjective( 2);
+        String currentObjective = chooseObjective( 3);
         setBoard(currentObjective);
         FitGame.boardUpdate(currentObjective, initialBoard);
-//        makePieces(currentObjective);
 
         String missing = setPlayablePieces(currentObjective, Games.getSolution(currentObjective));
         makePieces(missing);
