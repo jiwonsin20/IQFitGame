@@ -659,6 +659,7 @@ public class FitGame {
 //        return challenge;
 //    }
 
+
     /**
      * Return the solution to a particular challenge.
      **
