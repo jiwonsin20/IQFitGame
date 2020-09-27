@@ -659,6 +659,82 @@ public class FitGame {
 //        return challenge;
 //    }
 
+static private class PieceComparator implements Comparator<String>
+{
+    public int compare(String a, String b)
+    {
+        return  Character.toLowerCase(a.charAt(0)) - Character.toLowerCase(b.charAt(0));
+    }
+}
+
+    private static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
+        char colorChar = Character.toLowerCase(piecePlacement.charAt(0));
+        for (int i = 0; i < piecePlacements.size(); ++i) {
+            String currPiecePlacement = piecePlacements.get(i);
+            char currColorChar = Character.toLowerCase(currPiecePlacement.charAt(0));
+            if (colorChar < currColorChar) {
+                piecePlacements.add(i, piecePlacement);
+                return;
+            }
+        }
+        piecePlacements.add(piecePlacements.size(), piecePlacement);
+    }
+
+    private static String getSolutionHelper(List<String> piecePlacements, Set<String> triedPlacements) {
+//        piecePlacements.sort(new PieceComparator());
+
+        String placement = String.join("", piecePlacements);
+
+        if (triedPlacements.contains(placement)) {
+            return null;
+        }
+
+//        System.out.println("oldSize: " + piecePlacements.size());
+//        System.out.println(" > " + placement);
+
+        if (!isPlacementWellFormed(placement)) {
+            System.out.println(placement);
+            System.exit(-2);
+        }
+
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        boardUpdate(placement, initialBoard);
+
+        boolean isBoardFull = true;
+
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (initialBoard[j][i] != null) {
+                    continue;
+                }
+                isBoardFull = false;
+                Set<String> viablePiecePlacements = getViablePiecePlacements(placement, i, j);
+                if (viablePiecePlacements == null) {
+                    return null;
+                }
+                for (String viablePiecePlacement : viablePiecePlacements) {
+                    List<String> newPiecePlacements = new ArrayList<String>(piecePlacements);
+                    insertPiecePlacement(newPiecePlacements, viablePiecePlacement);
+                    String solution = getSolutionHelper(newPiecePlacements, triedPlacements);
+                    if (solution != null) {
+                        return solution;
+                    }
+                }
+            }
+        }
+
+        if (isBoardFull) {
+            return placement;
+        }
+
+        return null;
+    }
 
     /**
      * Return the solution to a particular challenge.
@@ -670,14 +746,17 @@ public class FitGame {
      * Code written by Mingxuan Wang
      */
     public static String getSolution(String challenge) {
-        String initial = challenge;
-        PieceType[][] initialBoard = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
+        List<String> piecePlacements = new ArrayList<String>();
+        Set<String> triedPlacements = new HashSet<String>();
+
+        for (int i = 0; i < challenge.length() - 4; i += 4) {
+            String pieceString = challenge.substring(i, i + 4);
+            piecePlacements.add(pieceString);
+        }
+
+        return getSolutionHelper(piecePlacements, triedPlacements);
+    }
+
 //        boardUpdate(challenge,initialBoard);
 //        List<String> listOfSolutions = findSolution(challenge);
 //
@@ -712,7 +791,6 @@ public class FitGame {
 //        }
 //
 //        return result;
-        return challenge;
         // FIXME Task 9: determine the solution to the game, given a particular challenge
-    }
+
 }
