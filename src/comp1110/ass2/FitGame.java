@@ -738,17 +738,17 @@ public class FitGame {
      *
      * Code written by Mingxuan Wang
      */
-    public static String getSolution(String challenge) {
-        List<String> piecePlacements = new ArrayList<String>();
-        Set<String> triedPlacements = new HashSet<String>();
+//   public static String getSolution(String challenge) {
+//        List<String> piecePlacements = new ArrayList<String>();
+//        Set<String> triedPlacements = new HashSet<String>();
 
-        for (int i = 0; i < challenge.length() - 4; i += 4) {
-            String pieceString = challenge.substring(i, i + 4);
-            piecePlacements.add(pieceString);
-        }
+//        for (int i = 0; i < challenge.length() - 4; i += 4) {
+//           String pieceString = challenge.substring(i, i + 4);
+//            piecePlacements.add(pieceString);
+//        }
 
-        return getSolutionHelper(piecePlacements, triedPlacements);
-    }
+//        return getSolutionHelper(piecePlacements, triedPlacements);
+//    }
 
 //        boardUpdate(challenge,initialBoard);
 //        List<String> listOfSolutions = findSolution(challenge);
@@ -784,6 +784,17 @@ public class FitGame {
 //        }
 //
 //        return result;
+    public static String getSolution(String challenge) {
+        String initial = challenge;
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        return challenge;
+    }
         // FIXME Task 9: determine the solution to the game, given a particular challenge
 
 }
