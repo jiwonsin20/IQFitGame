@@ -24,7 +24,6 @@ public class Board extends Application {
     private static final int GRID_TOP_PADDING = 25;
     private static final int PLAYABLE_AREA_X = 10 * SQUARE_SIZE + GRID_L_PADDING * 2;
     private static final int PLAYABLE_AREA_Y = 275;
-    private static final int START_X = 10;
     private static final int START_Y = BOARD_HEIGHT - 6 * SQUARE_SIZE -25;
 
     // This part is for board image
@@ -157,7 +156,6 @@ public class Board extends Application {
     }
 
     static class DraggablePiece extends PieceTile {
-        double initialX, initialY;
         double homeX, homeY;
         double mouseX, mouseY;
         int orientation; // 0 = NORTH, 1 = EAST 2 = SOUTH 3 = WEST

@@ -225,7 +225,7 @@ public class FitGame {
     // what if there is all the elements?
 
     public static List<String> getMissingPieces (String placement) {
-        Set<String> collect = new HashSet<>();
+        List<String> collect = new ArrayList<>();
         String [] array = {"b", "g", "i", "l", "n", "o", "p", "r", "s", "y"};
         if (placement.length() == 0) {
             List<String> sortedList = new ArrayList<>();
@@ -250,9 +250,8 @@ public class FitGame {
                 }
             }
         }
-        List<String> sortedList = new ArrayList<>(collect);
-        Collections.sort(sortedList);
-        return sortedList;
+        Collections.sort(collect);
+        return collect;
     }
 
     /**
@@ -315,10 +314,6 @@ public class FitGame {
         boardUpdate(placement, initialBoard);
         if (initialBoard[rowY][colX] != null)
             return false;
-
-//        else if (colX > 9 || rowY > 4) {
-//            return false;
-//        }
 
         PieceType[][] array = piece.getCoords();
         int x = piece.coords.getXCoordinate();
