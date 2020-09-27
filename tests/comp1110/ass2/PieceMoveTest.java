@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 //D2E
 
-public class PieceMove {
+public class PieceMoveTest {
 
     private void test(String placement, int m, int n, boolean expected){
         boolean outcome = FitGame.pieceMove(placement,m,n);
