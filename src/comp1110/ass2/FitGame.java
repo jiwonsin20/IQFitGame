@@ -660,7 +660,7 @@ public class FitGame {
 //    }
 
 
-    private static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
+    public static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
         char colorChar = Character.toLowerCase(piecePlacement.charAt(0));
         for (int i = 0; i < piecePlacements.size(); ++i) {
             String currPiecePlacement = piecePlacements.get(i);
