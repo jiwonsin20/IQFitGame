@@ -666,6 +666,34 @@ public class FitGame {
         }
         piecePlacements.add(piecePlacements.size(), piecePlacement);
     }
+    /**
+     * Determine whether the piece can move for a specified distance
+     **
+     * @param placement A piece string.
+     * @param m piece move m distance in x direction
+     * @param n piece move n distance in y direction
+     * @return whether the end position of the piece is valid in the Board
+     *
+     * Code written by Mingxuan Wang
+     */
+    public static boolean pieceMove(String placement, int m ,int n){
+        Piece piece = toPiece(placement);
+        assert piece != null;
+        int xStart = piece.coords.xCoord;
+        int xDim = piece.getXDimensions();
+        int xEnd = xStart + xDim + m -1;
+        int yStart = piece.coords.yCoord;
+        int yDim = piece.getYDimensions();
+        int yEnd = yStart + yDim + n -3;
+
+        if(xEnd<0||xEnd>9||yEnd<0||yEnd>4){
+            return false;
+        }
+
+        return isPiecePlacementWellFormed(placement);
+
+    }
+
 
     private static String getSolutionHelper(List<String> piecePlacements, Set<String> triedPlacements) {
 //        piecePlacements.sort(new PieceComparator());
