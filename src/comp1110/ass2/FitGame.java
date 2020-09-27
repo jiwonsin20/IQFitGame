@@ -659,13 +659,6 @@ public class FitGame {
 //        return challenge;
 //    }
 
-static private class PieceComparator implements Comparator<String>
-{
-    public int compare(String a, String b)
-    {
-        return  Character.toLowerCase(a.charAt(0)) - Character.toLowerCase(b.charAt(0));
-    }
-}
 
     private static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
         char colorChar = Character.toLowerCase(piecePlacement.charAt(0));
