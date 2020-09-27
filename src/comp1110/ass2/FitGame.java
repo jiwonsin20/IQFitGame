@@ -316,6 +316,10 @@ public class FitGame {
         if (initialBoard[rowY][colX] != null)
             return false;
 
+//        else if (colX > 9 || rowY > 4) {
+//            return false;
+//        }
+
         PieceType[][] array = piece.getCoords();
         int x = piece.coords.getXCoordinate();
         int y = piece.coords.getYCoordinate();
@@ -405,9 +409,9 @@ public class FitGame {
             }
         }
 
-//        possiblePiecePlacements.removeIf(piecePlacement -> !isPlacementWellFormed(piecePlacement));
+        possiblePiecePlacements.removeIf(piecePlacement -> !isPlacementWellFormed(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isOnBoard(piecePlacement));
-//        possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
+        possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
         possiblePiecePlacements.removeIf(piecePlacement ->
                 !piecePlacementOverlapping(placement, piecePlacement, col, row));
 
@@ -459,16 +463,6 @@ public class FitGame {
         return true;
     }
 
-    public static void main(String[] args) {
-        String str = "b33Sp30S";
-        boardUpdate(str, initialBoard);
-        System.out.println(Arrays.deepToString(initialBoard));
-        String str2 = "O33N";
-        System.out.println(isPlacementNotOverlapping(initialBoard, str2));
-//        boardUpdate(str2, initialBoard);
-        System.out.println(Arrays.deepToString(initialBoard));
-
-    }
 //
 //    public static int [] nullXCoordinate (PieceType[][] initialBoard) {
 //        int countEmptySpaces = 0;
