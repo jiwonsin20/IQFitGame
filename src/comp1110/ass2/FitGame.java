@@ -702,10 +702,6 @@ public class FitGame {
 //        System.out.println("oldSize: " + piecePlacements.size());
 //        System.out.println(" > " + placement);
 
-        if (!isPlacementWellFormed(placement)) {
-            System.out.println(placement);
-            System.exit(-2);
-        }
 
         PieceType[][] initialBoard = {
                 {null, null, null, null, null, null, null, null, null, null},
