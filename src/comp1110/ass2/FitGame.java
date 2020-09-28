@@ -428,9 +428,9 @@ public class FitGame {
                 int y = piece.coords.getYCoordinate();
                 for (int j = x; j < x + piece.getXDimensions(); j++) {
                     for (int i = y; i < y + piece.getYDimensions(); i++) {
-                        if (array[i - y][j - x] == null && initialBoard[i][j] != null)
-                            initialBoard[i][j] = initialBoard[i][j];
-                        else
+//                        if (array[i - y][j - x] == null && initialBoard[i][j] != null)
+//                            initialBoard[i][j] = initialBoard[i][j];
+                        if (array[i - y][j - x] != null && initialBoard[i][j] == null)
                             initialBoard[i][j] = array[i - y][j - x];
                     }
                 }
@@ -458,164 +458,253 @@ public class FitGame {
         return true;
     }
 
-//
-//    public static int [] nullXCoordinate (PieceType[][] initialBoard) {
-//        int countEmptySpaces = 0;
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if (initialBoard[i][j] == null)
-//                    countEmptySpaces++;
-//            }
-//        }
-//
-//        int [] possibleX = new int[countEmptySpaces];
-//        int k = 0;
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if (initialBoard[i][j] == null) {
-//                    possibleX[k] = j;
-//                    k++;
-//                }
-//            }
-//        }
-//        return possibleX;
-//    }
-//
-//    public static int [] nullYCoordinate (PieceType[][] initialBoard) {
-//        int countEmptySpaces = 0;
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if (initialBoard[i][j] == null)
-//                    countEmptySpaces++;
-//            }
-//        }
-//
-//        int [] possibleY = new int[countEmptySpaces];
-//        int k = 0;
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if (initialBoard[i][j] == null) {
-//                    possibleY[k] = i;
-//                    k++;
-//                }
-//            }
-//        }
-//        return possibleY;
-//    }
-//
-//    public static Set<String> combinationXY (int [] xCoordinates, int [] yCoordinates) {
-//        Set <String> result = new HashSet<>();
-//        for (int xValue : xCoordinates) {
-//            for (int yValue : yCoordinates)
-//            result.add(xValue + Integer.toString(yValue));
-//        }
-//        return result;
-//    }
-//
-//    public static List<String> listOfPieces (String challenge) {
-//
-//        PieceType[][] initialBoard = {
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null}
-//        };
-//        boardUpdate(challenge, initialBoard);
-//
-//
-//
-//        List<String> missingPieces = getMissingPieces(challenge);
-//        List<String> possiblePieces = new ArrayList<>();
-//        Set<String> possibleCoords = combinationXY(nullXCoordinate(initialBoard),nullYCoordinate(initialBoard));
-//
-//        for (String piece : missingPieces) {
-//            for (String xyCoords : possibleCoords) {
-//                possiblePieces.add(piece + xyCoords + "N");
-//                possiblePieces.add(piece + xyCoords + "E");
-//                possiblePieces.add(piece + xyCoords + "S");
-//                possiblePieces.add(piece + xyCoords + "W");
-//            }
-//
-//        }
-//        return possiblePieces;
-//    }
-//
-//    public static boolean isPieceOverlappingBoard(String placement, String str) {
-//
-//        PieceType[][] initialBoard = {
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null}
-//        };
-//        boardUpdate(placement, initialBoard);
-//
-//        Piece piece = toPiece(str);
-//        PieceType [][] pieceTypes = piece.getCoords();
-//        int xLocation = Character.getNumericValue(str.charAt(1));
-//        int pieceXDim = piece.getXDimensions();
-//        int yLocation = Character.getNumericValue(str.charAt(2));
-//        int pieceYDim = piece.getYDimensions();
-//
-//        for (int j = xLocation; j < xLocation + pieceXDim; j++) {
-//            for (int i = yLocation; i < yLocation + pieceYDim; i++) {
-//                if (initialBoard[i][j] != null) {
-//                        if (pieceTypes[i - yLocation][j - xLocation] != null)
-//                            return false;
-//                    }
-//                    else {
-//                        initialBoard[i][j] = pieceTypes[i - yLocation][j - xLocation];
-//                    }
-//                }
-//
-//            }
-//        return true;
-//    }
-//
-//    public static List<String> findSolution(String challenge) {
-//
-//        PieceType[][] initialBoard = {
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null}
-//        };
-//
-//        boardUpdate(challenge, initialBoard);
-//        List<String> possibleP = listOfPieces(challenge);
-//
+
+    public static int [] nullXCoordinate (PieceType[][] initialBoard) {
+        int countEmptySpaces = 0;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (initialBoard[i][j] == null)
+                    countEmptySpaces++;
+            }
+        }
+
+        int [] possibleX = new int[countEmptySpaces];
+        int k = 0;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (initialBoard[i][j] == null) {
+                    possibleX[k] = j;
+                    k++;
+                }
+            }
+        }
+        return possibleX;
+    }
+
+    public static int [] nullYCoordinate (PieceType[][] initialBoard) {
+        int countEmptySpaces = 0;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (initialBoard[i][j] == null)
+                    countEmptySpaces++;
+            }
+        }
+
+        int [] possibleY = new int[countEmptySpaces];
+        int k = 0;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (initialBoard[i][j] == null) {
+                    possibleY[k] = i;
+                    k++;
+                }
+            }
+        }
+        return possibleY;
+    }
+
+    public static Set<String> combinationXY (int [] xCoordinates, int [] yCoordinates) {
+        Set <String> result = new HashSet<>();
+        for (int xValue : xCoordinates) {
+            for (int yValue : yCoordinates)
+            result.add(xValue + Integer.toString(yValue));
+        }
+        return result;
+    }
+
+    public static List<String> listOfPieces (String challenge) {
+
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        boardUpdate(challenge, initialBoard);
+
+
+
+        List<String> missingPieces = getMissingPieces(challenge);
+        List<String> possiblePieces = new ArrayList<>();
+        Set<String> possibleCoords = combinationXY(nullXCoordinate(initialBoard),nullYCoordinate(initialBoard));
+
+        for (String piece : missingPieces) {
+            for (String xyCoords : possibleCoords) {
+                possiblePieces.add(piece + xyCoords + "N");
+                possiblePieces.add(piece + xyCoords + "E");
+                possiblePieces.add(piece + xyCoords + "S");
+                possiblePieces.add(piece + xyCoords + "W");
+            }
+
+        }
+        return possiblePieces;
+    }
+
+    public static boolean isPieceOverlappingBoard(String placement, String str) {
+
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        boardUpdate(placement, initialBoard);
+
+        Piece piece = toPiece(str);
+        PieceType [][] pieceTypes = piece.getCoords();
+        int xLocation = Character.getNumericValue(str.charAt(1));
+        int pieceXDim = piece.getXDimensions();
+        int yLocation = Character.getNumericValue(str.charAt(2));
+        int pieceYDim = piece.getYDimensions();
+
+        for (int j = xLocation; j < xLocation + pieceXDim; j++) {
+            for (int i = yLocation; i < yLocation + pieceYDim; i++) {
+                if (initialBoard[i][j] != null) {
+                        if (pieceTypes[i - yLocation][j - xLocation] != null)
+                            return false;
+                    }
+                    else {
+                        initialBoard[i][j] = pieceTypes[i - yLocation][j - xLocation];
+                    }
+                }
+
+            }
+        return true;
+    }
+
+    public static List<String> findSolution(String challenge) {
+
+        PieceType[][] board = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+
+        boardUpdate(challenge, board);
+        List<String> possibleP = listOfPieces(challenge);
+        List<String> rtn = new ArrayList<>();
+
 //        possibleP.removeIf(value -> !isOnBoard(value));
 //        possibleP.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
-//
-//
-//        return possibleP;
-//    }
-//
-//
-//    public static boolean isComplete(PieceType[][] initialBoard) {
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if (initialBoard[i][j] == null) {
-//                    return false;
-//                }
-//            }
-//        }
-//        return true;
-//    }
-//
-//    public static boolean pieceNotUsed (String challenge, String placement) {
-//        for (int i = 0; i < challenge.length(); i+=4) {
-//            if ((challenge.charAt(i)) == Character.toLowerCase(placement.charAt(0)) ||
-//                    (challenge.charAt(i)) == Character.toUpperCase(placement.charAt(0)) ||
-//                    challenge.charAt(i) == placement.charAt(0))
-//                return false;
-//        }
-//        return true;
-//    }
-//
+//        possibleP.removeIf(value -> !checkEmptySpace(value, board));
+
+        for (String s : possibleP) {
+            if (isOnBoard(s) && isPieceOverlappingBoard(challenge, s) && checkEmptySpace(challenge, s))
+                rtn.add(s);
+        }
+
+        return rtn;
+    }
+
+
+    public static boolean isComplete(PieceType[][] initialBoard) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (initialBoard[i][j] == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean pieceNotUsed (String challenge, String placement) {
+        for (int i = 0; i < challenge.length(); i+=4) {
+            if ((challenge.charAt(i)) == Character.toLowerCase(placement.charAt(0)) ||
+                    (challenge.charAt(i)) == Character.toUpperCase(placement.charAt(0)) ||
+                    challenge.charAt(i) == placement.charAt(0))
+                return false;
+        }
+        return true;
+    }
+
+    public static boolean checkEmptySpace(String challenge, String placement) {
+        PieceType[][] board = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        boardUpdate(challenge, board);
+        boardUpdate(placement, board);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (i == 0) { // when row is 0
+                    if (j == 0) {
+                        if (board[i][j] == null && board[i][j+1] != null && board[i+1][j] != null)
+                            return false;
+//                        else if (board[i][j] == null && board[i][j+1] == null &&board[i][j+2] == null && board[i][j+3] == null)
+//                            return false;
+//                        else if (board[i][j] == null && board[i+1][j] == null &&board[i+2][j] == null && board[i+3][j] == null)
+//                            return false;
+                    }
+                    else if (j < 9) {
+                        if (board[i][j] == null && board[i][j + 1] != null && board[i][j - 1] != null && board[i + 1][j] != null)
+                            return false;
+//                        if (j < 7) {
+//                            if (board[i][j] == null && board[i][j + 1] == null && board[i][j + 2] == null && board[i][j + 3] == null)
+//                                return false;
+//                            else if (board[i][j] == null && board[i + 1][j] == null && board[i + 2][j] == null && board[i + 3][j] == null)
+//                                return false;
+
+                    }
+                    else {
+                        if (board[i][j] == null && board[i][j-1] != null && board[i+1][j] != null)
+                            return false;
+//                        else if (board[i][j] == null && board[i][j-1] == null &&board[i][j-2] == null && board[i][j-3] == null)
+//                            return false;
+//                        else if (board[i][j] == null && board[i+1][j] == null &&board[i+2][j] == null && board[i+3][j] == null)
+//                            return false;
+                    }
+                }
+                else if (i == 4) { // when row is 4
+                    if (j == 0) {
+                        if (board[i][j] == null && board[i-1][j] != null && board[i][j+1] != null)
+                            return false;
+//                        else if (board[i][j] == null && board[i][j+1] == null &&board[i][j+2] == null && board[i][j+3] == null)
+//                            return false;
+//                        else if (board[i][j] == null && board[i-1][j] == null &&board[i-2][j] == null && board[i-3][j] == null)
+//                            return false;
+                    }
+                    else if (j < 9) {
+                        if (board[i][j] == null && board[i][j+1] != null && board[i][j-1] != null && board[i-1][j] != null)
+                            return false;
+//                        if (j < 7) {
+//                            if (board[i][j] == null && board[i][j + 1] == null && board[i][j + 2] == null && board[i][j + 3] == null)
+//                                return false;
+//                            else if (board[i][j] == null && board[i + 1][j] == null && board[i + 2][j] == null && board[i + 3][j] == null)
+//                                return false;
+
+                    }
+                    else {
+                        if (board[i][j] == null && board[i-1][j] != null && board[i][j-1] != null)
+                            return false;
+                    }
+                }
+                else { // when row is 1,2,3
+                    if (j == 0) {
+                        if (board[i][j] == null && board[i-1][j] != null && board[i+1][j] != null && board[i][j+1] != null)
+                            return false;
+                    }
+                    else if (j == 9) {
+                        if (board[i][j] == null && board[i-1][j] != null && board[i+1][j] != null && board[i][j-1] != null)
+                            return false;
+                    }
+                    else {
+                        if (board[i][j] == null && (board[i + 1][j] != null && board[i][j + 1] != null && board[i - 1][j] != null && board[i][j - 1] != null))
+                            return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
 //    public static String seekSolution(String challenge) {
 //        String initial = challenge;
 //        PieceType[][] initialBoard = {
@@ -647,6 +736,31 @@ public class FitGame {
 //        }
 //        return challenge;
 //    }
+
+
+    public static void main(String[] args) {
+        String str = "b40Nl30WO01Wp51Nr63SS23SY52S";
+        String str2 = "B40S";
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        boardUpdate(str, initialBoard);
+//        System.out.println(Arrays.deepToString(initialBoard));
+
+//        System.out.println(listOfPieces(str));
+        System.out.println(findSolution(str));
+
+//        System.out.println(isOnBoard(str2) && isPieceOverlappingBoard(str, str2));
+//        System.out.println(checkEmptySpace(str2, initialBoard));
+//        System.out.println(Arrays.deepToString(initialBoard));
+
+
+    }
+
 
 
     public static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
@@ -746,15 +860,6 @@ public class FitGame {
         return null;
     }
 
-    /**
-     * Return the solution to a particular challenge.
-     **
-     * @param challenge A challenge string.
-     * @return A placement string describing the encoding of the solution to
-     * the challenge.
-     *
-     * Code written by Mingxuan Wang
-     */
 //   public static String getSolution(String challenge) {
 //        List<String> piecePlacements = new ArrayList<String>();
 //        Set<String> triedPlacements = new HashSet<String>();
@@ -801,17 +906,69 @@ public class FitGame {
 //        }
 //
 //        return result;
+    public static int getMinimumXValue(PieceType [][] board) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (board[i][j] == null)
+                    return j;
+            }
+        }
+        return 10;
+    }
+
+    public static int getMinimumYValue(PieceType [][] board) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (board[i][j] == null)
+                    return i;
+            }
+        }
+        return 5;
+    }
+
+//    public static String getSolutionHelper(String challenge, int limit) {
+//        int minX = getMinimumXValue(initialBoard);
+//        int minY = getMinimumYValue(initialBoard);
+//
+//        if (limit == 1 && getViablePiecePlacements(challenge, minX, minY) != null) {
+//            if (challenge.length() == 40)
+//                return getViablePiecePlacements(challenge, minX, minY).toString();
+//            else
+//                return
+//        }
+//    }
+
+
+
     public static String getSolution(String challenge) {
         String initial = challenge;
-        PieceType[][] initialBoard = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
-        return challenge;
+//        PieceType[][] initialBoard = {
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null}
+//        };
+        boardUpdate(challenge, initialBoard);
+
+
+        int minX = getMinimumXValue(initialBoard);
+        int minY = getMinimumYValue(initialBoard);
+
+        int numberOfIteration = (40 - challenge.length()) / 4;
+
+        Set<String> possiblePositions = getViablePiecePlacements(challenge, minX, minY);
+
+//        for (String values : possiblePositions) {
+//            challenge += values;
+//            String str = getSolutionHelper(challenge, numberOfIteration - 1);
+//            if (str.length() != 40)
+//                challenge = initial;
+//        }
+
+        return null;
     }
+
         // FIXME Task 9: determine the solution to the game, given a particular challenge
 
 }
