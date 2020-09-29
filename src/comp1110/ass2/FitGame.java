@@ -792,6 +792,8 @@ public class FitGame {
             return null;
         }
 
+        triedPlacements.add(placement);
+
 //        System.out.println("oldSize: " + piecePlacements.size());
 //        System.out.println(" > " + placement);
 
