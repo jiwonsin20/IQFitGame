@@ -526,8 +526,6 @@ public class FitGame {
         };
         boardUpdate(challenge, initialBoard);
 
-
-
         List<String> missingPieces = getMissingPieces(challenge);
         List<String> possiblePieces = new ArrayList<>();
         Set<String> possibleCoords = combinationXY(nullXCoordinate(initialBoard),nullYCoordinate(initialBoard));
@@ -541,7 +539,7 @@ public class FitGame {
             }
         }
 
-        possiblePieces.removeIf(value -> !isOnBoard(value));
+//        possiblePieces.removeIf(value -> !isOnBoard(value));
         possiblePieces.removeIf(value -> !isPlacementValid(value));
         possiblePieces.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
 //        possiblePieces.removeIf(value -> !isThisLogical(challenge));
