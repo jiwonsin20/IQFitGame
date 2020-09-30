@@ -544,7 +544,7 @@ public class FitGame {
         possiblePieces.removeIf(value -> !isOnBoard(value));
         possiblePieces.removeIf(value -> !isPlacementValid(value));
         possiblePieces.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
-        possiblePieces.removeIf(value -> !checkEmptySpace(challenge, value));
+//        possiblePieces.removeIf(value -> !isThisLogical(challenge));
         return possiblePieces;
     }
 
@@ -580,33 +580,6 @@ public class FitGame {
             }
         return true;
     }
-
-    public static List<String> findSolution(String challenge) {
-
-        PieceType[][] board = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
-
-        boardUpdate(challenge, board);
-        List<String> possibleP = listOfPieces(challenge);
-        List<String> rtn = new ArrayList<>();
-
-//        possibleP.removeIf(value -> !isOnBoard(value));
-//        possibleP.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
-//        possibleP.removeIf(value -> !checkEmptySpace(value, board));
-
-        for (String s : possibleP) {
-            if (isOnBoard(s) && isPieceOverlappingBoard(challenge, s) && checkEmptySpace(challenge, s))
-                rtn.add(s);
-        }
-
-        return rtn;
-    }
-
 
     public static boolean isComplete(PieceType[][] initialBoard) {
         for (int i = 0; i < 5; i++) {
@@ -724,6 +697,119 @@ public class FitGame {
         return true;
     }
 
+    public static boolean isThisLogical(String challenge) {
+//        for (int i = 0; i < 5; i++) {
+//            for (int j = 0; j < 10; j++) {
+//                if (board[i][j] == null) {
+//                    if (i == 0) { // first row
+//                        switch (j) {
+//                            case 0: // (0,0)
+//                                if (board[i][j+1] != null && board[i+1][j] != null) // if (0,0) corner is null
+//                                    return false;
+//                                else if (board[i][j+1] == null && board[i][j+2] != null && board[i+1][j] != null && board[i+1][j+1] != null)
+//                                    return false;
+//                                else if (board[i+1][j] == null && board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j] != null)
+//                                    return false;
+//                                else if (board[i][j+1] == null && board[i][j+2] == null &&
+//                                        board[i][j+3] != null && board[i+1][j] != null && board[i+1][j+1] != null
+//                                         && board[i+1][j+2] != null)
+//                                    return false;
+//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
+//                                        board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j+1] != null)
+//                                    return false;
+//                                break;
+//                            case 7:
+//                                if (board[i][j+1] != null && board[i+1][j] != null && board[i][j-1] != null) // if (7,0) is null
+//                                    return false;
+//                                else if (board[i][j+1] == null
+//                                        && board[i][j+2] != null && board[i+1][j] != null && board[i+1][j+1] != null && board[i][j-1] != null)
+//                                    return false;
+//                                else if (board[i+1][j] == null
+//                                        && board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j] != null && board[i][j-1] != null && board[i+1][j-1] != null)
+//                                    return false;
+//                                else if (board[i][j+1] == null && board[i][j+2] == null &&
+//                                        board[i][j-1] != null && board[i+1][j] != null && board[i+1][j+1] != null
+//                                        && board[i+1][j+2] != null)
+//                                    return false;
+//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
+//                                        board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j+1] != null &&
+//                                        board[i][j-1] != null && board[i+1][j-1] != null && board[i+2][j-1] != null &&
+//                                        board[i+3][j] != null)
+//                                    return false;
+//                                break;
+//                            case 8:
+//                                if (board[i][j+1] != null && board[i+1][j] != null && board[i][j-1] != null) // if (8,0) is null
+//                                    return false;
+//                                else if (board[i][j+1] == null
+//                                        && board[i][j-1] != null && board[i+1][j] != null && board[i+1][j+1] != null)
+//                                    return false;
+//                                else if (board[i+1][j] == null
+//                                        && board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j] != null && board[i][j-1] != null && board[i+1][j-1] != null)
+//                                    return false;
+//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
+//                                        board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j+1] != null &&
+//                                        board[i][j-1] != null && board[i+1][j-1] != null && board[i+2][j-1] != null &&
+//                                        board[i+3][j] != null)
+//                                    return false;
+//                                break;
+//                            case 9:
+//                                if (board[i][j-1] != null && board[i+1][j] != null && board[i+1][j-1] != null) // if (9,0) is null
+//                                    return false;
+//                                else if (board[i+1][j] == null
+//                                        && board[i+2][j] != null && board[i][j-1] != null && board[i+1][j-1] != null)
+//                                    return false;
+//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
+//                                        board[i][j-1] != null && board[i+1][j-1] != null && board[i+2][j-1] != null &&
+//                                        board[i+3][j] != null)
+//                                    return false;
+//                                break;
+//                            default:
+//                                if (board[i][j+1] != null && board[i+1][j] != null && board[i][j-1] != null) // if (7,0) is null
+//                                    return false;
+//                                else if (board[i][j+1] == null
+//                                        && board[i][j+2] != null && board[i+1][j] != null && board[i+1][j+1] != null && board[i][j-1] != null)
+//                                    return false;
+//                                else if (board[i+1][j] == null
+//                                        && board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j] != null && board[i][j-1] != null && board[i+1][j-1] != null)
+//                                    return false;
+//                                else if (board[i][j+1] == null && board[i][j+2] == null &&
+//                                        board[i][j-1] != null && board[i+1][j] != null && board[i+1][j+1] != null
+//                                        && board[i+1][j+2] != null && board[i][j+3] != null)
+//                                    return false;
+//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
+//                                        board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j+1] != null &&
+//                                        board[i][j-1] != null && board[i+1][j-1] != null && board[i+2][j-1] != null &&
+//                                        board[i+3][j] != null)
+//                                    return false;
+//                                break;
+//
+//                        }
+//                    }
+//                    else if (i == 4) { // last row
+//
+//                    }
+//                }
+//            }
+//        }
+        PieceType[][] board = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+        boardUpdate(challenge, board);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (board[i][j] == null) {
+                    if (getViablePiecePlacements(challenge,j,i) == null)
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
         char colorChar = Character.toLowerCase(piecePlacement.charAt(0));
         for (int i = 0; i < piecePlacements.size(); ++i) {
@@ -819,13 +905,7 @@ public class FitGame {
         return null;
     }
 
-    public static void main(String[] args) {
-        String str = "b43SG82WR11S";
 
-        String ret = getSolution(str);
-        System.out.println(ret);
-        System.out.println(changeSequence(ret));
-    }
 
     public static String changeSequence(String solution) {
         String [] str = new String[solution.length() / 4];
@@ -867,9 +947,8 @@ public class FitGame {
         return rtn;
     }
 
-
-
     public static String getSolution(String challenge) {
+        System.out.println("New Test: ");
         PieceType[][] initialBoard = {
                 {null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null},
@@ -881,9 +960,52 @@ public class FitGame {
 
         int numberOfIteration = (40 - challenge.length()) / 4;
 
-        String result = findSolutionREC(challenge, "", initialBoard, numberOfIteration);
+        String result = getSolutionREC(challenge, null, initialBoard, numberOfIteration);
+        String rtn = changeSequence(result);
+        System.out.println(rtn);
+        return rtn;
+    }
 
-        return changeSequence(result);
+    public static void main(String[] args) {
+        String str = "l21WY51S";
+        System.out.println(getSolution(str));
+    }
+
+    public static String getSolutionREC(String challenge, String placement, PieceType [][] board, int RECtimes) {
+        String rtn = "";
+        if (RECtimes == 1) { // base case of recursion
+            List<String> list = listOfPieces(challenge);
+            if (list.size() != 0) {
+                for (String values : list) {
+                    boardUpdate(values, board);
+                    if (!isComplete(board)) { // even at base level, the board is not complete
+                        clearBoard(values, board); // incorrect piece so try again
+                    } else { // it is complete
+                        return challenge + values;
+                    }
+                }
+            }
+            else {
+                clearBoard(placement, board);
+            }
+        }
+        else { // if there are more than one piece to fill in
+            List<String> pieceList = listOfPieces(challenge);
+            if (pieceList.isEmpty()) {
+                clearBoard(placement, board);
+            }
+            else {
+                for (String values : pieceList) {
+                    boardUpdate(values, board);
+                    if (isThisLogical(challenge+values)) {
+                        rtn = getSolutionREC(challenge+values, values,board, RECtimes - 1);
+                        if (rtn.length() == 40 && isComplete(board))
+                            return rtn;
+                    }
+                }
+            }
+        }
+        return challenge + rtn;
     }
 
     public static void clearBoard(String placement, PieceType [][] initialBoard) {
@@ -917,10 +1039,10 @@ public class FitGame {
 
         List<String> list = listOfPieces(challenge);
         //Test code
-        System.out.println("List : " + list);
+//        System.out.println("List : " + list);
 
         if (list.isEmpty() && challenge.length() != 40) {
-            System.out.println("No other possible way");
+//            System.out.println("No other possible way");
             clearBoard(placement, initialBoard);
         }
 
@@ -931,8 +1053,8 @@ public class FitGame {
             // Update the challenge String with probable piece
             challenge += possiblePieces;
             // Test code
-            System.out.println("Challenge String : " + challenge);
-            System.out.println("Probable Piece : " + possiblePieces);
+//            System.out.println("Challenge String : " + challenge);
+//            System.out.println("Probable Piece : " + possiblePieces);
 
             rtn = findSolutionREC(challenge, possiblePieces, initialBoard, times - 1);
             if (check.equals(challenge)) {
@@ -944,9 +1066,9 @@ public class FitGame {
                 challenge = challenge.substring(0, challenge.length() - 4);
             }
             else if (isComplete(initialBoard)){
-                System.out.println("COMPLETE!");
-                System.out.println("rtn at else : " + rtn);
-                System.out.println(Arrays.deepToString(initialBoard));
+//                System.out.println("COMPLETE!");
+//                System.out.println("rtn at else : " + rtn);
+//                System.out.println(Arrays.deepToString(initialBoard));
                 return rtn;
             }
         }
