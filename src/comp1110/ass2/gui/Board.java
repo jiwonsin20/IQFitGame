@@ -231,10 +231,10 @@ public class Board extends Application {
                 mouseX = mouseEvent.getSceneX();
                 mouseY = mouseEvent.getSceneY();
                 toFront();
-                System.out.println(pieceID);
+//                System.out.println(pieceID);
                 if (FitGame.isPlacementValid(pieceID))
                     clearInitialBoard(pieceID);
-                System.out.println(Arrays.deepToString(initialBoard));
+//                System.out.println(Arrays.deepToString(initialBoard));
                 mouseEvent.consume();
             });
 
@@ -261,24 +261,24 @@ public class Board extends Application {
 
             setOnMouseReleased(mouseEvent -> {
                 updatePieceID();
-                System.out.println(pieceID);
+//                System.out.println(pieceID);
                 if (FitGame.isPlacementValid(pieceID)) {
                     if (FitGame.isPlacementNotOverlapping(initialBoard, pieceID)) {
                         snapToGrid();
                         FitGame.boardUpdate(pieceID, initialBoard);
                     }
                     else {
-                        System.out.println("It's Here 1");
+//                        System.out.println("It's Here 1");
                         setLayoutX(homeX);
                         setLayoutY(homeY);
                     }
                 }
                 else {
-                    System.out.println("It's Here 2");
+//                    System.out.println("It's Here 2");
                     setLayoutX(homeX);
                     setLayoutY(homeY);
                 }
-                System.out.println(Arrays.deepToString(initialBoard));
+//                System.out.println(Arrays.deepToString(initialBoard));
                 mouseEvent.consume();
             });
         }
@@ -596,10 +596,6 @@ public class Board extends Application {
         return result;
     }
 
-    // FIXME Task 7: Implement a basic playable Fix Game in JavaFX that only allows pieces to be placed in valid places
-
-    // FIXME Task 8: Implement challenges (you may use assets provided for you in comp1110.ass2.gui.assets)
-
     // FIXME Task 10: Implement hints (should become visible when the user presses '/' -- see gitlab issue for details)
 
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
@@ -610,6 +606,8 @@ public class Board extends Application {
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
         FitGame.boardUpdate("", initialBoard);
         // add an event that determines the difficulty of this piece
+
+        // Add hints (basically get the solution from Games.java and display it one by one with opacity of 0.5
 
         String currentObjective = chooseObjective( 5);
         setBoard(currentObjective);
@@ -622,6 +620,5 @@ public class Board extends Application {
         root.getChildren().add(gamePiece);
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 }
