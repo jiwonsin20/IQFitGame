@@ -3,6 +3,7 @@ package comp1110.ass2;
 import comp1110.ass2.gui.Board;
 
 import java.io.LineNumberInputStream;
+import java.sql.SQLOutput;
 import java.util.*;
 
 import static comp1110.ass2.Piece.*;
@@ -375,7 +376,7 @@ public class FitGame {
 
 //        possiblePiecePlacements.removeIf(piecePlacement -> !isPlacementWellFormed(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isOnBoard(piecePlacement));
-        possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
+//        possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
         possiblePiecePlacements.removeIf(piecePlacement ->
                 !piecePlacementOverlapping(placement, piecePlacement, col, row));
 
@@ -479,35 +480,37 @@ public class FitGame {
         return result;
     }
 
-    public static List<String> listOfPieces (String challenge) {
+    public static Set<String> listOfPieces (String challenge, PieceType [][] board) {
 
-        PieceType[][] initialBoard = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
-        boardUpdate(challenge, initialBoard);
+//        PieceType[][] initialBoard = {
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null}
+//        };
+//        boardUpdate(challenge, initialBoard);
 
-        List<String> missingPieces = getMissingPieces(challenge);
-        List<String> possiblePieces = new ArrayList<>();
-        Set<String> possibleCoords = combinationXY(nullXCoordinate(initialBoard),nullYCoordinate(initialBoard));
-
-        for (String piece : missingPieces) {
-            for (String xyCoords : possibleCoords) {
-                possiblePieces.add(piece + xyCoords + "N");
-                possiblePieces.add(piece + xyCoords + "E");
-                possiblePieces.add(piece + xyCoords + "S");
-                possiblePieces.add(piece + xyCoords + "W");
-            }
-        }
+//        List<String> missingPieces = getMissingPieces(challenge);
+//        List<String> possiblePieces = new ArrayList<>();
+//        Set<String> possibleCoords = combinationXY(nullXCoordinate(board),nullYCoordinate(board));
+        Set<String> possibePs = getViablePiecePlacements(challenge, getMinX(board), getMinY(board));
+//        for (String piece : missingPieces) {
+//            for (String xyCoords : possibleCoords) {
+//                possiblePieces.add(piece + xyCoords + "N");
+//                possiblePieces.add(piece + xyCoords + "E");
+//                possiblePieces.add(piece + xyCoords + "S");
+//                possiblePieces.add(piece + xyCoords + "W");
+//            }
+//        }
 
 //        possiblePieces.removeIf(value -> !isOnBoard(value));
-        possiblePieces.removeIf(value -> !isPlacementValid(value));
-        possiblePieces.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
+        if (possibePs != null) {
+            possibePs.removeIf(value -> !isPlacementValid(value));
+            possibePs.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
+        }
 //        possiblePieces.removeIf(value -> !isThisLogical(challenge));
-        return possiblePieces;
+        return possibePs;
     }
 
     public static boolean isPieceOverlappingBoard(String placement, String str) {
@@ -554,15 +557,15 @@ public class FitGame {
         return true;
     }
 
-    public static boolean pieceNotUsed (String challenge, String placement) {
-        for (int i = 0; i < challenge.length(); i+=4) {
-            if ((challenge.charAt(i)) == Character.toLowerCase(placement.charAt(0)) ||
-                    (challenge.charAt(i)) == Character.toUpperCase(placement.charAt(0)) ||
-                    challenge.charAt(i) == placement.charAt(0))
-                return false;
-        }
-        return true;
-    }
+//    public static boolean pieceNotUsed (String challenge, String placement) {
+//        for (int i = 0; i < challenge.length(); i+=4) {
+//            if ((challenge.charAt(i)) == Character.toLowerCase(placement.charAt(0)) ||
+//                    (challenge.charAt(i)) == Character.toUpperCase(placement.charAt(0)) ||
+//                    challenge.charAt(i) == placement.charAt(0))
+//                return false;
+//        }
+//        return true;
+//    }
 
     public static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
         char colorChar = Character.toLowerCase(piecePlacement.charAt(0));
@@ -654,15 +657,13 @@ public class FitGame {
         if (isBoardFull) {
             return placement;
         }
-
         return null;
     }
 
     public static String changeSequence(String solution) {
         String [] str = new String[solution.length() / 4];
-        String rtn = "";
+        StringBuilder rtn = new StringBuilder();
         String [] aligned = new String[10];
-        System.out.println(solution);
 
         for (int i = 0, j = 0; i < solution.length() && j < 10; i+=4, j++ ) {
             str[j] = solution.substring(i, i + 4);
@@ -692,113 +693,19 @@ public class FitGame {
         }
 
         for (String value : aligned)
-            rtn += value;
-        return rtn;
+            rtn.append(value);
+        return rtn.toString();
     }
 
-    public static boolean isThisLogical(String challenge) {
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if (board[i][j] == null) {
-//                    if (i == 0) { // first row
-//                        switch (j) {
-//                            case 0: // (0,0)
-//                                if (board[i][j+1] != null && board[i+1][j] != null) // if (0,0) corner is null
-//                                    return false;
-//                                else if (board[i][j+1] == null && board[i][j+2] != null && board[i+1][j] != null && board[i+1][j+1] != null)
-//                                    return false;
-//                                else if (board[i+1][j] == null && board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j] != null)
-//                                    return false;
-//                                else if (board[i][j+1] == null && board[i][j+2] == null &&
-//                                        board[i][j+3] != null && board[i+1][j] != null && board[i+1][j+1] != null
-//                                         && board[i+1][j+2] != null)
-//                                    return false;
-//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
-//                                        board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j+1] != null)
-//                                    return false;
-//                                break;
-//                            case 7:
-//                                if (board[i][j+1] != null && board[i+1][j] != null && board[i][j-1] != null) // if (7,0) is null
-//                                    return false;
-//                                else if (board[i][j+1] == null
-//                                        && board[i][j+2] != null && board[i+1][j] != null && board[i+1][j+1] != null && board[i][j-1] != null)
-//                                    return false;
-//                                else if (board[i+1][j] == null
-//                                        && board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j] != null && board[i][j-1] != null && board[i+1][j-1] != null)
-//                                    return false;
-//                                else if (board[i][j+1] == null && board[i][j+2] == null &&
-//                                        board[i][j-1] != null && board[i+1][j] != null && board[i+1][j+1] != null
-//                                        && board[i+1][j+2] != null)
-//                                    return false;
-//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
-//                                        board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j+1] != null &&
-//                                        board[i][j-1] != null && board[i+1][j-1] != null && board[i+2][j-1] != null &&
-//                                        board[i+3][j] != null)
-//                                    return false;
-//                                break;
-//                            case 8:
-//                                if (board[i][j+1] != null && board[i+1][j] != null && board[i][j-1] != null) // if (8,0) is null
-//                                    return false;
-//                                else if (board[i][j+1] == null
-//                                        && board[i][j-1] != null && board[i+1][j] != null && board[i+1][j+1] != null)
-//                                    return false;
-//                                else if (board[i+1][j] == null
-//                                        && board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j] != null && board[i][j-1] != null && board[i+1][j-1] != null)
-//                                    return false;
-//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
-//                                        board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j+1] != null &&
-//                                        board[i][j-1] != null && board[i+1][j-1] != null && board[i+2][j-1] != null &&
-//                                        board[i+3][j] != null)
-//                                    return false;
-//                                break;
-//                            case 9:
-//                                if (board[i][j-1] != null && board[i+1][j] != null && board[i+1][j-1] != null) // if (9,0) is null
-//                                    return false;
-//                                else if (board[i+1][j] == null
-//                                        && board[i+2][j] != null && board[i][j-1] != null && board[i+1][j-1] != null)
-//                                    return false;
-//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
-//                                        board[i][j-1] != null && board[i+1][j-1] != null && board[i+2][j-1] != null &&
-//                                        board[i+3][j] != null)
-//                                    return false;
-//                                break;
-//                            default:
-//                                if (board[i][j+1] != null && board[i+1][j] != null && board[i][j-1] != null) // if (7,0) is null
-//                                    return false;
-//                                else if (board[i][j+1] == null
-//                                        && board[i][j+2] != null && board[i+1][j] != null && board[i+1][j+1] != null && board[i][j-1] != null)
-//                                    return false;
-//                                else if (board[i+1][j] == null
-//                                        && board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j] != null && board[i][j-1] != null && board[i+1][j-1] != null)
-//                                    return false;
-//                                else if (board[i][j+1] == null && board[i][j+2] == null &&
-//                                        board[i][j-1] != null && board[i+1][j] != null && board[i+1][j+1] != null
-//                                        && board[i+1][j+2] != null && board[i][j+3] != null)
-//                                    return false;
-//                                else if (board[i+1][j] == null && board[i+2][j] == null &&
-//                                        board[i][j+1] != null && board[i+1][j+1] != null && board[i+2][j+1] != null &&
-//                                        board[i][j-1] != null && board[i+1][j-1] != null && board[i+2][j-1] != null &&
-//                                        board[i+3][j] != null)
-//                                    return false;
-//                                break;
-//
-//                        }
-//                    }
-//                    else if (i == 4) { // last row
-//
-//                    }
-//                }
-//            }
-//        }
-
-        PieceType[][] initialBoard = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
-        boardUpdate(challenge, initialBoard);
+    public static boolean isThisLogical(String challenge, PieceType [][] initialBoard) {
+//        PieceType[][] initialBoard = {
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null},
+//                {null, null, null, null, null, null, null, null, null, null}
+//        };
+//        boardUpdate(challenge, initialBoard);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 10; j++) {
                 if (initialBoard[i][j] == null) {
@@ -811,9 +718,18 @@ public class FitGame {
     }
 
     public static String getSolution(String challenge) {
+        PieceType[][] initialBoard = {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+        };
+
         System.out.println("New Test: ");
 
         boardUpdate(challenge, initialBoard);
+        System.out.println(Arrays.deepToString(initialBoard));
 
         int numberOfIteration = (40 - challenge.length()) / 4;
 
@@ -823,20 +739,17 @@ public class FitGame {
     }
 
     public static void main(String[] args) {
-        String str = "g01WN51W";
-
+        String str = "B03SN43S";
+        int numberOfIteration = (40 - str.length()) / 4;
+//
+        System.out.println(numberOfIteration);
         System.out.println(getSolution(str));
-
-//        String str2 = "b41NG52Ey01SI00Nr30Nn70NS81EP03N";
-//        boardUpdate(str2, initialBoard);
-//        System.out.println(getMinX(initialBoard));
-//        System.out.println(getMinY(initialBoard));
     }
 
-    public static String getSolutionREC(String challenge, String placement, PieceType [][] board, int RECtimes) {
+    public static String getSolutionREC(String challenge, String placement, PieceType [][] board, int recTimes) {
         String rtn = "";
-        if (RECtimes == 1) { // base case of recursion
-            List<String> list = listOfPieces(challenge);
+        if (recTimes == 1) { // base case of recursion
+            Set<String> list = listOfPieces(challenge, board);
             if (list.size() != 0) {
                 for (String values : list) {
                     boardUpdate(values, board);
@@ -852,17 +765,40 @@ public class FitGame {
             }
         }
         else { // if there are more than one piece to fill in
-            List<String> pieceList = listOfPieces(challenge);
+            Set<String> pieceList = listOfPieces(challenge, board);
             if (pieceList.isEmpty()) {
+//                System.out.println("The list is empty, revert it back to previous step");
+//                System.out.println(challenge);
                 clearBoard(placement, board);
+                challenge = challenge.substring(0, challenge.length() - 4);
+//                System.out.println(challenge);
             }
             else {
                 for (String values : pieceList) {
+//                    System.out.println("There are more than one piece");
+//                    System.out.println("List of Pieces : " +pieceList);
+//                    System.out.println("Value piece : " + values);
+//                    System.out.println(challenge);
                     boardUpdate(values, board);
-                    if (isThisLogical(challenge+values)) {
-                        rtn = getSolutionREC(challenge+values, values,board, RECtimes - 1);
-                        if (rtn.length() == 40 && isComplete(board))
+
+                    if (isThisLogical(challenge + values, board)) {
+                        challenge += values;
+//                        System.out.println(challenge);
+//                        System.out.println(Arrays.deepToString(board));
+                        rtn = getSolutionREC(challenge, values,board, recTimes - 1);
+                        if (isComplete(board))
                             return rtn;
+                        else {
+//                            System.out.println("Clearing...");
+//                            System.out.println(values);
+                            clearBoard(values, board);
+                            challenge = challenge.substring(0, challenge.length() - 4);
+
+                        }
+                    }
+                    else {
+//                        System.out.println("Piece placement not logical : " + values);
+                        clearBoard(values, board);
                     }
                 }
             }
