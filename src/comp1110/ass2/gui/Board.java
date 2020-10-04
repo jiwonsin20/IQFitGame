@@ -12,6 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.util.*;
 
@@ -598,6 +599,11 @@ public class Board extends Application {
 
     // FIXME Task 10: Implement hints (should become visible when the user presses '/' -- see gitlab issue for details)
 
+    //Basically, if I hold down the '/' key, I should be pointed towards a placement that makes up part of the solution (if this is possible).
+    private void ImpHints(){
+
+
+    }
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
 
     @Override
