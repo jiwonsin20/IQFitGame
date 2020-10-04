@@ -599,8 +599,20 @@ public class Board extends Application {
 
     // FIXME Task 10: Implement hints (should become visible when the user presses '/' -- see gitlab issue for details)
 
-    //Basically, if I hold down the '/' key, I should be pointed towards a placement that makes up part of the solution (if this is possible).
-    private void ImpHints(){
+    /**
+     * Basically, if I hold down the '/' key, I should be pointed towards a placement that makes up part of the solution (if this is possible).
+     **
+     * @param challenge the game's challenge
+     * @param placement the piece placement that the players has added
+     * @param solution the correct solution to the challenge
+     *
+     * first, check whether the placement is the right subString of solution
+     * then, find the next piece string in solution that need to be added
+     * finally, highlight the piece and the position when the player hold down the '/' key
+     *
+     * Code written by Mingxuan Wang
+    */
+    private void ImpHints(String challenge,String placement,String solution){
 
 
     }
