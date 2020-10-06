@@ -7,14 +7,23 @@ import comp1110.ass2.*;
 import static comp1110.ass2.PieceType.*;
 import static comp1110.ass2.Piece.*;
 
+import gittest.C;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import javax.print.attribute.standard.Finishings;
 import java.util.*;
 
 public class Board extends Application {
@@ -28,17 +37,24 @@ public class Board extends Application {
     private static final int PLAYABLE_AREA_Y = 275;
     private static final int START_Y = BOARD_HEIGHT - 6 * SQUARE_SIZE -25;
 
+    private final Slider difficultyBar = new Slider();
+
+
     // This part is for board image
     private static final String URI_BASE = "assets/";
     private static final String BOARD_URI = Board.class.getResource(URI_BASE + "board.png").toString();
 
     private final Group root = new Group();
-    private final Group board = new Group();
+    private final Group controls = new Group();
+    private final Group gameBoard = new Group();
     private final Group gamePiece = new Group();
+    private String objectiveString;
     private final Group gameHintPiece = new Group();
 
-    private static boolean isSlashKeyPressed = false;
-    private static final List<String> addedPieces = new ArrayList<>();
+//    private static boolean isSlashKeyPressed = false;
+//    private static final List<String> addedPieces = new ArrayList<>();
+
+    // Implementing difficulty bar
 
 
     private static final PieceType[][] initialBoard = {
@@ -56,12 +72,13 @@ public class Board extends Application {
         int yValue;
         int orientation;
 
-        board.getChildren().clear();
+        gameBoard.getChildren().clear();
 
         ImageView board = new ImageView();
         board.setImage(new Image(BOARD_URI));
         board.setFitWidth(600);
         board.setPreserveRatio(true);
+        gameBoard.getChildren().add(board);
 
         for (int i = 0; i < placement.length(); i+=4) {
             pieces[j] = placement.substring(i, i + 4);
@@ -130,10 +147,9 @@ public class Board extends Application {
                     break;
             }
             FitGame.boardUpdate(placement, initialBoard);
-            gamePiece.getChildren().add(pieceImage);
+            gameBoard.getChildren().add(pieceImage);
         }
         FitGame.boardUpdate(placement, initialBoard);
-        root.getChildren().add(board);
     }
 
     private static int getPieceSpineNum(String piece) {
@@ -240,6 +256,7 @@ public class Board extends Application {
                 toFront();
 //                System.out.println(pieceID);
                 if (FitGame.isPlacementValid(pieceID))
+                    System.out.println(pieceID);
                     clearInitialBoard(pieceID);
 //                System.out.println(Arrays.deepToString(initialBoard));
                 mouseEvent.consume();
@@ -285,7 +302,7 @@ public class Board extends Application {
                     setLayoutX(homeX);
                     setLayoutY(homeY);
                 }
-//                System.out.println(Arrays.deepToString(initialBoard));
+                System.out.println(Arrays.deepToString(initialBoard));
                 mouseEvent.consume();
             });
         }
@@ -306,7 +323,7 @@ public class Board extends Application {
                     }
                 } else { // West or East
                     for (int i = xLocation; i < xLocation + 2; i++) {
-                        for (int j = yLocation; j < yLocation + getPieceSpineNum(placement); j++) {
+                        for (int j = yLocation; j < 5; j++) {
                             if (Board.initialBoard[j][i] == piece.getType())
                                 Board.initialBoard[j][i] = null;
                         }
@@ -549,8 +566,89 @@ public class Board extends Application {
         }
     }
 
+    private void makeControls() {
+        Button newGame = new Button("NEW GAME");
+        newGame.setLayoutX(12 * SQUARE_SIZE + 100);
+        newGame.setLayoutY(0.5 * SQUARE_SIZE);
+        newGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                chooseGame();
+            }
+        });
 
-    // Need to change this
+        Button clear = new Button("CLEAR");
+        clear.setLayoutX(12*SQUARE_SIZE);
+        clear.setLayoutY(0.5*SQUARE_SIZE);
+        clear.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                clearBoard();
+            }
+        });
+
+//        Button hint = new Button("HINTS");
+//        hint.setLayoutX(13*SQUARE_SIZE);
+//        hint.setLayoutY(0.5 * SQUARE_SIZE);
+//        hint.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//                showHints();
+//
+//            }
+//        });
+
+        controls.getChildren().add(clear);
+        controls.getChildren().add(newGame);
+
+        difficultyBar.setMin(1);
+        difficultyBar.setMax(5);
+        difficultyBar.setValue(0);
+        difficultyBar.setShowTickLabels(true);
+        difficultyBar.setShowTickMarks(true);
+        difficultyBar.setMajorTickUnit(1);
+        difficultyBar.setMinorTickCount(1);
+        difficultyBar.setSnapToTicks(true);
+
+        difficultyBar.setLayoutX(700);
+        difficultyBar.setLayoutY(100);
+        controls.getChildren().add(difficultyBar);
+
+        final Label difficultyCaption = new Label("Difficulty:");
+        difficultyCaption.setTextFill(Color.BLACK);
+        difficultyCaption.setLayoutX(650);
+        difficultyCaption.setLayoutY(100);
+        controls.getChildren().add(difficultyCaption);
+    }
+
+    private void newGame(String objective, String solution) {
+        setBoard(objective);
+        FitGame.boardUpdate(objective, initialBoard);
+        gamePiece.getChildren().clear();
+        makePieces(setPlayablePieces(objective, solution));
+    }
+
+    private void resetBoard() {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 5; j++) {
+                initialBoard[j][i] = null;
+            }
+        }
+    }
+
+    private void clearBoard() {
+        newGame(objectiveString, Games.getSolution(objectiveString));
+        resetBoard();
+        FitGame.boardUpdate(objectiveString,initialBoard);
+    }
+
+    private void chooseGame(){
+        resetBoard();
+        String objective = chooseObjective((int)(difficultyBar.getValue()));
+        objectiveString = objective;
+        newGame(objective, Games.getSolution(objective));
+    }
+
     private void makePieces(String placement){
         for (int i = 0; i < placement.length(); i+=4) {
             String x = Character.toString(placement.charAt(i + 1));
@@ -560,9 +658,73 @@ public class Board extends Application {
         gamePiece.toFront();
     }
 
+//    private void makeHintPieces(String str) {
+//        char c = str.charAt(0);
+//        String identifier = "";
+//        int xValue = Character.getNumericValue(str.charAt(1)) * SQUARE_SIZE + GRID_L_PADDING;
+//        int yValue = Character.getNumericValue(str.charAt(2)) * SQUARE_SIZE + GRID_TOP_PADDING;
+//        int dir = PieceDirection.fromChar(str.charAt(3));
+//        if (Character.isLowerCase(str.charAt(0)))
+//            identifier = "1";
+//        else
+//            identifier = "2";
+//        ImageView img = new ImageView(new Image(getClass().getResource(URI_BASE + Character.toUpperCase(c)+identifier+".png").toString()));
+//
+//        if (getPieceSpineNum(str) == 3)
+//            img.setFitWidth(SQUARE_SIZE * 3);
+//        else
+//            img.setFitWidth(SQUARE_SIZE * 4);
+//
+//        img.setPreserveRatio(true);
+//        img.setRotate((dir - 1) * 90);
+//        img.setLayoutX(xValue);
+//        img.setLayoutY(yValue);
+//
+//        switch (dir) {
+//            case 1: // N
+//                if (getPieceSpineNum(str) == 3) {
+//                    img.setTranslateX(1);
+//                    img.setTranslateY(2);
+//                } else {
+//                    img.setTranslateX(0);
+//                    img.setTranslateY(3);
+//                }
+//                break;
+//            case 2: // E
+//                if (getPieceSpineNum(str) == 3) {
+//                    img.setTranslateX(-SQUARE_SIZE / 2f - 1);
+//                    img.setTranslateY(SQUARE_SIZE / 2f + 1);
+//                } else {
+//                    img.setTranslateX(-50);
+//                    img.setTranslateY(SQUARE_SIZE + 2);
+//                }
+//                break;
+//            case 3: // S
+//                if (getPieceSpineNum(str) == 3) {
+//                    img.setTranslateX(-1);
+//                    img.setTranslateY(1);
+//                }
+//                break;
+//            case 4: // W
+//                if (getPieceSpineNum(str) == 3) {
+//                    img.setTranslateX(-SQUARE_SIZE / 2f - 1);
+//                    img.setTranslateY(SQUARE_SIZE / 2f + 1);
+//                } else {
+//                    img.setTranslateX(-49);
+//                    img.setTranslateY(SQUARE_SIZE);
+//                }
+//                break;
+//            default:
+//                break;
+//        }
+//        img.setOpacity(0.5);
+//        img.toFront();
+//        gameBoard.getChildren().add(img);
+//    }
+
     private String chooseObjective (int difficulty) {
         Random random = new Random();
-        String currentDifficulty;
+        String currentDifficulty = "";
         int randomNumber = 0;
         switch (difficulty) {
             case 1: //difficulty set to Starter
@@ -582,7 +744,6 @@ public class Board extends Application {
                 break;
             default:
                 break;
-                // need to raise an error
         }
         currentDifficulty = Games.getObjective(randomNumber);
         return currentDifficulty;
@@ -604,6 +765,53 @@ public class Board extends Application {
     }
 
     // FIXME Task 10: Implement hints (should become visible when the user presses '/' -- see gitlab issue for details)
+
+
+//    private List<String> findPieces(String str) {
+//        List<String> list = new ArrayList<>();
+//        for (int i = 0; i < str.length(); i+=4) {
+//            list.add(str.substring(i, i+4));
+//        }
+//        return list;
+//    }
+//    private void showHints() {
+//        String solution = Games.getSolution(objectiveString);
+//        String playablePiece = setPlayablePieces(objectiveString, solution);
+//        List<String> pieces = findPieces(playablePiece);
+//        for (String values : pieces) {
+//            if (!isUsed(values, initialBoard)) {
+//                System.out.println(values);
+//                makeHintPieces(values);
+//            }
+//        }
+//    }
+//
+//    private boolean isUsed(String str, PieceType [][] board) {
+//        PieceType piece = PieceType.fromChar(Character.toString(str.charAt(0)));
+//        int x = Character.getNumericValue(str.charAt(1));
+//        int y = Character.getNumericValue(str.charAt(2));
+//        int direction = PieceDirection.fromChar(str.charAt(3));
+//
+//        if (direction == 1 || direction == 3) { // North or South
+//            for (int j = y; j < y + getPieceSpineNum(str); j++) {
+//                for (int i = x; i < x + 2; i++) {
+//                    if (board[j][i] != piece)
+//                        return false;
+//                }
+//            }
+//        }
+//        else { // East or West
+//            for (int j = y; j < y + 2; j++) {
+//                for (int i = x; i < 5; i++) {
+//                    if (board[j][i] != piece)
+//                        return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
+
+
 
     /**
      * Basically, if I hold down the '/' key, I should be pointed towards a placement that makes up part of the solution (if this is possible).
@@ -713,37 +921,39 @@ public class Board extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("IQ-Fit Game");
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
-        FitGame.boardUpdate("", initialBoard);
-        // add an event that determines the difficulty of this piece
+        root.getChildren().add(gameBoard);
+        root.getChildren().add(gamePiece);
+        root.getChildren().add(controls);
+//        FitGame.boardUpdate("", initialBoard);
+        makeControls();
 
-        String currentObjective = chooseObjective( 5);
-        setBoard(currentObjective);
-        FitGame.boardUpdate(currentObjective, initialBoard);
+//        String currentObjective = chooseObjective( 5);
+//        setBoard(currentObjective);
+//        FitGame.boardUpdate(currentObjective, initialBoard);
 
-        String missing = setPlayablePieces(currentObjective, Games.getSolution(currentObjective));
-        makePieces(missing);
-        String solution = FitGame.getSolution(currentObjective);
+//        String missing = setPlayablePieces(currentObjective, Games.getSolution(currentObjective));
+//        makePieces(missing);
+//        String solution = FitGame.getSolution(currentObjective);
 
         // Add hints (basically get the solution from Games.java and display it one by one with opacity of 0.5
+//
+//        scene.setOnKeyPressed(e -> {
+//            if (e.getCode() == KeyCode.SLASH) {
+//                if (!isSlashKeyPressed) {
+//                    isSlashKeyPressed = true;
+//                    ImpHints(currentObjective, String.join("", addedPieces), solution);
+//                }
+//            }
+//        });
+//        scene.setOnKeyReleased(e -> {
+//            if (e.getCode() == KeyCode.SLASH) {
+//                isSlashKeyPressed = false;
+//                ImpHints(currentObjective, "", "");
+//            }
+//        });
 
-        scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.SLASH) {
-                if (!isSlashKeyPressed) {
-                    isSlashKeyPressed = true;
-                    ImpHints(currentObjective, String.join("", addedPieces), solution);
-                }
-            }
-        });
-        scene.setOnKeyReleased(e -> {
-            if (e.getCode() == KeyCode.SLASH) {
-                isSlashKeyPressed = false;
-                ImpHints(currentObjective, "", "");
-            }
-        });
 
-        root.getChildren().add(board);
-        root.getChildren().add(gamePiece);
-        root.getChildren().add(gameHintPiece);
+//        root.getChildren().add(gameHintPiece);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

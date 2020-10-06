@@ -386,20 +386,7 @@ public class FitGame {
         Set<String> result = new HashSet<>(possiblePiecePlacements);
         if (result.size() == 0)
             return null;
-        System.out.println(result);
         return result;
-    }
-
-    public static void main(String[] args) {
-//        String str2 = "B20ER42NG00NP40No60S";
-//        boardUpdate(str2, initialBoard);
-//        System.out.println(isThisLogical(str2, initialBoard));
-        String str = "g20SS43S";
-        boardUpdate(str, initialBoard);
-        System.out.println(findOptimalX(str, initialBoard));
-        int numberOfIteration = (40 - str.length()) / 4;
-        System.out.println(numberOfIteration);
-        System.out.println(getSolution(str));
     }
 
     public static void boardUpdate (String placement, PieceType [][] initialBoard) {
@@ -671,7 +658,6 @@ public class FitGame {
 
         for (String value : aligned)
             rtn.append(value);
-        System.out.println(rtn);
         return rtn.toString();
     }
 
@@ -695,8 +681,6 @@ public class FitGame {
                 {null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null}
         };
-
-        System.out.println("New Test: ");
 
         boardUpdate(challenge, initialBoard);
         int numberOfIteration = (40 - challenge.length()) / 4;
