@@ -12,6 +12,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.util.*;
 
@@ -33,6 +35,11 @@ public class Board extends Application {
     private final Group root = new Group();
     private final Group board = new Group();
     private final Group gamePiece = new Group();
+    private final Group gameHintPiece = new Group();
+
+    private static boolean isSlashKeyPressed = false;
+    private static final List<String> addedPieces = new ArrayList<>();
+
 
     private static final PieceType[][] initialBoard = {
             {null, null, null, null, null, null, null, null, null, null},
@@ -598,6 +605,108 @@ public class Board extends Application {
 
     // FIXME Task 10: Implement hints (should become visible when the user presses '/' -- see gitlab issue for details)
 
+    /**
+     * Basically, if I hold down the '/' key, I should be pointed towards a placement that makes up part of the solution (if this is possible).
+     **
+     * @param challenge the game's challenge
+     * @param placement the piece placement that the players has added
+     * @param solution the correct solution to the challenge
+     *
+     * first, check whether the placement is the right subString of solution
+     * then, find the next piece string in solution that need to be added
+     * finally, highlight the piece and the position when the player hold down the '/' key
+     *
+     * Code written by Mingxuan Wang, Di Mou
+    */
+    private void ImpHints(String challenge,String placement,String solution){
+        if (solution.length() == 0) {
+            gameHintPiece.getChildren().clear();
+            return;
+        }
+
+        System.out.print(challenge + " " + placement + " " + solution);
+
+        List<String> solutionPieces = new ArrayList<>();
+        for (int i = 0; i < solution.length(); i += 4) {
+            solutionPieces.add(solution.substring(i, i + 4));
+        }
+        List<String> placementPieces = new ArrayList<>();
+        for (int i = 0; i < placement.length(); i += 4) {
+            placementPieces.add(placement.substring(i, i + 4));
+        }
+        for (String piecePlacement : placementPieces) {
+            if (!solutionPieces.contains(piecePlacement)) {
+                System.out.print("Solution does not contain " + piecePlacement);
+                return;
+            }
+        }
+
+        List<String> challengePieces = new ArrayList<>();
+        for (int i = 0; i < challenge.length(); i += 4) {
+            challengePieces.add(challenge.substring(i, i + 4));
+        }
+        for (String piecePlacement : solutionPieces) {
+            if (challengePieces.contains(piecePlacement) || placement.contains(piecePlacement)) {
+                continue;
+            }
+
+            char colorChar = piecePlacement.charAt(0);
+            char index = Character.isUpperCase(colorChar) ? '2' : '1';
+            int orientation = PieceDirection.fromChar(piecePlacement.charAt(3));
+            int xValue = Character.getNumericValue(piecePlacement.charAt(1)) * SQUARE_SIZE + GRID_L_PADDING;
+            int yValue = Character.getNumericValue(piecePlacement.charAt(2)) * SQUARE_SIZE + GRID_TOP_PADDING;
+
+            Image pieceImage = new Image(getClass().getResource(URI_BASE + Character.toUpperCase(colorChar) + index + ".png").toString());
+            ImageView pieceImageView = new ImageView(pieceImage);
+            pieceImageView.setFitWidth(SQUARE_SIZE * (getPieceSpineNum(piecePlacement) == 3 ? 3 : 4));
+            pieceImageView.setPreserveRatio(true);
+            pieceImageView.setRotate((orientation - 1) * 90);
+            pieceImageView.setLayoutX(xValue);
+            pieceImageView.setLayoutY(yValue);
+            pieceImageView.setOpacity(0.5);
+
+            switch (orientation) {
+                case 1: // N
+                    if (getPieceSpineNum(piecePlacement) == 3) {
+                        pieceImageView.setTranslateX(1);
+                        pieceImageView.setTranslateY(2);
+                    } else {
+                        pieceImageView.setTranslateX(0);
+                        pieceImageView.setTranslateY(3);
+                    }
+                    break;
+                case 2: // E
+                    if (getPieceSpineNum(piecePlacement) == 3) {
+                        pieceImageView.setTranslateX(-SQUARE_SIZE / 2f - 1);
+                        pieceImageView.setTranslateY(SQUARE_SIZE / 2f + 1);
+                    } else {
+                        pieceImageView.setTranslateX(-50);
+                        pieceImageView.setTranslateY(SQUARE_SIZE + 2);
+                    }
+                    break;
+                case 3: // S
+                    if (getPieceSpineNum(piecePlacement) == 3) {
+                        pieceImageView.setTranslateX(-1);
+                        pieceImageView.setTranslateY(1);
+                    }
+                    break;
+                case 4: // W
+                    if (getPieceSpineNum(piecePlacement) == 3) {
+                        pieceImageView.setTranslateX(-SQUARE_SIZE / 2f - 1);
+                        pieceImageView.setTranslateY(SQUARE_SIZE / 2f + 1);
+                    } else {
+                        pieceImageView.setTranslateX(-49);
+                        pieceImageView.setTranslateY(SQUARE_SIZE);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            gameHintPiece.getChildren().add(pieceImageView);
+            break;
+        }
+
+    }
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
 
     @Override
@@ -607,17 +716,34 @@ public class Board extends Application {
         FitGame.boardUpdate("", initialBoard);
         // add an event that determines the difficulty of this piece
 
-        // Add hints (basically get the solution from Games.java and display it one by one with opacity of 0.5
-
         String currentObjective = chooseObjective( 5);
         setBoard(currentObjective);
         FitGame.boardUpdate(currentObjective, initialBoard);
 
         String missing = setPlayablePieces(currentObjective, Games.getSolution(currentObjective));
         makePieces(missing);
+        String solution = FitGame.getSolution(currentObjective);
+
+        // Add hints (basically get the solution from Games.java and display it one by one with opacity of 0.5
+
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.SLASH) {
+                if (!isSlashKeyPressed) {
+                    isSlashKeyPressed = true;
+                    ImpHints(currentObjective, String.join("", addedPieces), solution);
+                }
+            }
+        });
+        scene.setOnKeyReleased(e -> {
+            if (e.getCode() == KeyCode.SLASH) {
+                isSlashKeyPressed = false;
+                ImpHints(currentObjective, "", "");
+            }
+        });
 
         root.getChildren().add(board);
         root.getChildren().add(gamePiece);
+        root.getChildren().add(gameHintPiece);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
