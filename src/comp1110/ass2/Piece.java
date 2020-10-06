@@ -400,11 +400,11 @@ public class Piece {
                     for (int i = 0; i < getYDimensions(); i++) {
                         for (int j = 0; j <getXDimensions(); j++) {
                             if (j == 0)
-                                array[i][j] = B;
+                                array[i][j] = I;
                             else if (j == 1 && i == 0)
-                                array[i][j] = B;
+                                array[i][j] = I;
                             else if (j == 1 && i == 1)
-                                array[i][j] = B;
+                                array[i][j] = I;
                             else
                                 array[i][j] = null;
                         }

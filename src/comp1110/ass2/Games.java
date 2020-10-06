@@ -28,6 +28,7 @@ public class Games {
   }
 
   public static String getSolution (String objective) {
+//    return SOLUTIONS[number].placement;
     for (Games solution : SOLUTIONS) {
       if (objective.equals(solution.objective))
         return solution.placement;
