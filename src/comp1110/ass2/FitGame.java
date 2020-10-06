@@ -557,16 +557,6 @@ public class FitGame {
         return true;
     }
 
-//    public static boolean pieceNotUsed (String challenge, String placement) {
-//        for (int i = 0; i < challenge.length(); i+=4) {
-//            if ((challenge.charAt(i)) == Character.toLowerCase(placement.charAt(0)) ||
-//                    (challenge.charAt(i)) == Character.toUpperCase(placement.charAt(0)) ||
-//                    challenge.charAt(i) == placement.charAt(0))
-//                return false;
-//        }
-//        return true;
-//    }
-
     public static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
         char colorChar = Character.toLowerCase(piecePlacement.charAt(0));
         for (int i = 0; i < piecePlacements.size(); ++i) {
