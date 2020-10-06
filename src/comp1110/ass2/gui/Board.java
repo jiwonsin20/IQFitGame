@@ -613,7 +613,13 @@ public class Board extends Application {
      * Code written by Mingxuan Wang
     */
     private void ImpHints(String challenge,String placement,String solution){
+       solution = Games.getSolution(challenge);
+       if(placement == null){
+           String hint = solution.substring(0,4);
 
+
+       }
+       
 
     }
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
