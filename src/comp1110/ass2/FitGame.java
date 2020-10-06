@@ -3,6 +3,7 @@ package comp1110.ass2;
 import comp1110.ass2.gui.Board;
 
 import java.io.LineNumberInputStream;
+import java.sql.Array;
 import java.sql.SQLOutput;
 import java.util.*;
 
@@ -385,8 +386,20 @@ public class FitGame {
         Set<String> result = new HashSet<>(possiblePiecePlacements);
         if (result.size() == 0)
             return null;
-
+        System.out.println(result);
         return result;
+    }
+
+    public static void main(String[] args) {
+//        String str2 = "B20ER42NG00NP40No60S";
+//        boardUpdate(str2, initialBoard);
+//        System.out.println(isThisLogical(str2, initialBoard));
+        String str = "g20SS43S";
+        boardUpdate(str, initialBoard);
+        System.out.println(findOptimalX(str, initialBoard));
+        int numberOfIteration = (40 - str.length()) / 4;
+        System.out.println(numberOfIteration);
+        System.out.println(getSolution(str));
     }
 
     public static void boardUpdate (String placement, PieceType [][] initialBoard) {
@@ -397,8 +410,6 @@ public class FitGame {
                 int y = piece.coords.getYCoordinate();
                 for (int j = x; j < x + piece.getXDimensions(); j++) {
                     for (int i = y; i < y + piece.getYDimensions(); i++) {
-//                        if (array[i - y][j - x] == null && initialBoard[i][j] != null)
-//                            initialBoard[i][j] = initialBoard[i][j];
                         if (array[i - y][j - x] != null && initialBoard[i][j] == null)
                             initialBoard[i][j] = array[i - y][j - x];
                     }
@@ -408,7 +419,6 @@ public class FitGame {
     }
 
     public static boolean isPlacementNotOverlapping(PieceType [][] board, String placement) {
-        // For 4-character length placement
         Piece piece = toPiece(placement);
         if (piece == null)
             return true;
@@ -482,34 +492,11 @@ public class FitGame {
 
     public static Set<String> listOfPieces (String challenge, PieceType [][] board) {
 
-//        PieceType[][] initialBoard = {
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null}
-//        };
-//        boardUpdate(challenge, initialBoard);
-
-//        List<String> missingPieces = getMissingPieces(challenge);
-//        List<String> possiblePieces = new ArrayList<>();
-//        Set<String> possibleCoords = combinationXY(nullXCoordinate(board),nullYCoordinate(board));
-        Set<String> possibePs = getViablePiecePlacements(challenge, getMinX(board), getMinY(board));
-//        for (String piece : missingPieces) {
-//            for (String xyCoords : possibleCoords) {
-//                possiblePieces.add(piece + xyCoords + "N");
-//                possiblePieces.add(piece + xyCoords + "E");
-//                possiblePieces.add(piece + xyCoords + "S");
-//                possiblePieces.add(piece + xyCoords + "W");
-//            }
-//        }
-
-//        possiblePieces.removeIf(value -> !isOnBoard(value));
+        Set<String> possibePs = getViablePiecePlacements(challenge, findOptimalX(challenge,board).get(1), findOptimalX(challenge,board).get(0));
         if (possibePs != null) {
             possibePs.removeIf(value -> !isPlacementValid(value));
             possibePs.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
         }
-//        possiblePieces.removeIf(value -> !isThisLogical(challenge));
         return possibePs;
     }
 
@@ -684,18 +671,11 @@ public class FitGame {
 
         for (String value : aligned)
             rtn.append(value);
+        System.out.println(rtn);
         return rtn.toString();
     }
 
     public static boolean isThisLogical(String challenge, PieceType [][] initialBoard) {
-//        PieceType[][] initialBoard = {
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null},
-//                {null, null, null, null, null, null, null, null, null, null}
-//        };
-//        boardUpdate(challenge, initialBoard);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 10; j++) {
                 if (initialBoard[i][j] == null) {
@@ -719,28 +699,18 @@ public class FitGame {
         System.out.println("New Test: ");
 
         boardUpdate(challenge, initialBoard);
-        System.out.println(Arrays.deepToString(initialBoard));
-
         int numberOfIteration = (40 - challenge.length()) / 4;
-
         String result = getSolutionREC(challenge, "", initialBoard, numberOfIteration);
-        System.out.println(result);
+//        System.out.println(result);
         return changeSequence(result);
-    }
-
-    public static void main(String[] args) {
-        String str = "B03SN43S";
-        int numberOfIteration = (40 - str.length()) / 4;
-//
-        System.out.println(numberOfIteration);
-        System.out.println(getSolution(str));
     }
 
     public static String getSolutionREC(String challenge, String placement, PieceType [][] board, int recTimes) {
         String rtn = "";
-        if (recTimes == 1) { // base case of recursion
+        // base case of recursion
+        if (recTimes == 1) {
             Set<String> list = listOfPieces(challenge, board);
-            if (list.size() != 0) {
+            if (list != null) {
                 for (String values : list) {
                     boardUpdate(values, board);
                     if (!isComplete(board)) { // even at base level, the board is not complete
@@ -754,9 +724,10 @@ public class FitGame {
                 clearBoard(placement, board);
             }
         }
-        else { // if there are more than one piece to fill in
+        // If recTimes is more than 1
+        else {
             Set<String> pieceList = listOfPieces(challenge, board);
-            if (pieceList.isEmpty()) {
+            if (pieceList == null) {
 //                System.out.println("The list is empty, revert it back to previous step");
 //                System.out.println(challenge);
                 clearBoard(placement, board);
@@ -772,6 +743,8 @@ public class FitGame {
                     boardUpdate(values, board);
 
                     if (isThisLogical(challenge + values, board)) {
+//                        System.out.println(Arrays.deepToString(board));
+//                        System.out.println("It is logical to use " +values);
                         challenge += values;
 //                        System.out.println(challenge);
 //                        System.out.println(Arrays.deepToString(board));
@@ -782,6 +755,7 @@ public class FitGame {
 //                            System.out.println("Clearing...");
 //                            System.out.println(values);
                             clearBoard(values, board);
+//                            System.out.println(challenge);
                             challenge = challenge.substring(0, challenge.length() - 4);
 
                         }
@@ -789,11 +763,13 @@ public class FitGame {
                     else {
 //                        System.out.println("Piece placement not logical : " + values);
                         clearBoard(values, board);
+//                        System.out.println(Arrays.deepToString(board));
+//                        System.out.println(challenge);
                     }
                 }
             }
         }
-        return challenge + rtn;
+        return rtn;
     }
 
 
@@ -830,6 +806,30 @@ public class FitGame {
             }
         }
         return 0;
+    }
+
+    public static List<Integer> findOptimalX(String challenge, PieceType [][] board) {
+        int possiblePieces = 100;
+        int chances;
+        List<Integer> array = new ArrayList<>();
+        Set<String> numPieces;
+        for (int i =0; i < 5; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (board[i][j] == null) {
+                    numPieces = getViablePiecePlacements(challenge, j, i);
+                    if (numPieces != null) {
+                        chances = numPieces.size();
+                        if (numPieces.size() < possiblePieces) {
+                            possiblePieces = chances;
+                            array.clear();
+                            array.add(i);
+                            array.add(j);
+                        }
+                    }
+                }
+            }
+        }
+        return array;
     }
 
     public static int getMinY(PieceType[][] board) {
