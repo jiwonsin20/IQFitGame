@@ -48,11 +48,13 @@ public class Board extends Application {
     private final Group controls = new Group();
     private final Group gameBoard = new Group();
     private final Group gamePiece = new Group();
-    private String objectiveString;
     private final Group gameHintPiece = new Group();
 
-//    private static boolean isSlashKeyPressed = false;
-//    private static final List<String> addedPieces = new ArrayList<>();
+    private static boolean isSlashKeyPressed = false;
+    private static final List<String> addedPieces = new ArrayList<>();
+
+    private static String objective;
+    private static String solution;
 
     // Implementing difficulty bar
 
@@ -255,9 +257,11 @@ public class Board extends Application {
                 mouseY = mouseEvent.getSceneY();
                 toFront();
 //                System.out.println(pieceID);
-                if (FitGame.isPlacementValid(pieceID))
+                if (FitGame.isPlacementValid(pieceID)) {
                     System.out.println(pieceID);
                     clearInitialBoard(pieceID);
+                    Board.addedPieces.remove(pieceID);
+                }
 //                System.out.println(Arrays.deepToString(initialBoard));
                 mouseEvent.consume();
             });
@@ -281,7 +285,7 @@ public class Board extends Application {
                     if (orientation == 5)
                         orientation = 1;
                 }
-                });
+            });
 
             setOnMouseReleased(mouseEvent -> {
                 updatePieceID();
@@ -290,6 +294,7 @@ public class Board extends Application {
                     if (FitGame.isPlacementNotOverlapping(initialBoard, pieceID)) {
                         snapToGrid();
                         FitGame.boardUpdate(pieceID, initialBoard);
+                        Board.addedPieces.add(pieceID);
                     }
                     else {
 //                        System.out.println("It's Here 1");
@@ -356,7 +361,6 @@ public class Board extends Application {
                 setLayoutY(homeY);
             }
         }
-
 
         private int getPositionX(double x) {
 //            double snapXValue = snapXToGrid(getLayoutX());
@@ -624,6 +628,9 @@ public class Board extends Application {
     private void newGame(String objective, String solution) {
         setBoard(objective);
         FitGame.boardUpdate(objective, initialBoard);
+        addedPieces.clear();
+        isSlashKeyPressed = false;
+        gameHintPiece.getChildren().clear();
         gamePiece.getChildren().clear();
         makePieces(setPlayablePieces(objective, solution));
     }
@@ -637,16 +644,16 @@ public class Board extends Application {
     }
 
     private void clearBoard() {
-        newGame(objectiveString, Games.getSolution(objectiveString));
+        newGame(objective, solution);
         resetBoard();
-        FitGame.boardUpdate(objectiveString,initialBoard);
+        FitGame.boardUpdate(objective,initialBoard);
     }
 
     private void chooseGame(){
         resetBoard();
-        String objective = chooseObjective((int)(difficultyBar.getValue()));
-        objectiveString = objective;
-        newGame(objective, Games.getSolution(objective));
+        objective = chooseObjective((int)(difficultyBar.getValue()));
+        solution = Games.getSolution(objective);
+        newGame(objective, solution);
     }
 
     private void makePieces(String placement){
@@ -657,6 +664,7 @@ public class Board extends Application {
         }
         gamePiece.toFront();
     }
+
 
 //    private void makeHintPieces(String str) {
 //        char c = str.charAt(0);
@@ -811,7 +819,21 @@ public class Board extends Application {
 //        return true;
 //    }
 
+    private void onKeyPressed(javafx.scene.input.KeyEvent e) {
+        if (e.getCode() == KeyCode.SLASH) {
+            if (!isSlashKeyPressed) {
+                isSlashKeyPressed = true;
+                ImpHints(objective, String.join("", addedPieces), solution);
+            }
+        }
+    }
 
+    private void onKeyReleased(javafx.scene.input.KeyEvent e) {
+        if (e.getCode() == KeyCode.SLASH) {
+            isSlashKeyPressed = false;
+            ImpHints(objective, "", "");
+        }
+    }
 
     /**
      * Basically, if I hold down the '/' key, I should be pointed towards a placement that makes up part of the solution (if this is possible).
@@ -913,8 +935,8 @@ public class Board extends Application {
             gameHintPiece.getChildren().add(pieceImageView);
             break;
         }
-
     }
+
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
 
     @Override
@@ -924,36 +946,20 @@ public class Board extends Application {
         root.getChildren().add(gameBoard);
         root.getChildren().add(gamePiece);
         root.getChildren().add(controls);
-//        FitGame.boardUpdate("", initialBoard);
         makeControls();
 
-//        String currentObjective = chooseObjective( 5);
-//        setBoard(currentObjective);
-//        FitGame.boardUpdate(currentObjective, initialBoard);
+        objective = chooseObjective( 5);
+        solution = Games.getSolution(objective);
 
-//        String missing = setPlayablePieces(currentObjective, Games.getSolution(currentObjective));
-//        makePieces(missing);
-//        String solution = FitGame.getSolution(currentObjective);
+        setBoard(objective);
+        FitGame.boardUpdate(objective, initialBoard);
+        makePieces(setPlayablePieces(objective, solution));
 
         // Add hints (basically get the solution from Games.java and display it one by one with opacity of 0.5
-//
-//        scene.setOnKeyPressed(e -> {
-//            if (e.getCode() == KeyCode.SLASH) {
-//                if (!isSlashKeyPressed) {
-//                    isSlashKeyPressed = true;
-//                    ImpHints(currentObjective, String.join("", addedPieces), solution);
-//                }
-//            }
-//        });
-//        scene.setOnKeyReleased(e -> {
-//            if (e.getCode() == KeyCode.SLASH) {
-//                isSlashKeyPressed = false;
-//                ImpHints(currentObjective, "", "");
-//            }
-//        });
+        scene.setOnKeyPressed(e -> onKeyPressed(e));
+        scene.setOnKeyReleased(e -> onKeyReleased(e));
 
-
-//        root.getChildren().add(gameHintPiece);
+        root.getChildren().add(gameHintPiece);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
