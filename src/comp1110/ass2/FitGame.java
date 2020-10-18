@@ -389,19 +389,18 @@ public class FitGame {
     }
 
     public static void boardUpdate (String placement, PieceType [][] initialBoard) {
-            Piece[] pieces = toPieces(placement);
-            for (Piece piece : pieces) {
-                PieceType[][] array = piece.getCoords();
-                int x = piece.coords.getXCoordinate();
-                int y = piece.coords.getYCoordinate();
-                for (int j = x; j < x + piece.getXDimensions(); j++) {
-                    for (int i = y; i < y + piece.getYDimensions(); i++) {
-                        if (array[i - y][j - x] != null && initialBoard[i][j] == null)
-                            initialBoard[i][j] = array[i - y][j - x];
-                    }
+        Piece[] pieces = toPieces(placement);
+        for (Piece piece : pieces) {
+            PieceType[][] array = piece.getCoords();
+            int x = piece.coords.getXCoordinate();
+            int y = piece.coords.getYCoordinate();
+            for (int j = x; j < x + piece.getXDimensions(); j++) {
+                for (int i = y; i < y + piece.getYDimensions(); i++) {
+                    if (array[i - y][j - x] != null && initialBoard[i][j] == null)
+                        initialBoard[i][j] = array[i - y][j - x];
                 }
             }
-
+        }
     }
 
     public static boolean isPlacementNotOverlapping(PieceType [][] board, String placement) {
