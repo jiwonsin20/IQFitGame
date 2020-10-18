@@ -314,24 +314,23 @@ public class FitGame {
      * Code written by Jiwon Sin
      */
 
-    public static boolean isCovered (String placement, int x, int y) {
-        Piece piece = toPiece(placement);
-        int xMin = piece.coords.xCoord;
-        int xDim = piece.getXDimensions();
-        int xMax = xMin + xDim - 1;
-        int yMin = piece.coords.yCoord;
-        int yDim = piece.getYDimensions();
-        int yMax = yMin + yDim - 1;
-
-        if (xMin > x || xMax < x || yMin > y || yMax < y) {
-            return false;
-        }
-
-        PieceType[][] array = piece.getCoords();
-
-        return array[y - yMin][x - xMin] != null;
-
-    }
+//    public static boolean isCovered (String placement, int x, int y) {
+//        Piece piece = toPiece(placement);
+//        int xMin = piece.coords.xCoord;
+//        int xDim = piece.getXDimensions();
+//        int xMax = xMin + xDim - 1;
+//        int yMin = piece.coords.yCoord;
+//        int yDim = piece.getYDimensions();
+//        int yMax = yMin + yDim - 1;
+//
+//        if (xMin > x || xMax < x || yMin > y || yMax < y) {
+//            return false;
+//        }
+//
+//        PieceType[][] array = piece.getCoords();
+//
+//        return array[y - yMin][x - xMin] != null;
+//    }
 
     /**
      * Given a string describing a placement of pieces, and a location
@@ -422,59 +421,6 @@ public class FitGame {
             }
         }
         return true;
-    }
-
-    public static int [] nullXCoordinate (PieceType[][] initialBoard) {
-        int countEmptySpaces = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 10; j++) {
-                if (initialBoard[i][j] == null)
-                    countEmptySpaces++;
-            }
-        }
-
-        int [] possibleX = new int[countEmptySpaces];
-        int k = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 10; j++) {
-                if (initialBoard[i][j] == null) {
-                    possibleX[k] = j;
-                    k++;
-                }
-            }
-        }
-        return possibleX;
-    }
-
-    public static int [] nullYCoordinate (PieceType[][] initialBoard) {
-        int countEmptySpaces = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 10; j++) {
-                if (initialBoard[i][j] == null)
-                    countEmptySpaces++;
-            }
-        }
-
-        int [] possibleY = new int[countEmptySpaces];
-        int k = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 10; j++) {
-                if (initialBoard[i][j] == null) {
-                    possibleY[k] = i;
-                    k++;
-                }
-            }
-        }
-        return possibleY;
-    }
-
-    public static Set<String> combinationXY (int [] xCoordinates, int [] yCoordinates) {
-        Set <String> result = new HashSet<>();
-        for (int xValue : xCoordinates) {
-            for (int yValue : yCoordinates)
-            result.add(xValue + Integer.toString(yValue));
-        }
-        return result;
     }
 
     public static Set<String> listOfPieces (String challenge, PieceType [][] board) {
@@ -568,60 +514,6 @@ public class FitGame {
         }
 
         return isPiecePlacementWellFormed(placement);
-
-    }
-
-    private static String getSolutionHelper(List<String> piecePlacements, Set<String> triedPlacements) {
-//        piecePlacements.sort(new PieceComparator());
-
-        String placement = String.join("", piecePlacements);
-
-        if (triedPlacements.contains(placement)) {
-            return null;
-        }
-
-        triedPlacements.add(placement);
-
-//        System.out.println("oldSize: " + piecePlacements.size());
-//        System.out.println(" > " + placement);
-
-
-        PieceType[][] initialBoard = {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-        };
-        boardUpdate(placement, initialBoard);
-
-        boolean isBoardFull = true;
-
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 5; j++) {
-                if (initialBoard[j][i] != null) {
-                    continue;
-                }
-                isBoardFull = false;
-                Set<String> viablePiecePlacements = getViablePiecePlacements(placement, i, j);
-                if (viablePiecePlacements == null) {
-                    return null;
-                }
-                for (String viablePiecePlacement : viablePiecePlacements) {
-                    List<String> newPiecePlacements = new ArrayList<String>(piecePlacements);
-                    insertPiecePlacement(newPiecePlacements, viablePiecePlacement);
-                    String solution = getSolutionHelper(newPiecePlacements, triedPlacements);
-                    if (solution != null) {
-                        return solution;
-                    }
-                }
-            }
-        }
-
-        if (isBoardFull) {
-            return placement;
-        }
-        return null;
     }
 
     public static String changeSequence(String solution) {
@@ -685,7 +577,6 @@ public class FitGame {
         boardUpdate(challenge, initialBoard);
         int numberOfIteration = (40 - challenge.length()) / 4;
         String result = getSolutionREC(challenge, "", initialBoard, numberOfIteration);
-//        System.out.println(result);
         return changeSequence(result);
     }
 
@@ -712,50 +603,31 @@ public class FitGame {
         else {
             Set<String> pieceList = listOfPieces(challenge, board);
             if (pieceList == null) {
-//                System.out.println("The list is empty, revert it back to previous step");
-//                System.out.println(challenge);
                 clearBoard(placement, board);
                 challenge = challenge.substring(0, challenge.length() - 4);
-//                System.out.println(challenge);
             }
             else {
                 for (String values : pieceList) {
-//                    System.out.println("There are more than one piece");
-//                    System.out.println("List of Pieces : " +pieceList);
-//                    System.out.println("Value piece : " + values);
-//                    System.out.println(challenge);
                     boardUpdate(values, board);
 
                     if (isThisLogical(challenge + values, board)) {
-//                        System.out.println(Arrays.deepToString(board));
-//                        System.out.println("It is logical to use " +values);
                         challenge += values;
-//                        System.out.println(challenge);
-//                        System.out.println(Arrays.deepToString(board));
                         rtn = getSolutionREC(challenge, values,board, recTimes - 1);
                         if (isComplete(board))
                             return rtn;
                         else {
-//                            System.out.println("Clearing...");
-//                            System.out.println(values);
                             clearBoard(values, board);
-//                            System.out.println(challenge);
                             challenge = challenge.substring(0, challenge.length() - 4);
-
                         }
                     }
                     else {
-//                        System.out.println("Piece placement not logical : " + values);
                         clearBoard(values, board);
-//                        System.out.println(Arrays.deepToString(board));
-//                        System.out.println(challenge);
                     }
                 }
             }
         }
         return rtn;
     }
-
 
     public static void clearBoard(String placement, PieceType [][] initialBoard) {
         int xLocation = Character.getNumericValue(placement.charAt(1));
@@ -782,16 +654,6 @@ public class FitGame {
         }
     }
 
-    public static int getMinX(PieceType[][] board) {
-        for (int i =0; i < 5; i++) {
-            for (int j = 0; j < 10; j++) {
-                if (board[i][j] == null)
-                    return j;
-            }
-        }
-        return 0;
-    }
-
     public static List<Integer> findOptimalX(String challenge, PieceType [][] board) {
         int possiblePieces = 100;
         int chances;
@@ -815,17 +677,4 @@ public class FitGame {
         }
         return array;
     }
-
-    public static int getMinY(PieceType[][] board) {
-        for (int i =0; i < 5; i++) {
-            for (int j = 0; j < 10; j++) {
-                if (board[i][j] == null)
-                    return i;
-            }
-        }
-        return 0;
-    }
-
-        // FIXME Task 9: determine the solution to the game, given a particular challenge
-
 }
