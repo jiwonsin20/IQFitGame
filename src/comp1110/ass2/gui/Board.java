@@ -21,6 +21,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.print.attribute.standard.Finishings;
@@ -572,7 +575,7 @@ public class Board extends Application {
 
     private void makeControls() {
         Button newGame = new Button("NEW GAME");
-        newGame.setLayoutX(12 * SQUARE_SIZE + 100);
+        newGame.setLayoutX(12 * SQUARE_SIZE + 150);
         newGame.setLayoutY(0.5 * SQUARE_SIZE);
         newGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -581,8 +584,9 @@ public class Board extends Application {
             }
         });
 
-        Button clear = new Button("CLEAR");
-        clear.setLayoutX(12*SQUARE_SIZE);
+        Button clear = new Button("RESET"); // CLEAR
+        clear.setLayoutX(12*SQUARE_SIZE+50);
+
         clear.setLayoutY(0.5*SQUARE_SIZE);
         clear.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -614,15 +618,35 @@ public class Board extends Application {
         difficultyBar.setMinorTickCount(1);
         difficultyBar.setSnapToTicks(true);
 
-        difficultyBar.setLayoutX(700);
+        difficultyBar.setLayoutX(725);
         difficultyBar.setLayoutY(100);
         controls.getChildren().add(difficultyBar);
 
         final Label difficultyCaption = new Label("Difficulty:");
         difficultyCaption.setTextFill(Color.BLACK);
+        difficultyCaption.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
         difficultyCaption.setLayoutX(650);
         difficultyCaption.setLayoutY(100);
         controls.getChildren().add(difficultyCaption);
+
+        Text tip0 = new Text("Tips:");
+        tip0.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        tip0.setLayoutX(610);
+        tip0.setLayoutY(180);
+        controls.getChildren().add(tip0);
+
+        Text tip1 = new Text("1.Scroll the mouse wheel to rotate the Piece");
+        tip1.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        tip1.setLayoutX(610);
+        tip1.setLayoutY(210);
+        controls.getChildren().add(tip1);
+
+        Text tip2 = new Text("2.Press / to get the hints");
+        tip2.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        tip2.setLayoutX(610);
+        tip2.setLayoutY(240);
+        controls.getChildren().add(tip2);
+
     }
 
     private void newGame(String objective, String solution) {
