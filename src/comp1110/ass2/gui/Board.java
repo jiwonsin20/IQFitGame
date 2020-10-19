@@ -46,6 +46,7 @@ public class Board extends Application {
     // This part is for board image
     private static final String URI_BASE = "assets/";
     private static final String BOARD_URI = Board.class.getResource(URI_BASE + "board.png").toString();
+    private static final String TITLE_ICON = Board.class.getResource(URI_BASE + "timg.jpeg").toString();
 
     private final Group root = new Group();
     private final Group controls = new Group();
@@ -577,6 +578,7 @@ public class Board extends Application {
         Button newGame = new Button("NEW GAME");
         newGame.setLayoutX(12 * SQUARE_SIZE + 150);
         newGame.setLayoutY(0.5 * SQUARE_SIZE);
+        newGame.setStyle("-fx-font: 15 Grotesque; -fx-base: #18ee11;");
         newGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -586,8 +588,8 @@ public class Board extends Application {
 
         Button clear = new Button("RESET"); // CLEAR
         clear.setLayoutX(12*SQUARE_SIZE+50);
-
         clear.setLayoutY(0.5*SQUARE_SIZE);
+        clear.setStyle("-fx-font: 15 Grotesque; -fx-base: #d91d0e;");
         clear.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -985,6 +987,7 @@ public class Board extends Application {
 
         root.getChildren().add(gameHintPiece);
         primaryStage.setScene(scene);
+        primaryStage.getIcons().add(new Image(TITLE_ICON));
         primaryStage.show();
     }
 }
