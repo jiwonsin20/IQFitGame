@@ -20,6 +20,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -61,6 +63,8 @@ public class Board extends Application {
     private static String solution;
 
     // Implementing difficulty bar
+
+
 
 
     private static final PieceType[][] initialBoard = {
@@ -643,7 +647,7 @@ public class Board extends Application {
         tip1.setLayoutY(210);
         controls.getChildren().add(tip1);
 
-        Text tip2 = new Text("2.Press / to get the hints");
+        Text tip2 = new Text("2.Press '/' to get the hints");
         tip2.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
         tip2.setLayoutX(610);
         tip2.setLayoutY(240);
@@ -973,6 +977,9 @@ public class Board extends Application {
         root.getChildren().add(gamePiece);
         root.getChildren().add(controls);
         makeControls();
+
+        GridPane gpTitle = new GridPane();
+        gpTitle.setStyle("-fx-background-color: darkgray");
 
         objective = chooseObjective( 5);
         solution = Games.getSolution(objective);
