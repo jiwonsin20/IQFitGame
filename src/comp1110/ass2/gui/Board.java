@@ -45,7 +45,6 @@ public class Board extends Application {
 
     private final Slider difficultyBar = new Slider();
 
-
     // This part is for board image
     private static final String URI_BASE = "assets/";
     private static final String BOARD_URI = Board.class.getResource(URI_BASE + "board.png").toString();
@@ -76,6 +75,8 @@ public class Board extends Application {
      * First, the background image is set then other pieces that are present in placement string is placed on top.
      *
      * @param placement : Objective String selected in random
+     *
+     * Code Written by Jiwon Sin
      */
 
     void setBoard(String placement) {
@@ -169,10 +170,18 @@ public class Board extends Application {
      * This method returns the number of 
      * @param piece
      * @return
+     *
+     * Code Written by Jiwon Sin
      */
+
     private static int getPieceSpineNum(String piece) {
         return toPiece(piece).type.getSpineNum();
     }
+
+    /**
+     * This class represents the pieceTile that will be added into the game.
+     * Class written by Jiwon Sin
+     */
 
     static class PieceTile extends ImageView {
         String pieceID;
@@ -195,6 +204,11 @@ public class Board extends Application {
             setPreserveRatio(true);
         }
     }
+
+    /**
+     *
+     * Class written by Jiwon Sin
+     */
 
     static class DraggablePiece extends PieceTile {
         double homeX, homeY;
@@ -328,6 +342,13 @@ public class Board extends Application {
             });
         }
 
+        /**
+         *
+         * @param placement
+         *
+         * Code Written by Jiwon Sin
+         */
+
         private void clearInitialBoard(String placement) {
             int xLocation = Character.getNumericValue(placement.charAt(1));
             int yLocation = Character.getNumericValue(placement.charAt(2));
@@ -353,19 +374,45 @@ public class Board extends Application {
             }
         }
 
+        /**
+         *
+         * Code Written by Jiwon Sin
+         */
+
         private void updatePieceID() {
             int xValue = getPositionX(snapXToGrid(getLayoutX()));
             int yValue = getPositionY(snapYToGrid(getLayoutY()));
             pieceID = type + Integer.toString(xValue) + yValue + PieceDirection.getChar(orientation);
         }
 
+        /**
+         *
+         * @param piece
+         * @return
+         *
+         * Code Written by Jiwon Sin
+         */
+
         private boolean isThreeByTwo(String piece) {
             return getPieceSpineNum(piece) == 3;
         }
 
+        /**
+         *
+         * Code Written by Jiwon Sin
+         */
+
         private void snapToGrid() {
             snapLayoutToGrid(snapXToGrid(getLayoutX()), snapYToGrid(getLayoutY()));
         }
+
+        /**
+         *
+         * @param x
+         * @param y
+         *
+         * Code Written by Jiwon Sin
+         */
 
         private void snapLayoutToGrid(double x, double y) {
             if (getPositionX(x) <= 9 && getPositionY(y) <= 4) {
@@ -377,6 +424,14 @@ public class Board extends Application {
                 setLayoutY(homeY);
             }
         }
+
+        /**
+         *
+         * @param x
+         * @return
+         *
+         * Code Written by Jiwon Sin
+         */
 
         private int getPositionX(double x) {
 //            double snapXValue = snapXToGrid(getLayoutX());
@@ -397,6 +452,14 @@ public class Board extends Application {
                 return (int) homeX;
         }
 
+        /**
+         *
+         * @param y
+         * @return
+         *
+         * Code Written by Jiwon Sin
+         */
+
         private int getPositionY(double y) {
             if (y != homeY) {
                 if (isThreeByTwo(pieceID)) {
@@ -416,6 +479,13 @@ public class Board extends Application {
             else
                 return (int) homeY;
         }
+
+        /**
+         *
+         * @return
+         *
+         * Code Written by Jiwon Sin
+         */
 
         private boolean isPieceOnBoard() {
             double xMax;
@@ -446,6 +516,14 @@ public class Board extends Application {
             else
                 return false;
         }
+
+        /**
+         *
+         * @param xLayout
+         * @return
+         *
+         * Code Written by Jiwon Sin
+         */
 
         private double snapXToGrid(double xLayout) {
             if (isThreeByTwo(pieceID)) {
@@ -536,6 +614,14 @@ public class Board extends Application {
             }
         }
 
+        /**
+         *
+         * @param yLayout
+         * @return
+         *
+         * Code Written by Jiwon Sin
+         */
+
         private double snapYToGrid (double yLayout) {
             if (isThreeByTwo(pieceID)) {
                 if (orientation == 1 || orientation == 3) { //North and South
@@ -585,6 +671,11 @@ public class Board extends Application {
             }
         }
     }
+
+    /**
+     *
+     * Code Written by Jiwon Sin, Di Mou, Mingxuan Wang
+     */
 
     private void makeControls() {
         Button newGame = new Button("NEW GAME");

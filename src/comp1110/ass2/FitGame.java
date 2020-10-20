@@ -388,6 +388,15 @@ public class FitGame {
         return result;
     }
 
+    /**
+     * This method updates the board, whenever changes to the board is made (mainly deals with addition of pieces).
+     *
+     * @param placement : Piece string that is being used
+     * @param initialBoard : Current board int 2-dimension array
+     *
+     * Code Written by Jiwon Sin
+     */
+
     public static void boardUpdate (String placement, PieceType [][] initialBoard) {
         Piece[] pieces = toPieces(placement);
         for (Piece piece : pieces) {
@@ -402,6 +411,18 @@ public class FitGame {
             }
         }
     }
+
+    /**
+     * This method checks whether the placement string overlaps with any of the current board.
+     * If the board element overlaps with the piece with specific coordinate, will return false.
+     * Else, the piece will return true.
+     *
+     * @param board : Current board in terms of 2-dimensional Array
+     * @param placement : Current piece that is compared with array
+     * @return True if there is no overlap. False if there is at least 1 overlapping.
+     *
+     * Code Written by Jiwon Sin
+     */
 
     public static boolean isPlacementNotOverlapping(PieceType [][] board, String placement) {
         Piece piece = toPiece(placement);
@@ -422,15 +443,39 @@ public class FitGame {
         return true;
     }
 
+    /**
+     * This method finds the list of pieces that could possibly placed on the board.
+     * Using getViablePiecePlacements() method, this method checks whether the piece on certain coordinate
+     * satisfies conditions below
+     *  - piece placement is a valid string
+     *      - Piece is positioned entirely on the board
+     *  - piece placement does not overlap board (at any point of time)
+     * Output will be
+     * @param challenge : String placement
+     * @param board : Current board of the game
+     * @return A set of String placements that could possibly fit in the specific coordinate
+     *
+     * Code Written by Jiwon Sin
+     */
+
     public static Set<String> listOfPieces (String challenge, PieceType [][] board) {
 
-        Set<String> possibePs = getViablePiecePlacements(challenge, findOptimalX(challenge,board).get(1), findOptimalX(challenge,board).get(0));
-        if (possibePs != null) {
-            possibePs.removeIf(value -> !isPlacementValid(value));
-            possibePs.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
+        Set<String> possiblePs = getViablePiecePlacements(challenge, findOptimalX(challenge,board).get(1), findOptimalX(challenge,board).get(0));
+        if (possiblePs != null) {
+            possiblePs.removeIf(value -> !isPlacementValid(value));
+            possiblePs.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
         }
-        return possibePs;
+        return possiblePs;
     }
+
+    /**
+     * This method compares placement String and the target piece String and returns whether it overlaps or not.
+     * @param placement : String of placements
+     * @param str : Target piece string
+     * @return True if piece does not overlap. False if piece overlaps.
+     *
+     * Code Written by Jiwon Sin
+     */
 
     public static boolean isPieceOverlappingBoard(String placement, String str) {
 
@@ -465,6 +510,15 @@ public class FitGame {
         return true;
     }
 
+    /**
+     * Checks whether entire board is filled up by checking whether there is any null
+     *
+     * @param initialBoard : Current board of the game
+     * @return True if there is no null in 10 * 5 board, False if there is at least 1.
+     *
+     * Code Written by Jiwon Sin
+     */
+
     public static boolean isComplete(PieceType[][] initialBoard) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 10; j++) {
@@ -475,6 +529,12 @@ public class FitGame {
         }
         return true;
     }
+
+    /**
+     *
+     * @param piecePlacements
+     * @param piecePlacement
+     */
 
     public static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
         char colorChar = Character.toLowerCase(piecePlacement.charAt(0));
@@ -488,6 +548,7 @@ public class FitGame {
         }
         piecePlacements.add(piecePlacements.size(), piecePlacement);
     }
+
     /**
      * Determine whether the piece can move for a specified distance
      **
@@ -514,6 +575,15 @@ public class FitGame {
 
         return isPiecePlacementWellFormed(placement);
     }
+
+    /**
+     * This method re-arranges the given solution String into a proper solution string
+     *
+     * @param solution : Solution string obtained from getSolution method
+     * @return Solution String that is re-arranged according to rules
+     *
+     * Code Written by Jiwon Sin
+     */
 
     public static String changeSequence(String solution) {
         String [] str = new String[solution.length() / 4];
@@ -551,6 +621,13 @@ public class FitGame {
             rtn.append(value);
         return rtn.toString();
     }
+
+    /**
+     *
+     * @param challenge
+     * @param initialBoard
+     * @return
+     */
 
     public static boolean isThisLogical(String challenge, PieceType [][] initialBoard) {
         for (int i = 0; i < 5; i++) {
