@@ -6,6 +6,7 @@ import comp1110.ass2.*;
 
 import static comp1110.ass2.PieceType.*;
 import static comp1110.ass2.Piece.*;
+import static comp1110.ass2.PieceType.*;
 
 import gittest.C;
 import javafx.application.Application;
@@ -62,11 +63,6 @@ public class Board extends Application {
     private static String objective;
     private static String solution;
 
-    // Implementing difficulty bar
-
-
-
-
     private static final PieceType[][] initialBoard = {
             {null, null, null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null, null, null},
@@ -74,6 +70,13 @@ public class Board extends Application {
             {null, null, null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null, null, null}
     };
+
+    /**
+     * This method sets the board for the game GUI
+     * First, the background image is set then other pieces that are present in placement string is placed on top.
+     *
+     * @param placement : Objective String selected in random
+     */
 
     void setBoard(String placement) {
         String [] pieces = new String[placement.length()/4];
@@ -162,6 +165,11 @@ public class Board extends Application {
         FitGame.boardUpdate(placement, initialBoard);
     }
 
+    /**
+     * This method returns the number of 
+     * @param piece
+     * @return
+     */
     private static int getPieceSpineNum(String piece) {
         return toPiece(piece).type.getSpineNum();
     }
@@ -601,17 +609,6 @@ public class Board extends Application {
             }
         });
 
-//        Button hint = new Button("HINTS");
-//        hint.setLayoutX(13*SQUARE_SIZE);
-//        hint.setLayoutY(0.5 * SQUARE_SIZE);
-//        hint.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent actionEvent) {
-//                showHints();
-//
-//            }
-//        });
-
         controls.getChildren().add(clear);
         controls.getChildren().add(newGame);
 
@@ -695,71 +692,6 @@ public class Board extends Application {
         gamePiece.toFront();
     }
 
-
-//    private void makeHintPieces(String str) {
-//        char c = str.charAt(0);
-//        String identifier = "";
-//        int xValue = Character.getNumericValue(str.charAt(1)) * SQUARE_SIZE + GRID_L_PADDING;
-//        int yValue = Character.getNumericValue(str.charAt(2)) * SQUARE_SIZE + GRID_TOP_PADDING;
-//        int dir = PieceDirection.fromChar(str.charAt(3));
-//        if (Character.isLowerCase(str.charAt(0)))
-//            identifier = "1";
-//        else
-//            identifier = "2";
-//        ImageView img = new ImageView(new Image(getClass().getResource(URI_BASE + Character.toUpperCase(c)+identifier+".png").toString()));
-//
-//        if (getPieceSpineNum(str) == 3)
-//            img.setFitWidth(SQUARE_SIZE * 3);
-//        else
-//            img.setFitWidth(SQUARE_SIZE * 4);
-//
-//        img.setPreserveRatio(true);
-//        img.setRotate((dir - 1) * 90);
-//        img.setLayoutX(xValue);
-//        img.setLayoutY(yValue);
-//
-//        switch (dir) {
-//            case 1: // N
-//                if (getPieceSpineNum(str) == 3) {
-//                    img.setTranslateX(1);
-//                    img.setTranslateY(2);
-//                } else {
-//                    img.setTranslateX(0);
-//                    img.setTranslateY(3);
-//                }
-//                break;
-//            case 2: // E
-//                if (getPieceSpineNum(str) == 3) {
-//                    img.setTranslateX(-SQUARE_SIZE / 2f - 1);
-//                    img.setTranslateY(SQUARE_SIZE / 2f + 1);
-//                } else {
-//                    img.setTranslateX(-50);
-//                    img.setTranslateY(SQUARE_SIZE + 2);
-//                }
-//                break;
-//            case 3: // S
-//                if (getPieceSpineNum(str) == 3) {
-//                    img.setTranslateX(-1);
-//                    img.setTranslateY(1);
-//                }
-//                break;
-//            case 4: // W
-//                if (getPieceSpineNum(str) == 3) {
-//                    img.setTranslateX(-SQUARE_SIZE / 2f - 1);
-//                    img.setTranslateY(SQUARE_SIZE / 2f + 1);
-//                } else {
-//                    img.setTranslateX(-49);
-//                    img.setTranslateY(SQUARE_SIZE);
-//                }
-//                break;
-//            default:
-//                break;
-//        }
-//        img.setOpacity(0.5);
-//        img.toFront();
-//        gameBoard.getChildren().add(img);
-//    }
-
     private String chooseObjective (int difficulty) {
         Random random = new Random();
         String currentDifficulty = "";
@@ -802,53 +734,6 @@ public class Board extends Application {
         return result;
     }
 
-    // FIXME Task 10: Implement hints (should become visible when the user presses '/' -- see gitlab issue for details)
-
-
-//    private List<String> findPieces(String str) {
-//        List<String> list = new ArrayList<>();
-//        for (int i = 0; i < str.length(); i+=4) {
-//            list.add(str.substring(i, i+4));
-//        }
-//        return list;
-//    }
-//    private void showHints() {
-//        String solution = Games.getSolution(objectiveString);
-//        String playablePiece = setPlayablePieces(objectiveString, solution);
-//        List<String> pieces = findPieces(playablePiece);
-//        for (String values : pieces) {
-//            if (!isUsed(values, initialBoard)) {
-//                System.out.println(values);
-//                makeHintPieces(values);
-//            }
-//        }
-//    }
-//
-//    private boolean isUsed(String str, PieceType [][] board) {
-//        PieceType piece = PieceType.fromChar(Character.toString(str.charAt(0)));
-//        int x = Character.getNumericValue(str.charAt(1));
-//        int y = Character.getNumericValue(str.charAt(2));
-//        int direction = PieceDirection.fromChar(str.charAt(3));
-//
-//        if (direction == 1 || direction == 3) { // North or South
-//            for (int j = y; j < y + getPieceSpineNum(str); j++) {
-//                for (int i = x; i < x + 2; i++) {
-//                    if (board[j][i] != piece)
-//                        return false;
-//                }
-//            }
-//        }
-//        else { // East or West
-//            for (int j = y; j < y + 2; j++) {
-//                for (int i = x; i < 5; i++) {
-//                    if (board[j][i] != piece)
-//                        return false;
-//                }
-//            }
-//        }
-//        return true;
-//    }
-
     private void onKeyPressed(javafx.scene.input.KeyEvent e) {
         if (e.getCode() == KeyCode.SLASH) {
             if (!isSlashKeyPressed) {
@@ -878,6 +763,7 @@ public class Board extends Application {
      *
      * Code written by Mingxuan Wang, Di Mou
     */
+
     private void ImpHints(String challenge,String placement,String solution){
         if (solution.length() == 0) {
             gameHintPiece.getChildren().clear();
