@@ -6,9 +6,7 @@ import comp1110.ass2.*;
 
 import static comp1110.ass2.PieceType.*;
 import static comp1110.ass2.Piece.*;
-import static comp1110.ass2.PieceType.*;
 
-import gittest.C;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,13 +18,12 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import javax.print.attribute.standard.Finishings;
@@ -42,6 +39,7 @@ public class Board extends Application {
     private static final int PLAYABLE_AREA_X = 10 * SQUARE_SIZE + GRID_L_PADDING * 2;
     private static final int PLAYABLE_AREA_Y = 275;
     private static final int START_Y = BOARD_HEIGHT - 6 * SQUARE_SIZE -25;
+    private static final Text completingText = new Text("Good Job! Up for next game?");
 
     private final Slider difficultyBar = new Slider();
 
@@ -210,7 +208,7 @@ public class Board extends Application {
      * Class written by Jiwon Sin
      */
 
-    static class DraggablePiece extends PieceTile {
+    class DraggablePiece extends PieceTile {
         double homeX, homeY;
         double mouseX, mouseY;
         int orientation; // 0 = NORTH, 1 = EAST 2 = SOUTH 3 = WEST
@@ -234,7 +232,6 @@ public class Board extends Application {
                 pieceImage = new Image(getClass().getResource(URI_BASE + (placement.charAt(0)) +"2.png").toString());
             setImage(pieceImage);
 
-            // This section will be edited by this week -- Jiwon Sin
             switch (Character.toUpperCase(piece)) {
                 case 'B':
                     homeX = 0;
@@ -321,7 +318,12 @@ public class Board extends Application {
                         snapToGrid();
                         FitGame.boardUpdate(pieceID, initialBoard);
                         Board.addedPieces.add(pieceID);
+                        if (isItComplete()) {
+                            showCompletionText();
+                            makeCompletionText();
+                        }
                     }
+
                     else {
                         setLayoutX(homeX);
                         setLayoutY(homeY);
@@ -337,7 +339,7 @@ public class Board extends Application {
 
         /**
          * Clears the specific placement from the board
-         * @param placement
+         * @param placement : String that needs to be removed from the board
          *
          * Code Written by Jiwon Sin
          */
@@ -368,7 +370,7 @@ public class Board extends Application {
         }
 
         /**
-         *
+         * Updates Piece's placement by obtaining x Values and y Values with orientation
          * Code Written by Jiwon Sin
          */
 
@@ -379,9 +381,9 @@ public class Board extends Application {
         }
 
         /**
-         *
-         * @param piece
-         * @return
+         * Checks whether the piece spine length = 3
+         * @param piece : Piece String
+         * @return True if its length = 3. Else false
          *
          * Code Written by Jiwon Sin
          */
@@ -391,7 +393,7 @@ public class Board extends Application {
         }
 
         /**
-         *
+         * Puts selected piece onto the board
          * Code Written by Jiwon Sin
          */
 
@@ -400,9 +402,10 @@ public class Board extends Application {
         }
 
         /**
-         *
-         * @param x
-         * @param y
+         * Makes 'snapping' animation
+         *  - if x or y values are within certain range, the value sets into place
+         * @param x : x value on GUI
+         * @param y : y value on GUI
          *
          * Code Written by Jiwon Sin
          */
@@ -419,9 +422,9 @@ public class Board extends Application {
         }
 
         /**
-         *
-         * @param x
-         * @return
+         * Converts x value to appropriate snapping position
+         * @param x : x coordinate within the game itself
+         * @return Integer values converted
          *
          * Code Written by Jiwon Sin
          */
@@ -445,9 +448,9 @@ public class Board extends Application {
         }
 
         /**
-         *
-         * @param y
-         * @return
+         * Converts y value to appropriate snapping position
+         * @param y : y Coordinate within the game itself
+         * @return Integer values converted (different regarding orientation of the piece)
          *
          * Code Written by Jiwon Sin
          */
@@ -473,8 +476,8 @@ public class Board extends Application {
         }
 
         /**
-         *
-         * @return
+         * Checks whether the piece gets out of the 10 X 5 board
+         * @return True if it isn't, False if it is.
          *
          * Code Written by Jiwon Sin
          */
@@ -510,8 +513,8 @@ public class Board extends Application {
         }
 
         /**
-         *
-         * @param xLayout
+         * By using x coordinate value obtained through dragging, returns converted value of X
+         * @param xLayout : x coordinate obtained by dragging and releasing
          * @return
          *
          * Code Written by Jiwon Sin
@@ -664,8 +667,33 @@ public class Board extends Application {
         }
     }
 
+    private boolean isItComplete(){
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 5; j ++) {
+                if (Board.initialBoard[j][i] == null)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private void showCompletionText(){
+        completingText.toFront();
+        completingText.setOpacity(1);
+        gameBoard.setOpacity(0.0);
+        gamePiece.setOpacity(0.0);
+    }
+
+    private void makeCompletionText() {
+        completingText.setFill(Color.BLACK);
+        completingText.setLayoutY(100);
+        completingText.setTextAlignment(TextAlignment.CENTER);
+        completingText.setFont(Font.font("Ariel" ,50));
+        root.getChildren().add(completingText);
+    }
+
     /**
-     *
+     * Making controls for New Game, Resetting pieces
      * Code Written by Jiwon Sin, Di Mou, Mingxuan Wang
      */
 
@@ -736,6 +764,9 @@ public class Board extends Application {
     }
 
     private void newGame(String objective, String solution) {
+        root.getChildren().remove(completingText);
+        gameBoard.setOpacity(1);
+        gamePiece.setOpacity(1);
         setBoard(objective);
         FitGame.boardUpdate(objective, initialBoard);
         addedPieces.clear();
@@ -938,6 +969,7 @@ public class Board extends Application {
     }
 
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
+
     /**
      * Generate new challenges
      **
@@ -994,6 +1026,7 @@ public class Board extends Application {
         setBoard(objective);
         FitGame.boardUpdate(objective, initialBoard);
         makePieces(setPlayablePieces(objective, solution));
+
 
         // Add hints (basically get the solution from Games.java and display it one by one with opacity of 0.5
         scene.setOnKeyPressed(e -> onKeyPressed(e));
