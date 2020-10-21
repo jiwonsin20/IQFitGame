@@ -945,6 +945,42 @@ public class Board extends Application {
     }
 
     // FIXME Task 11: Generate interesting challenges (each challenge may have just one solution)
+    /**
+     * Generate new challenges
+     **
+     * @param iNumber the original challenge's number
+     *
+     * first, get the original challenges and placement from the game
+     * then separate the original challenges into Pieces
+     * delete each Piece from the  placement
+     * Finally, the left placement can be the new challenges
+     * and the original challenges placement will be the solution
+     * as the original challenges are unique, the complementary of them are also unique
+     * Code written by Mingxuan Wang
+     */
+        public static String GenerateChallenges(int iNumber){
+           String placement1;
+           String placement2="";
+           String objective;
+           String[] s1 = new String[10];
+           objective = Games.getObjective(iNumber);
+           placement1 = Games.getSolution(objective);
+            for (int j = 0; j <placement1.length()/4 ; j++) {
+                for (int i = 0; i < objective.length(); i+=4) {
+                    s1[j]=objective.substring(j,j+4);
+                    placement2=placement1.replaceAll(s1[j],"");
+                }
+            }
+            return placement2;
+        }
+        public void getNewChallenges(){
+        String[] newChallenges = new String[120];
+            for (int i = 1; i <121 ; i++) {
+                newChallenges[i]=GenerateChallenges(i);
+            }
+        }
+
+
 
     @Override
     public void start(Stage primaryStage) {
