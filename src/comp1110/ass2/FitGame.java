@@ -623,10 +623,14 @@ public class FitGame {
     }
 
     /**
+     * This method checks whether the placement of this string is logical
+     * What does it mean by logical?
+     *  - When this placement string is placed, then there should be no cell where getViablePiecePlacement() == null
+     * @param challenge : Placement string that is being checked
+     * @param initialBoard : Current board which challenge string will be placed
+     * @return True if the placement challenge is considered valid, False if its not logical
      *
-     * @param challenge
-     * @param initialBoard
-     * @return
+     * Code written by Jiwon Sin
      */
 
     public static boolean isThisLogical(String challenge, PieceType [][] initialBoard) {
@@ -640,6 +644,15 @@ public class FitGame {
         }
         return true;
     }
+
+    /**
+     * This method calls getSolutionREC to find the solution for objective string
+     * and re-arranges the string accordingly
+     * @param challenge : Objective string
+     * @return Solution string obtained from getSolutionREC
+     *
+     * Code written by Jiwon Sin
+     */
 
     public static String getSolution(String challenge) {
         PieceType[][] initialBoard = {
@@ -656,6 +669,25 @@ public class FitGame {
         return changeSequence(result);
     }
 
+    /**
+     * This method finds the solution recursively.
+     * Multiple conditions needs to be met to find correct solution
+     *  - list of possible piece after placing placement should not be null
+     *  - the board must be completed when recTimes == 1, then there should be no null in board
+     *  - then the challenge string adds that placement string
+     * If conditions are not met,
+     *  - remove the piece from the board
+     *  - go back one step of recursion and find another possible piece
+     *
+     * @param challenge : challenge string of the game
+     * @param placement : placement that could be placed
+     * @param board : current board
+     * @param recTimes : Number of pieces that needs to be found
+     * @return Complete String that is NOT arranged.
+     *
+     * Code written by Jiwon Sin
+     */
+
     public static String getSolutionREC(String challenge, String placement, PieceType [][] board, int recTimes) {
         String rtn = "";
         // base case of recursion
@@ -664,9 +696,13 @@ public class FitGame {
             if (list != null) {
                 for (String values : list) {
                     boardUpdate(values, board);
-                    if (!isComplete(board)) { // even at base level, the board is not complete
-                        clearBoard(values, board); // incorrect piece so try again
-                    } else { // it is complete
+                    // even at base level, the board is not complete
+                    if (!isComplete(board)) {
+                        // incorrect piece so try again
+                        clearBoard(values, board);
+                    }
+                    // it is complete
+                    else {
                         return challenge + values;
                     }
                 }
@@ -675,7 +711,8 @@ public class FitGame {
                 clearBoard(placement, board);
             }
         }
-        // If recTimes is more than 1
+
+        // If recTimes is more than 1 (step case)
         else {
             Set<String> pieceList = listOfPieces(challenge, board);
             if (pieceList == null) {
@@ -705,6 +742,14 @@ public class FitGame {
         return rtn;
     }
 
+    /**
+     * This method clears the placement string from the board
+     * @param placement : placement string that needs to be cleared
+     * @param initialBoard : current board of the game
+     *
+     * Code written by Jiwon Sin
+     */
+
     public static void clearBoard(String placement, PieceType [][] initialBoard) {
         int xLocation = Character.getNumericValue(placement.charAt(1));
         int yLocation = Character.getNumericValue(placement.charAt(2));
@@ -729,6 +774,19 @@ public class FitGame {
             }
         }
     }
+
+    /**
+     * Returns the list of integers that has smallest number of pieces (x and y) coordinates
+     * Initially sets possiblePieces as ridiculously large number.
+     * Replaces when possiblePieces is less than what it has before.
+     * This method is used to boost the speed of recursion method above
+     *
+     * @param challenge : Challenge string of the game
+     * @param board : current board
+     * @return List of integers (x,y) coordinate that has least number of possible pieces
+     *
+     * Code written by Jiwon Sin
+     */
 
     public static List<Integer> findOptimalX(String challenge, PieceType [][] board) {
         int possiblePieces = 100;

@@ -48,7 +48,7 @@ public class Board extends Application {
     // This part is for board image
     private static final String URI_BASE = "assets/";
     private static final String BOARD_URI = Board.class.getResource(URI_BASE + "board.png").toString();
-    private static final String TITLE_ICON = Board.class.getResource(URI_BASE + "timg.jpeg").toString();
+//    private static final String TITLE_ICON = Board.class.getResource(URI_BASE + "timg.jpeg").toString();
 
     private final Group root = new Group();
     private final Group controls = new Group();
@@ -206,7 +206,7 @@ public class Board extends Application {
     }
 
     /**
-     *
+     * This class produces draggable pieces, with snapping positions
      * Class written by Jiwon Sin
      */
 
@@ -286,13 +286,10 @@ public class Board extends Application {
                 mouseX = mouseEvent.getSceneX();
                 mouseY = mouseEvent.getSceneY();
                 toFront();
-//                System.out.println(pieceID);
                 if (FitGame.isPlacementValid(pieceID)) {
-                    System.out.println(pieceID);
                     clearInitialBoard(pieceID);
                     Board.addedPieces.remove(pieceID);
                 }
-//                System.out.println(Arrays.deepToString(initialBoard));
                 mouseEvent.consume();
             });
 
@@ -319,7 +316,6 @@ public class Board extends Application {
 
             setOnMouseReleased(mouseEvent -> {
                 updatePieceID();
-//                System.out.println(pieceID);
                 if (FitGame.isPlacementValid(pieceID)) {
                     if (FitGame.isPlacementNotOverlapping(initialBoard, pieceID)) {
                         snapToGrid();
@@ -327,23 +323,20 @@ public class Board extends Application {
                         Board.addedPieces.add(pieceID);
                     }
                     else {
-//                        System.out.println("It's Here 1");
                         setLayoutX(homeX);
                         setLayoutY(homeY);
                     }
                 }
                 else {
-//                    System.out.println("It's Here 2");
                     setLayoutX(homeX);
                     setLayoutY(homeY);
                 }
-                System.out.println(Arrays.deepToString(initialBoard));
                 mouseEvent.consume();
             });
         }
 
         /**
-         *
+         * Clears the specific placement from the board
          * @param placement
          *
          * Code Written by Jiwon Sin
@@ -434,7 +427,6 @@ public class Board extends Application {
          */
 
         private int getPositionX(double x) {
-//            double snapXValue = snapXToGrid(getLayoutX());
             if (x != homeX) {
                 if (isThreeByTwo(pieceID)) {
                     if (orientation == 1 || orientation == 3)
@@ -788,7 +780,8 @@ public class Board extends Application {
         String currentDifficulty = "";
         int randomNumber = 0;
         switch (difficulty) {
-            case 1: //difficulty set to Starter
+            //difficulty set to Starter
+            case 1:
                 randomNumber = random.nextInt(24);
                 break;
             case 2:
@@ -852,7 +845,7 @@ public class Board extends Application {
      * then, find the next piece string in solution that need to be added
      * finally, highlight the piece and the position when the player hold down the '/' key
      *
-     * Code written by Mingxuan Wang, Di Mou
+     * Code written by Di Mou, Mingxuan Wang
     */
 
     private void ImpHints(String challenge,String placement,String solution){
@@ -861,7 +854,7 @@ public class Board extends Application {
             return;
         }
 
-        System.out.print(challenge + " " + placement + " " + solution);
+//        System.out.print(challenge + " " + placement + " " + solution);
 
         List<String> solutionPieces = new ArrayList<>();
         for (int i = 0; i < solution.length(); i += 4) {
@@ -873,7 +866,7 @@ public class Board extends Application {
         }
         for (String piecePlacement : placementPieces) {
             if (!solutionPieces.contains(piecePlacement)) {
-                System.out.print("Solution does not contain " + piecePlacement);
+//                System.out.print("Solution does not contain " + piecePlacement);
                 return;
             }
         }
@@ -958,7 +951,8 @@ public class Board extends Application {
         GridPane gpTitle = new GridPane();
         gpTitle.setStyle("-fx-background-color: darkgray");
 
-        objective = chooseObjective( 5);
+        // Sets initial difficulty to 1, can be changed by user using slider
+        objective = chooseObjective( 1);
         solution = Games.getSolution(objective);
 
         setBoard(objective);
@@ -971,7 +965,7 @@ public class Board extends Application {
 
         root.getChildren().add(gameHintPiece);
         primaryStage.setScene(scene);
-        primaryStage.getIcons().add(new Image(TITLE_ICON));
+//        primaryStage.getIcons().add(new Image(TITLE_ICON));
         primaryStage.show();
     }
 }
