@@ -9,5 +9,9 @@ package comp1110.ass2;
  */
 
 public enum PieceColour {
-    blue, green, indigo, limegreen, navyblue, orange, pink, red, skyblue, yellow
+    blue, green,
+    indigo, limegreen,
+    navyblue, orange,
+    pink, red,
+    skyblue, yellow
 }

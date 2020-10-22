@@ -1174,8 +1174,6 @@ public class Piece {
     return array;
     }
 
-
-
     /**
      * Knowing the piece's direction, return the dimensions of the piece.
      * Knowing that whatever the Piece is, if the Direction is North or South, dimension will always be

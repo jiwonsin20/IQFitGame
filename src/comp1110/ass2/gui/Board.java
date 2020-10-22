@@ -56,6 +56,7 @@ public class Board extends Application {
     private final Group gameBoard = new Group();
     private final Group gamePiece = new Group();
     private final Group gameHintPiece = new Group();
+    private final Group backgroundImage = new Group();
 
     private static boolean isSlashKeyPressed = false;
     private static final List<String> addedPieces = new ArrayList<>();
@@ -326,7 +327,6 @@ public class Board extends Application {
                             makeCompletionText();
                         }
                     }
-
                     else {
                         setLayoutX(homeX);
                         setLayoutY(homeY);
@@ -695,9 +695,8 @@ public class Board extends Application {
 
     private void showCompletionText(){
         completingText.toFront();
+        gamePiece.setDisable(true);
         completingText.setOpacity(1);
-        gameBoard.setOpacity(0.05);
-        gamePiece.setOpacity(0.05);
     }
 
     /**
@@ -705,15 +704,39 @@ public class Board extends Application {
      */
     private void makeCompletionText() {
         DropShadow dropShadow = new DropShadow();
-        dropShadow.setOffsetX(1.0);
-        dropShadow.setOffsetY(3.0);
+        dropShadow.setOffsetX(3.0);
+        dropShadow.setOffsetY(7.0);
         completingText.setEffect(dropShadow);
-        completingText.setFill(Color.BLACK);
-        completingText.setX(SQUARE_SIZE*3.5);
+        completingText.setFill(Color.WHITE);
+        completingText.setX(SQUARE_SIZE*2.25);
         completingText.setY(175);
         completingText.setTextAlignment(TextAlignment.CENTER);
-        completingText.setFont(Font.font("Verdana" ,50));
+        completingText.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 70));
         root.getChildren().add(completingText);
+    }
+
+    /**
+     * Sets the background image of the game
+     *
+     * Image obtained from https://www.rawpixel.com/image/569984/blue-teal-sand-paper
+     * Code Written by Jiwon Sin
+     */
+
+    private void backgroundImg() {
+        ImageView background1 =new ImageView (new Image(Board.class.getResource("assets/background2.jpg").toString()));
+        background1.setX(12*SQUARE_SIZE);
+        background1.setY(0);
+        background1.setFitWidth(933);
+        background1.setFitHeight(7*SQUARE_SIZE);
+        ImageView background2 =new ImageView (new Image(Board.class.getResource("assets/background2.jpg").toString()));
+        background2.setX(0);
+        background2.setY(5*SQUARE_SIZE);
+        background2.setFitWidth(933);
+        background2.setFitHeight(700);
+        backgroundImage.getChildren().add(background1);
+        backgroundImage.getChildren().add(background2);
+        root.getChildren().add(backgroundImage);
+        backgroundImage.toBack();
     }
 
     /**
@@ -722,9 +745,19 @@ public class Board extends Application {
      */
 
     private void makeControls() {
+
+        // Title of the game
+        Text title = new Text("IQ - FIT GAME");
+        title.setFont(Font.font("Courier New", FontWeight.EXTRA_BOLD, 30));
+        title.setFill(Color.FLORALWHITE);
+        title.setLayoutX(12.75 * SQUARE_SIZE);
+        title.setLayoutY(SQUARE_SIZE * 1.25);
+        controls.getChildren().add(title);
+
+        // Sets the NEW GAME button
         Button newGame = new Button("NEW GAME");
         newGame.setLayoutX(12 * SQUARE_SIZE + 150);
-        newGame.setLayoutY(0.5 * SQUARE_SIZE);
+        newGame.setLayoutY(2 * SQUARE_SIZE);
         newGame.setStyle("-fx-font: 15 Grotesque; -fx-base: #18ee11;");
         newGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -733,9 +766,10 @@ public class Board extends Application {
             }
         });
 
+        // Sets the RESET button
         Button clear = new Button("RESET"); // CLEAR
         clear.setLayoutX(12*SQUARE_SIZE+50);
-        clear.setLayoutY(0.5*SQUARE_SIZE);
+        clear.setLayoutY(2*SQUARE_SIZE);
         clear.setStyle("-fx-font: 15 Grotesque; -fx-base: #d91d0e;");
         clear.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -747,55 +781,61 @@ public class Board extends Application {
         controls.getChildren().add(clear);
         controls.getChildren().add(newGame);
 
-//        ObservableList<String> difficultyOptions =
-//                FXCollections.observableArrayList(
-//                        "Starter", "Junior", " Expert", "Master", "Wizard"
-//                );
-
         difficultyBox.getItems().addAll(
                 "Starter", "Junior", "Expert", "Master", "Wizard"
         );
-        difficultyBox.setLayoutX(725);
-        difficultyBox.setLayoutY(100);
+        difficultyBox.setLayoutX(15 * SQUARE_SIZE + 10);
+        difficultyBox.setLayoutY(3*SQUARE_SIZE);
         difficultyBox.setMinWidth(150);
         difficultyBox.getSelectionModel().selectFirst();
         controls.getChildren().add(difficultyBox);
 
-        final Label difficultyCaption = new Label("Difficulty:");
-        difficultyCaption.setTextFill(Color.BLACK);
-        difficultyCaption.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
-        difficultyCaption.setLayoutX(650);
-        difficultyCaption.setLayoutY(100);
+        // Sets "Difficulty" label
+        final Label difficultyCaption = new Label("DIFFICULTY :");
+        difficultyCaption.setTextFill(Color.WHITE);
+        difficultyCaption.setFont(Font.font("Courier New",FontWeight.BOLD,20));
+        difficultyCaption.setLayoutX(12*SQUARE_SIZE+10);
+        difficultyCaption.setLayoutY(3*SQUARE_SIZE);
         controls.getChildren().add(difficultyCaption);
 
-        Text tip0 = new Text("How to play:");
-        tip0.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        // Sets "how to play" text
+        Text tip0 = new Text("HOW TO PLAY");
+        tip0.setFill(Color.WHITE);
+        tip0.setFont(Font.font("Courier New",FontWeight.BOLD,20));
         tip0.setLayoutX(12 * SQUARE_SIZE + 10);
-        tip0.setLayoutY(SQUARE_SIZE * 3 + 10);
+        tip0.setLayoutY(SQUARE_SIZE * 4 + 10);
         controls.getChildren().add(tip0);
 
+        // Sets tip 1
         Text tip1 = new Text("1. Select the difficulty and click NEW GAME");
-        tip1.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        tip1.setFill(Color.WHITE);
+        tip1.setFont(Font.font("Verdana",FontWeight.NORMAL,14));
         tip1.setLayoutX(12 * SQUARE_SIZE + 10);
-        tip1.setLayoutY(SQUARE_SIZE * 3 + 40);
+        tip1.setLayoutY(SQUARE_SIZE * 4 + 40);
         controls.getChildren().add(tip1);
 
+        // Sets tip 2
         Text tip2 = new Text("2. Scroll to rotate pieces");
-        tip2.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        tip2.setFill(Color.WHITE);
+        tip2.setFont(Font.font("Verdana",FontWeight.NORMAL,14));
         tip2.setLayoutX(12 * SQUARE_SIZE + 10);
-        tip2.setLayoutY(SQUARE_SIZE * 4 + 20);
+        tip2.setLayoutY(SQUARE_SIZE * 5 + 20);
         controls.getChildren().add(tip2);
 
+        // Sets tip 3
         Text tip3 = new Text("3. Click RESET button to restart the game");
-        tip3.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        tip3.setFill(Color.WHITE);
+        tip3.setFont(Font.font("Verdana",FontWeight.NORMAL,14));
         tip3.setLayoutX(12 * SQUARE_SIZE + 10);
-        tip3.setLayoutY(SQUARE_SIZE * 5);
+        tip3.setLayoutY(SQUARE_SIZE * 6);
         controls.getChildren().add(tip3);
 
+        // Sets tip 4
         Text tip4 = new Text("4. Press '/' to get hints");
-        tip4.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        tip4.setFill(Color.WHITE);
+        tip4.setFont(Font.font("Verdana",FontWeight.NORMAL,14));
         tip4.setLayoutX(12 * SQUARE_SIZE + 10);
-        tip4.setLayoutY(SQUARE_SIZE * 5 + 30);
+        tip4.setLayoutY(SQUARE_SIZE * 6 + 30);
         controls.getChildren().add(tip4);
 
     }
@@ -810,6 +850,7 @@ public class Board extends Application {
     private void newGame(String objective, String solution) {
         root.getChildren().remove(completingText);
         gameBoard.setOpacity(1);
+        gamePiece.setDisable(false);
         gamePiece.setOpacity(1);
         setBoard(objective);
         FitGame.boardUpdate(objective, initialBoard);
@@ -942,29 +983,21 @@ public class Board extends Application {
         return result;
     }
 
-    /**
-     *
-     * @param e
-     */
-
     private void onKeyPressed(javafx.scene.input.KeyEvent e) {
         if (e.getCode() == KeyCode.SLASH) {
             if (!isSlashKeyPressed) {
                 isSlashKeyPressed = true;
                 ImpHints(objective, String.join("", addedPieces), solution);
             }
+            e.consume();
         }
     }
-
-    /**
-     *
-     * @param e
-     */
 
     private void onKeyReleased(javafx.scene.input.KeyEvent e) {
         if (e.getCode() == KeyCode.SLASH) {
             isSlashKeyPressed = false;
             ImpHints(objective, "", "");
+            e.consume();
         }
     }
 
@@ -1123,7 +1156,10 @@ public class Board extends Application {
         objective = chooseObjective( "");
         solution = Games.getSolution(objective);
 
+        backgroundImg();
+
         makeControls();
+
         setBoard(objective);
         FitGame.boardUpdate(objective, initialBoard);
         makePieces(setPlayablePieces(objective, solution));

@@ -42,9 +42,9 @@ declaration: >-
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external assets)
 #assets:
-#  - comment:
-#    url:
-#    licence:
+  - comment: This image was used as background image for IQ-Fit Game
+    url: https://www.rawpixel.com/image/569984/blue-teal-sand-paper
+    licence: Royalty free image
 
 
 # Sign *your* name and uids here. (Remove entries if you have fewer

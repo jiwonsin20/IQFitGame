@@ -198,16 +198,17 @@ public class FitGame {
      */
 
     public static boolean isPlacementValid(String placement) {
-        if (!isPlacementWellFormed(placement)) {
-            return false;
-        }
-        else {
-            if (!isOnBoard(placement))
-                return false;
-            else {
-                return isNotOverLapping(placement);
-            }
-        }
+        return isPlacementWellFormed(placement) && isOnBoard(placement) && isNotOverLapping(placement);
+//        if (!isPlacementWellFormed(placement)) {
+//            return false;
+//        }
+//        else {
+//            if (!isOnBoard(placement))
+//                return false;
+//            else {
+//                return isNotOverLapping(placement);
+//            }
+//        }
     }
 
     /**
@@ -223,33 +224,30 @@ public class FitGame {
      */
 
     public static List<String> getMissingPieces (String placement) {
-        List<String> collect = new ArrayList<>();
-        String [] array = {"b", "g", "i", "l", "n", "o", "p", "r", "s", "y"};
+        List<String> stringList = new ArrayList<>();
+        List<String> array = new ArrayList<>(Arrays.asList("b", "g", "i", "l", "n", "o", "p", "r", "s", "y"));
         if (placement.length() == 0) {
-            List<String> sortedList = new ArrayList<>();
-
             for (String s : array) {
-                sortedList.add(s);
-                sortedList.add(s.toUpperCase());
+                stringList.add(s);
+                stringList.add(s.toUpperCase());
             }
-            Collections.sort(sortedList);
-            return sortedList;
         }
 
         for (String c : array) {
             for (int i = 0; i < placement.length(); i += 4) {
-                if (Character.toString(placement.charAt(i)).equals(c) ||
-                        Character.toString(placement.charAt(i)).toLowerCase().equals(c))
+                if (
+                        Character.toString(placement.charAt(i)).toLowerCase().equals(c)) {
                     break;
-
+                }
                 else if (i == placement.length() - 4) {
-                    collect.add(c);
-                    collect.add(c.toUpperCase());
+                    stringList.add(c);
+                    stringList.add(c.toUpperCase());
                 }
             }
+
         }
-        Collections.sort(collect);
-        return collect;
+        Collections.sort(stringList);
+        return stringList;
     }
 
     /**
@@ -369,9 +367,8 @@ public class FitGame {
             }
         }
 
-//        possiblePiecePlacements.removeIf(piecePlacement -> !isPlacementWellFormed(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isOnBoard(piecePlacement));
-//        possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
+        possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
         possiblePiecePlacements.removeIf(piecePlacement ->
                 !piecePlacementOverlapping(placement, piecePlacement, col, row));
 
@@ -525,11 +522,6 @@ public class FitGame {
         return true;
     }
 
-    /**
-     *
-     * @param piecePlacements
-     * @param piecePlacement
-     */
 
     public static void insertPiecePlacement(List<String> piecePlacements, String piecePlacement) {
         char colorChar = Character.toLowerCase(piecePlacement.charAt(0));

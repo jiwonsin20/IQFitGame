@@ -44,6 +44,7 @@ class:
    - PieceType.java
    - Viewer.java (implementation of viewer)
    - PieceTile class, DraggablePiece class within Board.java
+   - Completed presentation.pdf and COMP1110Assignment2.pdf
 
 
 # I wish to submit the following methods as entirely my own (remove this if
