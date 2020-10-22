@@ -8,6 +8,10 @@ of our project implements the following features:
  - A basic playable game that snaps pieces to the board and checks for validity (Task 7)
  - Generates simple challenges (Task 8)
  - Implements hints (Task 10)
- - Implements interesting starting challenges (Task 11)
 
 additional features...
+ - Can rotate pieces using scroll wheel
+ - Set difficulty of the game (using ComboBox)
+ - Game selected at random within the boundaries of selected difficulty
+ - Clear the board (if user wants to restart)
+ - Start new game (random game within that difficulty level)

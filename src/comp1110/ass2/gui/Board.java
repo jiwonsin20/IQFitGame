@@ -1,6 +1,6 @@
 package comp1110.ass2.gui;
 
-// Entire Board Application created by Jiwon Sin, edited by Jiwon Sin
+// Entire Board Application created by Jiwon Sin, edited by Jiwon Sin, Di Mou, Mingxuan Wang
 
 import comp1110.ass2.*;
 
@@ -8,13 +8,16 @@ import static comp1110.ass2.PieceType.*;
 import static comp1110.ass2.Piece.*;
 
 import javafx.application.Application;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -26,8 +29,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import javax.print.attribute.standard.Finishings;
 import java.util.*;
+import java.util.List;
 
 public class Board extends Application {
 
@@ -39,14 +42,14 @@ public class Board extends Application {
     private static final int PLAYABLE_AREA_X = 10 * SQUARE_SIZE + GRID_L_PADDING * 2;
     private static final int PLAYABLE_AREA_Y = 275;
     private static final int START_Y = BOARD_HEIGHT - 6 * SQUARE_SIZE -25;
-    private static final Text completingText = new Text("Good Job! Up for next game?");
+    private static final Text completingText = new Text("Good Job!");
 
-    private final Slider difficultyBar = new Slider();
+    private static final ComboBox difficultyBox = new ComboBox();
 
     // This part is for board image
     private static final String URI_BASE = "assets/";
     private static final String BOARD_URI = Board.class.getResource(URI_BASE + "board.png").toString();
-//    private static final String TITLE_ICON = Board.class.getResource(URI_BASE + "timg.jpeg").toString();
+    private static final String TITLE_ICON = Board.class.getResource(URI_BASE + "timg.jpeg").toString();
 
     private final Group root = new Group();
     private final Group controls = new Group();
@@ -165,9 +168,9 @@ public class Board extends Application {
     }
 
     /**
-     * This method returns the number of 
-     * @param piece
-     * @return
+     * This method returns the number of piece's spine
+     * @param piece : Piece placement
+     * @return length of spine for that particular piece
      *
      * Code Written by Jiwon Sin
      */
@@ -610,9 +613,9 @@ public class Board extends Application {
         }
 
         /**
-         *
-         * @param yLayout
-         * @return
+         * This method converts y coordinate into respective values on the board itself
+         * @param yLayout : y coordinate of the piece
+         * @return y Value on the 10 X 5 board
          *
          * Code Written by Jiwon Sin
          */
@@ -667,6 +670,13 @@ public class Board extends Application {
         }
     }
 
+    /**
+     * Checks whether the board has any empty spaces
+     * @return True if all filled, False if there is at least 1 empty
+     *
+     * Code written by Jiwon Sin
+     */
+
     private boolean isItComplete(){
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 5; j ++) {
@@ -677,18 +687,32 @@ public class Board extends Application {
         return true;
     }
 
+    /**
+     * Puts up completionText and at the same time removes the board (signifies end of game)
+     *
+     * Code written by Jiwon Sin
+     */
+
     private void showCompletionText(){
         completingText.toFront();
         completingText.setOpacity(1);
-        gameBoard.setOpacity(0.0);
-        gamePiece.setOpacity(0.0);
+        gameBoard.setOpacity(0.05);
+        gamePiece.setOpacity(0.05);
     }
 
+    /**
+     * Constructs completionText
+     */
     private void makeCompletionText() {
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setOffsetX(1.0);
+        dropShadow.setOffsetY(3.0);
+        completingText.setEffect(dropShadow);
         completingText.setFill(Color.BLACK);
-        completingText.setLayoutY(100);
+        completingText.setX(SQUARE_SIZE*3.5);
+        completingText.setY(175);
         completingText.setTextAlignment(TextAlignment.CENTER);
-        completingText.setFont(Font.font("Ariel" ,50));
+        completingText.setFont(Font.font("Verdana" ,50));
         root.getChildren().add(completingText);
     }
 
@@ -723,18 +747,19 @@ public class Board extends Application {
         controls.getChildren().add(clear);
         controls.getChildren().add(newGame);
 
-        difficultyBar.setMin(1);
-        difficultyBar.setMax(5);
-        difficultyBar.setValue(0);
-        difficultyBar.setShowTickLabels(true);
-        difficultyBar.setShowTickMarks(true);
-        difficultyBar.setMajorTickUnit(1);
-        difficultyBar.setMinorTickCount(1);
-        difficultyBar.setSnapToTicks(true);
+//        ObservableList<String> difficultyOptions =
+//                FXCollections.observableArrayList(
+//                        "Starter", "Junior", " Expert", "Master", "Wizard"
+//                );
 
-        difficultyBar.setLayoutX(725);
-        difficultyBar.setLayoutY(100);
-        controls.getChildren().add(difficultyBar);
+        difficultyBox.getItems().addAll(
+                "Starter", "Junior", "Expert", "Master", "Wizard"
+        );
+        difficultyBox.setLayoutX(725);
+        difficultyBox.setLayoutY(100);
+        difficultyBox.setMinWidth(150);
+        difficultyBox.getSelectionModel().selectFirst();
+        controls.getChildren().add(difficultyBox);
 
         final Label difficultyCaption = new Label("Difficulty:");
         difficultyCaption.setTextFill(Color.BLACK);
@@ -743,26 +768,45 @@ public class Board extends Application {
         difficultyCaption.setLayoutY(100);
         controls.getChildren().add(difficultyCaption);
 
-        Text tip0 = new Text("Tips:");
+        Text tip0 = new Text("How to play:");
         tip0.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
-        tip0.setLayoutX(610);
-        tip0.setLayoutY(180);
+        tip0.setLayoutX(12 * SQUARE_SIZE + 10);
+        tip0.setLayoutY(SQUARE_SIZE * 3 + 10);
         controls.getChildren().add(tip0);
 
-        Text tip1 = new Text("1.Scroll the mouse wheel to rotate the Piece");
+        Text tip1 = new Text("1. Select the difficulty and click NEW GAME");
         tip1.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
-        tip1.setLayoutX(610);
-        tip1.setLayoutY(210);
+        tip1.setLayoutX(12 * SQUARE_SIZE + 10);
+        tip1.setLayoutY(SQUARE_SIZE * 3 + 40);
         controls.getChildren().add(tip1);
 
-        Text tip2 = new Text("2.Press '/' to get the hints");
+        Text tip2 = new Text("2. Scroll to rotate pieces");
         tip2.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
-        tip2.setLayoutX(610);
-        tip2.setLayoutY(240);
+        tip2.setLayoutX(12 * SQUARE_SIZE + 10);
+        tip2.setLayoutY(SQUARE_SIZE * 4 + 20);
         controls.getChildren().add(tip2);
+
+        Text tip3 = new Text("3. Click RESET button to restart the game");
+        tip3.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        tip3.setLayoutX(12 * SQUARE_SIZE + 10);
+        tip3.setLayoutY(SQUARE_SIZE * 5);
+        controls.getChildren().add(tip3);
+
+        Text tip4 = new Text("4. Press '/' to get hints");
+        tip4.setFont(Font.font("Grotesque",FontWeight.NORMAL,15));
+        tip4.setLayoutX(12 * SQUARE_SIZE + 10);
+        tip4.setLayoutY(SQUARE_SIZE * 5 + 30);
+        controls.getChildren().add(tip4);
 
     }
 
+    /**
+     * Sets up button for newGame with hints
+     * @param objective : Objective string
+     * @param solution : Solution string
+     *
+     * Code written by Jiwon Sin, Di Mou
+     */
     private void newGame(String objective, String solution) {
         root.getChildren().remove(completingText);
         gameBoard.setOpacity(1);
@@ -776,6 +820,12 @@ public class Board extends Application {
         makePieces(setPlayablePieces(objective, solution));
     }
 
+    /**
+     * Resets the board (works with reset button)
+     *
+     * Code written by Jiwon Sin
+     */
+
     private void resetBoard() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 5; j++) {
@@ -784,18 +834,40 @@ public class Board extends Application {
         }
     }
 
+    /**
+     * This method is to implement reset.
+     *
+     * Code written by Jiwon Sin
+     */
+
     private void clearBoard() {
         newGame(objective, solution);
         resetBoard();
         FitGame.boardUpdate(objective,initialBoard);
     }
 
+    /**
+     * Chooses the game randomly by taking the input from difficulty bar
+     *
+     * Code written by Jiwon Sin
+     */
+
     private void chooseGame(){
         resetBoard();
-        objective = chooseObjective((int)(difficultyBar.getValue()));
+        objective = chooseObjective((String)(difficultyBox.getValue()));
         solution = Games.getSolution(objective);
         newGame(objective, solution);
     }
+
+    /**
+     * Makes the pieces of the game.
+     * The pieces that are placed on GUI will be initialised to 'N' direction.
+     * User can then scroll to rotate the pieces.
+     *
+     * @param placement : placement of the piece
+     *
+     * Code written by Jiwon Sin
+     */
 
     private void makePieces(String placement){
         for (int i = 0; i < placement.length(); i+=4) {
@@ -806,33 +878,54 @@ public class Board extends Application {
         gamePiece.toFront();
     }
 
-    private String chooseObjective (int difficulty) {
+    /**
+     * This method chooses the difficulty of the game.
+     * The input will be the difficulty bar level, which will then by calculated.
+     *
+     * @param difficulty : Difficulty bar level
+     * @return Game difficulty from 1 to 120
+     *
+     * Code written by Jiwon Sin
+     */
+
+    private String chooseObjective (String difficulty) {
         Random random = new Random();
         String currentDifficulty = "";
         int randomNumber = 0;
-        switch (difficulty) {
-            //difficulty set to Starter
-            case 1:
-                randomNumber = random.nextInt(24);
-                break;
-            case 2:
-                randomNumber = random.nextInt(48 - 24) + 24;
-                break;
-            case 3:
-                randomNumber = random.nextInt(72 - 48) + 48;
-                break;
-            case 4:
-                randomNumber = random.nextInt(96 - 72) + 72;
-                break;
-            case 5:
-                randomNumber = random.nextInt(108 - 96) + 96;
-                break;
-            default:
-                break;
+        if (difficulty != null) {
+            switch (difficulty) {
+                //difficulty set to Starter
+                case "Starter":
+                    randomNumber = random.nextInt(24);
+                    break;
+                case "Junior":
+                    randomNumber = random.nextInt(48 - 24) + 24;
+                    break;
+                case "Expert":
+                    randomNumber = random.nextInt(72 - 48) + 48;
+                    break;
+                case "Master":
+                    randomNumber = random.nextInt(96 - 72) + 72;
+                    break;
+                case "Wizard":
+                    randomNumber = random.nextInt(108 - 96) + 96;
+                    break;
+                default:
+                    break;
+            }
         }
         currentDifficulty = Games.getObjective(randomNumber);
         return currentDifficulty;
     }
+
+    /**
+     * Sets the playable piece by comparing the objective string and solution string.
+     * Basically solution pieces - objective string = playable pieces.
+     *
+     * @param objective : objective string
+     * @param solution : Solution string
+     * @return playable pieces concatenated into string form.
+     */
 
     private static String setPlayablePieces (String objective, String solution) {
         List<String> obj = new ArrayList<>(Arrays.asList(objective.split("(?<=\\G.{4})")));
@@ -849,6 +942,11 @@ public class Board extends Application {
         return result;
     }
 
+    /**
+     *
+     * @param e
+     */
+
     private void onKeyPressed(javafx.scene.input.KeyEvent e) {
         if (e.getCode() == KeyCode.SLASH) {
             if (!isSlashKeyPressed) {
@@ -857,6 +955,11 @@ public class Board extends Application {
             }
         }
     }
+
+    /**
+     *
+     * @param e
+     */
 
     private void onKeyReleased(javafx.scene.input.KeyEvent e) {
         if (e.getCode() == KeyCode.SLASH) {
@@ -876,7 +979,8 @@ public class Board extends Application {
      * then, find the next piece string in solution that need to be added
      * finally, highlight the piece and the position when the player hold down the '/' key
      *
-     * Code written by Di Mou, Mingxuan Wang
+     * Code written by Di Mou
+     * Code edited by Mingxuan Wang
     */
 
     private void ImpHints(String challenge,String placement,String solution){
@@ -884,8 +988,6 @@ public class Board extends Application {
             gameHintPiece.getChildren().clear();
             return;
         }
-
-//        System.out.print(challenge + " " + placement + " " + solution);
 
         List<String> solutionPieces = new ArrayList<>();
         for (int i = 0; i < solution.length(); i += 4) {
@@ -897,7 +999,7 @@ public class Board extends Application {
         }
         for (String piecePlacement : placementPieces) {
             if (!solutionPieces.contains(piecePlacement)) {
-//                System.out.print("Solution does not contain " + piecePlacement);
+                System.out.print("Solution does not contain " + piecePlacement);
                 return;
             }
         }
@@ -1005,24 +1107,23 @@ public class Board extends Application {
             }
         }
 
-
-
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("IQ-Fit Game");
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
+
         root.getChildren().add(gameBoard);
         root.getChildren().add(gamePiece);
         root.getChildren().add(controls);
-        makeControls();
+
 
         GridPane gpTitle = new GridPane();
         gpTitle.setStyle("-fx-background-color: darkgray");
 
-        // Sets initial difficulty to 1, can be changed by user using slider
-        objective = chooseObjective( 1);
+        objective = chooseObjective( "");
         solution = Games.getSolution(objective);
 
+        makeControls();
         setBoard(objective);
         FitGame.boardUpdate(objective, initialBoard);
         makePieces(setPlayablePieces(objective, solution));
@@ -1031,10 +1132,10 @@ public class Board extends Application {
         // Add hints (basically get the solution from Games.java and display it one by one with opacity of 0.5
         scene.setOnKeyPressed(e -> onKeyPressed(e));
         scene.setOnKeyReleased(e -> onKeyReleased(e));
-
         root.getChildren().add(gameHintPiece);
+
         primaryStage.setScene(scene);
-//        primaryStage.getIcons().add(new Image(TITLE_ICON));
+        primaryStage.getIcons().add(new Image(TITLE_ICON));
         primaryStage.show();
     }
 }

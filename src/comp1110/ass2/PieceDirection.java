@@ -101,11 +101,6 @@ public enum PieceDirection {
         return dir;
     }
 
-    // method 2 : rotate()
-    // parameter : current direction of the piece
-    // return : another direction that the player desires.
-    //Mingxuan Wang 08/23
-
     public char rotate(char symbol){
         if(symbol=='↑')
             symbol = '→';
@@ -115,10 +110,6 @@ public enum PieceDirection {
             symbol = '←';
         return symbol;
     }
-
-    // method 3: isValidRotation()
-    // returns true/false on whether the protrusion is not facing upwards
-
 
     public char getSymbol() {
         return symbol;

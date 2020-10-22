@@ -1,10 +1,5 @@
 package comp1110.ass2;
 
-import comp1110.ass2.gui.Board;
-
-import java.io.LineNumberInputStream;
-import java.sql.Array;
-import java.sql.SQLOutput;
 import java.util.*;
 
 import static comp1110.ass2.Piece.*;
@@ -314,23 +309,23 @@ public class FitGame {
      * Code written by Jiwon Sin
      */
 
-//    public static boolean isCovered (String placement, int x, int y) {
-//        Piece piece = toPiece(placement);
-//        int xMin = piece.coords.xCoord;
-//        int xDim = piece.getXDimensions();
-//        int xMax = xMin + xDim - 1;
-//        int yMin = piece.coords.yCoord;
-//        int yDim = piece.getYDimensions();
-//        int yMax = yMin + yDim - 1;
-//
-//        if (xMin > x || xMax < x || yMin > y || yMax < y) {
-//            return false;
-//        }
-//
-//        PieceType[][] array = piece.getCoords();
-//
-//        return array[y - yMin][x - xMin] != null;
-//    }
+    public static boolean isCovered (String placement, int x, int y) {
+        Piece piece = toPiece(placement);
+        int xMin = piece.coords.xCoord;
+        int xDim = piece.getXDimensions();
+        int xMax = xMin + xDim - 1;
+        int yMin = piece.coords.yCoord;
+        int yDim = piece.getYDimensions();
+        int yMax = yMin + yDim - 1;
+
+        if (xMin > x || xMax < x || yMin > y || yMax < y) {
+            return false;
+        }
+
+        PieceType[][] array = piece.getCoords();
+
+        return array[y - yMin][x - xMin] != null;
+    }
 
     /**
      * Given a string describing a placement of pieces, and a location
