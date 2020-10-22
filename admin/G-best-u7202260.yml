@@ -42,9 +42,9 @@ declaration: >-
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-   -isPiecePlacementWellFormed();
-   -GenerateChallenges();
-   -getNewChallenges();
+   - isPiecePlacementWellFormed();
+   - GenerateChallenges();
+   - getNewChallenges();
 
 
 
