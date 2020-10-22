@@ -289,9 +289,7 @@ public class FitGame {
                     initialBoard[i][j] = array[i - y][j - x];
                 }
             }
-            if (initialBoard[rowY][colX] == null)
-                return false;
-        return true;
+        return initialBoard[rowY][colX] != null;
     }
 
     /**
@@ -347,18 +345,17 @@ public class FitGame {
 
         for (int i = 0; i < col + 2 && i < 9 ; i++) {
             for (int j = 0; j < row + 2 &&  j < 4; j++) {
-                String colString = Integer.toString(i);
-                String rowString = Integer.toString(j);
+                String xy = i + Integer.toString(j);
                 for (String missingPiece : listOfMissingPieces) {
-                    String pieceN = missingPiece + colString + rowString + "N";
-                    String pieceS = missingPiece + colString + rowString + "S";
+                    String pieceN = missingPiece + xy + "N";
+                    String pieceS = missingPiece + xy + "S";
                     if (j > 2) {
                         possiblePiecePlacements.add(pieceN);
                         possiblePiecePlacements.add(pieceS);
                     }
                     else {
-                        String pieceE = missingPiece + colString + rowString + "E";
-                        String pieceW = missingPiece + colString + rowString + "W";
+                        String pieceE = missingPiece + xy + "E";
+                        String pieceW = missingPiece + xy + "W";
 
                         possiblePiecePlacements.add(pieceN);
                         possiblePiecePlacements.add(pieceS);
@@ -368,13 +365,10 @@ public class FitGame {
                 }
             }
         }
-//        possiblePiecePlacements.removeIf(piecePlacement -> !isPlacementValid(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isOnBoard(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
         possiblePiecePlacements.removeIf(piecePlacement ->
                 !piecePlacementOverlapping(placement, piecePlacement, col, row));
-
-//        Collections.sort(possiblePiecePlacements);
 
         Set<String> result = new HashSet<>(possiblePiecePlacements);
         if (result.size() == 0)
