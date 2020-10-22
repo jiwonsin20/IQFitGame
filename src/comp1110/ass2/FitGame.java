@@ -345,8 +345,8 @@ public class FitGame {
         List<String> listOfMissingPieces = getMissingPieces(placement);
         List<String> possiblePiecePlacements = new ArrayList<>();
 
-        for (int i = 0; i < col + 3 && i < 9 ; i++) {
-            for (int j = 0; j < row + 3 &&  j < 4; j++) {
+        for (int i = 0; i < col + 2 && i < 9 ; i++) {
+            for (int j = 0; j < row + 2 &&  j < 4; j++) {
                 String colString = Integer.toString(i);
                 String rowString = Integer.toString(j);
                 for (String missingPiece : listOfMissingPieces) {
@@ -368,12 +368,13 @@ public class FitGame {
                 }
             }
         }
+//        possiblePiecePlacements.removeIf(piecePlacement -> !isPlacementValid(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isOnBoard(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
         possiblePiecePlacements.removeIf(piecePlacement ->
                 !piecePlacementOverlapping(placement, piecePlacement, col, row));
 
-        Collections.sort(possiblePiecePlacements);
+//        Collections.sort(possiblePiecePlacements);
 
         Set<String> result = new HashSet<>(possiblePiecePlacements);
         if (result.size() == 0)
@@ -607,6 +608,7 @@ public class FitGame {
 
         for (String value : aligned)
             rtn.append(value);
+        System.out.println("Solved");
         return rtn.toString();
     }
 
@@ -654,7 +656,6 @@ public class FitGame {
         boardUpdate(challenge, initialBoard);
         int numberOfIteration = (40 - challenge.length()) / 4;
         String result = getSolutionREC(challenge, "", initialBoard, numberOfIteration);
-        System.out.println("Solved");
         return changeSequence(result);
     }
 
