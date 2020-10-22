@@ -232,11 +232,9 @@ public class FitGame {
                 stringList.add(s.toUpperCase());
             }
         }
-
         for (String c : array) {
             for (int i = 0; i < placement.length(); i += 4) {
-                if (
-                        Character.toString(placement.charAt(i)).toLowerCase().equals(c)) {
+                if (Character.toString(placement.charAt(i)).toLowerCase().equals(c)) {
                     break;
                 }
                 else if (i == placement.length() - 4) {
@@ -244,7 +242,6 @@ public class FitGame {
                     stringList.add(c.toUpperCase());
                 }
             }
-
         }
         Collections.sort(stringList);
         return stringList;
@@ -348,25 +345,29 @@ public class FitGame {
         List<String> listOfMissingPieces = getMissingPieces(placement);
         List<String> possiblePiecePlacements = new ArrayList<>();
 
-        for (int i = 0; i < 10 ; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < col + 3 && i < 9 ; i++) {
+            for (int j = 0; j < row + 3 &&  j < 4; j++) {
                 String colString = Integer.toString(i);
                 String rowString = Integer.toString(j);
+                for (String missingPiece : listOfMissingPieces) {
+                    String pieceN = missingPiece + colString + rowString + "N";
+                    String pieceS = missingPiece + colString + rowString + "S";
+                    if (j > 2) {
+                        possiblePiecePlacements.add(pieceN);
+                        possiblePiecePlacements.add(pieceS);
+                    }
+                    else {
+                        String pieceE = missingPiece + colString + rowString + "E";
+                        String pieceW = missingPiece + colString + rowString + "W";
 
-                for (String listOfMissingPiece : listOfMissingPieces) {
-                    String pieceN = listOfMissingPiece + colString + rowString + "N";
-                    String pieceS = listOfMissingPiece + colString + rowString + "S";
-                    String pieceE = listOfMissingPiece + colString + rowString + "E";
-                    String pieceW = listOfMissingPiece + colString + rowString + "W";
-
-                    possiblePiecePlacements.add(pieceN);
-                    possiblePiecePlacements.add(pieceS);
-                    possiblePiecePlacements.add(pieceE);
-                    possiblePiecePlacements.add(pieceW);
+                        possiblePiecePlacements.add(pieceN);
+                        possiblePiecePlacements.add(pieceS);
+                        possiblePiecePlacements.add(pieceE);
+                        possiblePiecePlacements.add(pieceW);
+                    }
                 }
             }
         }
-
         possiblePiecePlacements.removeIf(piecePlacement -> !isOnBoard(piecePlacement));
         possiblePiecePlacements.removeIf(piecePlacement -> !isCovered(piecePlacement, col, row));
         possiblePiecePlacements.removeIf(piecePlacement ->
@@ -455,7 +456,7 @@ public class FitGame {
         Set<String> possiblePs = getViablePiecePlacements(challenge, findOptimalX(challenge,board).get(1), findOptimalX(challenge,board).get(0));
         if (possiblePs != null) {
             possiblePs.removeIf(value -> !isPlacementValid(value));
-            possiblePs.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
+//            possiblePs.removeIf(value -> !isPieceOverlappingBoard(challenge, value));
         }
         return possiblePs;
     }
@@ -653,6 +654,7 @@ public class FitGame {
         boardUpdate(challenge, initialBoard);
         int numberOfIteration = (40 - challenge.length()) / 4;
         String result = getSolutionREC(challenge, "", initialBoard, numberOfIteration);
+        System.out.println("Solved");
         return changeSequence(result);
     }
 
