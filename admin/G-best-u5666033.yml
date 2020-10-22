@@ -50,7 +50,6 @@ class:
 # you want to just submit classes):
 method:
    - getSolution(), getObjective() in Games.java
-   -
    - The following codes are from Board.java
    - setBoard(), getPieceSpineNum()
    - clearInitialBoard(), updatPieceID(), isThreeByTwo(), snapToGrid(), snapLayoutToGrid(),
@@ -59,7 +58,6 @@ method:
    - resetBoard(), clearBoard(), chooseGame(), makePieces(), chooseObjective(),
    - parts of newGame() and parts of makeControls().
    - Added controls for NewGame, Reset Game and Difficulty ComboBox
-   -
    - The following methods are from FitGame.java
    - isOnBoard(), isNotOverLapping(), isPlacementValid(), getMissingPieces(),
    - piecePlacementOverlapping(), isCovered(), getViablePiecePlacements(),
