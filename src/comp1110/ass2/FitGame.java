@@ -602,7 +602,6 @@ public class FitGame {
 
         for (String value : aligned)
             rtn.append(value);
-        System.out.println("Solved");
         return rtn.toString();
     }
 
